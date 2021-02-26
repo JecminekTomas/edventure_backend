@@ -31,10 +31,10 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
 
     // Spring Data JPA (Hibernate)
-    //implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // PostgreSQL
-    //runtimeOnly ("org.postgresql:postgresql")
+    runtimeOnly ("org.postgresql:postgresql")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -43,8 +43,6 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-
-    annotationProcessor("org.projectlombok:lombok")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
