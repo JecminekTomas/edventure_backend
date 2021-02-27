@@ -9,5 +9,5 @@ import javax.persistence.MappedSuperclass
 abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long? = null
+    val id: Long = 0
 }
