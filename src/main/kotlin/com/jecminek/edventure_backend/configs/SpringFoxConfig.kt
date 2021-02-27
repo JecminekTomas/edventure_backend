@@ -22,10 +22,10 @@ class SpringFoxConfig {
             .build()
             .apiInfo(apiInfo())
     }
-    private fun apiInfo(): ApiInfo? {
+    private fun apiInfo(): ApiInfo {
         return ApiInfo(
             "Edventure REST API",
-            "This is documentation of REST API made for Theses. ",
+            "This is documentation of REST API made for bachelor theses made by Tomáš Ječmínek. ",
             "V1",
             "Terms of service",
             Contact("Tomáš Ječmínek", "https://www.linkedin.com/in/tomas-jecminek/", "jecminek.tomas@outlook.com"),
