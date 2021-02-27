@@ -6,6 +6,10 @@ import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
+import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.Contact
+import java.util.*
+
 
 @Configuration
 class SpringFoxConfig {
@@ -16,5 +20,16 @@ class SpringFoxConfig {
             .apis(RequestHandlerSelectors.any())
             .paths(PathSelectors.any())
             .build()
+            .apiInfo(apiInfo())
+    }
+    private fun apiInfo(): ApiInfo? {
+        return ApiInfo(
+            "Edventure REST API",
+            "This is documentation of REST API made for Theses. ",
+            "V1",
+            "Terms of service",
+            Contact("Tomáš Ječmínek", "https://www.linkedin.com/in/tomas-jecminek/", "jecminek.tomas@outlook.com"),
+            "License of API", "API license URL", Collections.emptyList()
+        )
     }
 }

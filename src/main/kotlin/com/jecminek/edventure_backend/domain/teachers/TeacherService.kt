@@ -10,17 +10,11 @@ class TeacherService {
     @Autowired
     lateinit var repository: TeacherRepository
 
-    fun findByLastName(name: String): List<Teacher> {
-        return repository.findByLastName(name)
-    }
+    fun findByLastName(name: String): List<Teacher> = repository.findByLastName(name)
 
-    fun findAll(): MutableIterable<Teacher> {
-        return repository.findAll()
-    }
+    fun findAll(): MutableIterable<Teacher> = repository.findAll()
 
-    fun save(teacher: Teacher): Teacher {
-        return repository.save(teacher)
-    }
+    fun save(teacher: Teacher): Teacher = repository.save(teacher)
 
     fun delete(id: Long) {
         val teacher = findByIdOrNull(id)
@@ -29,9 +23,7 @@ class TeacherService {
         }
     }
 
-    fun findByIdOrNull(id: Long): Teacher? {
-        return repository.findByIdOrNull(id)
-    }
+    fun findByIdOrNull(id: Long): Teacher? = repository.findByIdOrNull(id)
 
 
 }

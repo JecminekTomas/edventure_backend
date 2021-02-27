@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
 @RestController
-abstract class TeacherController {
+class TeacherController {
 
     @Autowired
     lateinit var service: TeacherService
@@ -21,22 +21,8 @@ abstract class TeacherController {
     @PostMapping("/teachers/create")
     fun create(@RequestBody teacher: Teacher): Teacher = service.save(teacher)
 
-    @PutMapping("teachers/{id}/update")
-    fun update(@PathVariable id: Long): Teacher? {
-        val teacher = service.findByIdOrNull(id)
-        return if (teacher != null) {
-            service.save(
-                Teacher(
-                    teacher.firstName,
-                    lastName = teacher.lastName,
-                    email = teacher.email,
-                    biography = teacher.biography,
-                    rating = teacher.rating,
-                    phoneNumber = teacher.phoneNumber
-                )
-            )
-        } else {
-            teacher
-        }
+    @PutMapping("/teachers/{id}/update")
+    fun update(@PathVariable id: Long, teacher: Teacher) {
+        service.save(teacher)
     }
 }
