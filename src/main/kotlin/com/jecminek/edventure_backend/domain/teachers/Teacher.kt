@@ -7,11 +7,11 @@ import javax.persistence.OneToMany
 
 @Entity
 class Teacher(
-    firstName: String = "",
-    lastName: String = "",
-    email: String = "",
-    biography: String? = "",
-    rating: Double? = 2.5,
-    phoneNumber: String? = "",
+    var firstName: String = "",
+    var lastName: String = "",
+    var email: String = "",
+    var biography: String? = "",
+    var rating: Double? = 2.5,
+    var phoneNumber: String? = "",
     @OneToMany val lessons: List<Lesson> = emptyList()
 ): BaseEntity()

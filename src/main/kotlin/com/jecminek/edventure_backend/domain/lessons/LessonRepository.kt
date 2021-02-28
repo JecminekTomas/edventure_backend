@@ -8,6 +8,8 @@ import java.time.LocalDateTime
 @Repository
 interface LessonRepository : PagingAndSortingRepository<Lesson, Long> {
 
+    // TODO: ADD UPDATE
+
     fun findLessonByStartDateTimeAfter(startDateTime: LocalDateTime): List<Lesson>?
 
     fun findLessonByEndDateTimeBefore(endDateTime: LocalDateTime): List<Lesson>?

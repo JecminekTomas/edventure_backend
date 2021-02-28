@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.domain.lessons
 
 import com.jecminek.edventure_backend.BaseEntity
+import com.jecminek.edventure_backend.domain.students.Student
 import com.jecminek.edventure_backend.domain.teachers.Teacher
 import java.sql.Timestamp
 import java.time.LocalDateTime
@@ -12,5 +13,6 @@ class Lesson(
     var endDateTime: LocalDateTime = LocalDateTime.now(),
     var price: Double = 0.0,
     var online: Boolean = false,
-    @ManyToOne var teacher: Teacher = Teacher()
+    @ManyToOne var teacher: Teacher = Teacher(),
+    @ManyToOne var student: Student = Student()
 ): BaseEntity()

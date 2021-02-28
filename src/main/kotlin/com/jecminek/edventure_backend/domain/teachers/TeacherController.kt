@@ -12,8 +12,8 @@ class TeacherController {
     @GetMapping("/teachers")
     fun findAll(): MutableIterable<Teacher> = service.findAll()
 
-    @GetMapping("/teachers/{name}")
-    fun findByLastName(@PathVariable name: String): List<Teacher> = service.findByLastName(name)
+    @GetMapping("/teachers/{lastName}")
+    fun findByLastName(@PathVariable lastName: String): List<Teacher> = service.findByLastName(lastName)
 
     @DeleteMapping("/teachers/{id}/delete")
     fun delete(@PathVariable id: Long) = service.delete(id)
@@ -23,6 +23,7 @@ class TeacherController {
 
     @PutMapping("/teachers/{id}/update")
     fun update(@PathVariable id: Long, teacher: Teacher) {
+        //FIXME: WHAT.. Přidá se na pouze konec.
         service.save(teacher)
     }
 }

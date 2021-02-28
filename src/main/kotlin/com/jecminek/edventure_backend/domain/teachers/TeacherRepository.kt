@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TeacherRepository: PagingAndSortingRepository<Teacher, Long>{
-
-    fun findByLastName(name: String): List<Teacher>
+    // TODO: ADD UPDATE
+    fun findByLastName(lastName: String): List<Teacher>
 
 }

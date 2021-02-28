@@ -1,12 +1,18 @@
 package com.jecminek.edventure_backend.domain.students
 
 import com.jecminek.edventure_backend.BaseEntity
+import com.jecminek.edventure_backend.domain.lessons.Lesson
+import javax.persistence.Entity
+import javax.persistence.OneToMany
 
-data class Student(
+@Entity
+class Student(
     var firstName: String = "",
     var lastName: String = "",
     var email: String = "",
     var biography: String? = "",
-    var rating: Double? = -1.0,
-    var phoneNumber: String? = "00123456789",
+    var rating: Double? = 2.5,
+    var phoneNumber: String? = "",
+
+    @OneToMany val lessons: List<Lesson> = emptyList()
 ): BaseEntity()
