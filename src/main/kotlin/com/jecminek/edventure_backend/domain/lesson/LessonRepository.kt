@@ -1,14 +1,14 @@
-package com.jecminek.edventure_backend.domain.lessons
+package com.jecminek.edventure_backend.domain.lesson
 
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
-import java.sql.Timestamp
 import java.time.LocalDateTime
 
 @Repository
 interface LessonRepository : PagingAndSortingRepository<Lesson, Long> {
 
     // TODO: ADD UPDATE
+
 
     fun findLessonByStartDateTimeAfter(startDateTime: LocalDateTime): List<Lesson>?
 

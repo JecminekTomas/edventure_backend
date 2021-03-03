@@ -1,8 +1,9 @@
-package com.jecminek.edventure_backend.domain.lessons
+package com.jecminek.edventure_backend.domain.lesson
 
+import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.query.Param
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @RestController
 class LessonController {
@@ -11,14 +12,21 @@ class LessonController {
     lateinit var lessonService: LessonService
 
     @GetMapping("/lessons")
-    fun findAll() = lessonService.findAll()
+    fun findAll(@RequestParam(defaultValue="") startDateTime: Long): List<Lesson>? {
+        if (startDateTime == 0L) {
+        return lessonService.findAll()
+
+        } else {
+            return lessonService.findLessonByStartDateTimeAfter()
+        }
+    }
 
     @GetMapping("/lessons/{id}")
     fun findByIdOrNull(@PathVariable id: Long) = lessonService.findByIdOrNull(id)
 
-//    @GetMapping
-//    fun findLessonByStartDateTimeAfter(startDateTime: LocalDateTime): List<Lesson>? = lessonService.findLessonByStartDateTimeAfter(startDateTime)
-//
+    @GetMapping
+    fun findLessonByStartDateTimeAfter(startDateTime: Long): List<Lesson>? = lessonService.findLessonByStartDateTimeAfter(startDateTime)
+
 //    @GetMapping
 //    fun findLessonByEndDateTimeBefore(endDateTime: LocalDateTime): List<Lesson>? = lessonService.findLessonByEndDateTimeBefore(endDateTime)
 //

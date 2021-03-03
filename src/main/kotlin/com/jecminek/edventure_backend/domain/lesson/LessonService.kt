@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend.domain.lessons
+package com.jecminek.edventure_backend.domain.lesson
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -12,7 +12,7 @@ class LessonService {
     @Autowired
     lateinit var lessonRepository: LessonRepository
 
-    fun findAll(): MutableIterable<Lesson> = lessonRepository.findAll()
+    fun findAll(): List<Lesson> = lessonRepository.findAll()
 
     fun findByIdOrNull(id: Long): Lesson? = lessonRepository.findByIdOrNull(id)
 

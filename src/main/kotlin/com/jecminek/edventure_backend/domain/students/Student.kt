@@ -1,7 +1,7 @@
 package com.jecminek.edventure_backend.domain.students
 
 import com.jecminek.edventure_backend.BaseEntity
-import com.jecminek.edventure_backend.domain.lessons.Lesson
+import com.jecminek.edventure_backend.domain.lesson.Lesson
 import javax.persistence.Entity
 import javax.persistence.OneToMany
 
