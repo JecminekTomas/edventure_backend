@@ -1,9 +1,8 @@
 package com.jecminek.edventure_backend.domain.lesson
 
 import com.jecminek.edventure_backend.BaseEntity
-import com.jecminek.edventure_backend.domain.students.Student
-import com.jecminek.edventure_backend.domain.teachers.Teacher
-import java.time.LocalDateTime
+import com.jecminek.edventure_backend.domain.user.User
+import com.jecminek.edventure_backend.domain.user.UserStatus
 import javax.persistence.*
 
 @Entity
@@ -13,6 +12,7 @@ class Lesson(
     var price: Double = 0.0,
     var online: Boolean = false,
 
-    @ManyToOne var teacher: Teacher = Teacher(),
-    @ManyToOne var student: Student = Student()
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable(name = "USER_LESSONS")
+    var users: MutableList<User> = mutableListOf()
 ): BaseEntity()
