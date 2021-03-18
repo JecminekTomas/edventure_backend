@@ -2,6 +2,9 @@ package com.jecminek.edventure_backend.domain.user
 
 import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
+import com.jecminek.edventure_backend.domain.review.Review
+import com.jecminek.edventure_backend.enums.UserRole
+import com.jecminek.edventure_backend.enums.UserStatus
 import javax.persistence.*
 
 @Entity
@@ -21,5 +24,8 @@ class User(
     var roles: MutableList<UserRole> = mutableListOf(),
 
     @ManyToMany(mappedBy = "users")
-    var lessons: MutableList<Lesson> = mutableListOf()
+    var lessons: MutableList<Lesson> = mutableListOf(),
+
+    @OneToMany
+    var reviews: MutableList<Review> = mutableListOf()
 ) : BaseEntity()

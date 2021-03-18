@@ -43,6 +43,11 @@ dependencies {
     // PostgreSQL
     runtimeOnly ("org.postgresql:postgresql")
 
+    //Mapper
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
+    implementation("org.mapstruct:mapstruct-processor:1.4.2.Final")
+
+
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

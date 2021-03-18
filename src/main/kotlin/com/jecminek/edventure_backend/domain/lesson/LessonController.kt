@@ -11,18 +11,19 @@ class LessonController {
     lateinit var service: LessonService
 
     @GetMapping("/lessons")
-    fun findLessonByUserId(@RequestParam(required = true) userId: Long): List<Lesson>? =
-        service.findLessonByUserId(userId)
+    fun findLessonByUsersId(@RequestParam(required = true) userId: Long): List<Lesson>? =
+        service.findLessonByUsersId(userId)
 
     @PostMapping("/lessons")
     fun create(
-        id: Long,
         @RequestParam(required = true) startDateTime: Long,
         @RequestParam(required = true) endDateTime: Long,
         @RequestParam(required = true) price: Double,
         @RequestParam(required = true) online: Boolean,
         @RequestParam(required = true) users: MutableList<User>
     ) = service.create(startDateTime, endDateTime, price, online, users)
+
+    /** fun create(@RequestBody lesson: Lesson)*/
 
     @DeleteMapping("/lessons/{id}")
     fun delete(@PathVariable id: Long) = service.delete(id)

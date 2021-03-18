@@ -1,6 +1,8 @@
 package com.jecminek.edventure_backend.domain.user
 
 import com.jecminek.edventure_backend.domain.lesson.Lesson
+import com.jecminek.edventure_backend.enums.UserRole
+import com.jecminek.edventure_backend.enums.UserStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -17,7 +19,7 @@ class UserService {
 
     fun findByIdOrNull(id: Long): User? = repository.findByIdOrNull(id)
 
-    fun findUserByRole(role: UserRole): List<User>? = repository.findUserByRole(role)
+    fun findUserByRole(role: UserRole): List<User>? = repository.findUserByRoles(role)
 
     fun create(
         firstName: String,
@@ -35,7 +37,7 @@ class UserService {
             repository.delete(teacher)
         } else {
             throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "User not found."
+                HttpStatus.NOT_FOUND, "User Not Found"
             )
         }
     }
@@ -53,7 +55,7 @@ class UserService {
     ) {
         // FIXME - Vytvořit DTO!.
         val user = findByIdOrNull(id)
-        if(user != null) {
+        if (user != null) {
             user.firstName = firstName
             user.lastName = lastName
             user.email = email
@@ -62,6 +64,10 @@ class UserService {
             user.status = status
             user.roles = roles
             user.lessons = lessons
+        } else {
+            throw ResponseStatusException(
+                HttpStatus.NOT_FOUND, "User Not Found"
+            )
         }
     } // FIXME - Návratový typ
 }

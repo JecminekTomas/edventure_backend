@@ -19,7 +19,7 @@ class LessonService {
 
     fun findByIdOrNull(id: Long): Lesson? = repository.findByIdOrNull(id)
 
-    fun findLessonByUserId(id: Long): List<Lesson>? = repository.findLessonByUserId(id)
+    fun findLessonByUsersId(id: Long): List<Lesson>? = repository.findLessonByUsersId(id)
 
     fun delete(id: Long) {
         val lesson = repository.findByIdOrNull(id)
@@ -27,7 +27,7 @@ class LessonService {
             repository.delete(lesson)
         } else {
             throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Lesson not found"
+                HttpStatus.NOT_FOUND, "Lesson Not Found"
             )
         }
     }
@@ -50,7 +50,7 @@ class LessonService {
             repository.save(lesson)
         } else {
             throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Lesson not found"
+                HttpStatus.NOT_FOUND, "Lesson Not Found"
             )
         }
     }
