@@ -2,6 +2,7 @@ package com.jecminek.edventure_backend.domain.review
 
 
 import com.jecminek.edventure_backend.domain.user.User
+import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -20,21 +21,22 @@ class ReviewService {
 
     fun findReviewsByUserId(user_id: Long): List<Review>? = repository.findReviewsByUserId(user_id)
 
-    fun create(stars: Int, verbalEvaluation: String, user: User): Review? =
-        repository.save(Review(stars, verbalEvaluation, user = user))
+    fun create(review: ReviewDto): Review =
+        repository.save(review.convertToEntity())
 
-    fun update(id: Long, stars: Int, verbalEvaluation: String, helpful: Int, unhelpful: Int, user: User): Review? {
-        val review = findByIdOrNull(id)
-        if (review != null) {
-            review.stars = stars
-            review.verbalEvaluation = verbalEvaluation
-            review.helpful = helpful
-            review.unhelpful = unhelpful
-            review.user = user
+    fun update(id: Long, reviewDto: ReviewDto): Review? {
+        val oldReview = findByIdOrNull(id)
+        val newReview = reviewDto.convertToEntity()
+        if (oldReview != null) {
+            oldReview.stars = newReview.stars
+            oldReview.verbalEvaluation = newReview.verbalEvaluation
+            oldReview.helpful = newReview.helpful
+            oldReview.unhelpful = newReview.unhelpful
+            oldReview.user = newReview.user
         } else {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Review Not Found")
         }
-        return review
+        return newReview
     }
 
     fun delete(id: Long) {
@@ -45,6 +47,4 @@ class ReviewService {
             throw ResponseStatusException(HttpStatus.NOT_FOUND, "Review Not Found")
         }
     }
-
-
 }

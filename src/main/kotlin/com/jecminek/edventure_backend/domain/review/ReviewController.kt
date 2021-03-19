@@ -1,37 +1,38 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.domain.user.User
+import org.apache.catalina.mapper.Mapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
-@Controller
+@RestController
 class ReviewController {
     @Autowired
     lateinit var service: ReviewService
 
     @GetMapping("/reviews")
+    @ResponseStatus(HttpStatus.OK)
     fun findReviewsByUserId(@RequestParam(required = true) user_id: Long): List<Review>? =
         service.findReviewsByUserId(user_id)
 
     @PostMapping("/reviews")
+    @ResponseStatus(HttpStatus.CREATED)
     fun create(
-        @RequestParam(required = true) stars: Int,
-        @RequestParam(required = false) verbalEvaluation: String,
-        @RequestParam(required = true) user: User
-    ): Review? = service.create(stars, verbalEvaluation, user)
+        @RequestBody review: ReviewDto
+    ): Review = service.create(review)
 
     @PutMapping("/reviews/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
-        @RequestParam(required = true) stars: Int,
-        @RequestParam(required = true) verbalEvaluation: String,
-        @RequestParam(required = true) helpful: Int,
-        @RequestParam(required = true) unhelpful: Int,
-        @RequestParam(required = true) user: User
-    ): Review? = service.update(id, stars, verbalEvaluation, helpful, unhelpful, user)
+        @RequestBody review: ReviewDto
+    ): Review? = service.update(id, review)
 
     @DeleteMapping("/reviews/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = service.delete(id)
 }

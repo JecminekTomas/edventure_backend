@@ -11,6 +11,8 @@ import springfox.documentation.service.Contact
 import java.util.*
 
 
+// TODO: 18.03.2021 CASCADE, FETCH TYPES 
+
 @Configuration
 class SpringFoxConfig {
     @Bean

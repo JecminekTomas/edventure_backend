@@ -27,7 +27,7 @@ class UserController {
         @RequestParam(required = true) email: String,
         @RequestParam(required = false) biography: String,
         @RequestParam(required = false) phoneNumber: String,
-        @RequestParam(required = true) roles: MutableList<UserRole>
+        @RequestParam(required = true) roles: MutableList<UserRole>,
         // Status se neposílá. Nastaví se v service na ONLINE. - Budoucí feature.
     ): User = service.create(firstName, lastName, email, biography, phoneNumber, roles)
 
