@@ -1,36 +1,36 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.domain.user.User
-import org.apache.catalina.mapper.Mapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.stereotype.Controller
-import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 
 @RestController
 class ReviewController {
     @Autowired
     lateinit var service: ReviewService
 
-    @GetMapping("/reviews")
+    @GetMapping("/reviews/reviewer/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun findReviewsByUserId(@RequestParam(required = true) user_id: Long): List<Review>? =
-        service.findReviewsByUserId(user_id)
+    fun findReviewsByReviewerId(@PathVariable id: Long): List<ReviewDto> =
+        service.findReviewsByReviewerId(id)
+
+    @GetMapping("/reviews/reviewed/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findReviewsByReviewedId(@PathVariable id: Long): List<ReviewDto> =
+        service.findReviewsByReviewedId(id)
 
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody review: ReviewDto
-    ): Review = service.create(review)
+    ): ReviewDto = service.create(review)
 
     @PutMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
         @RequestBody review: ReviewDto
-    ): Review? = service.update(id, review)
+    ): ReviewDto = service.update(id, review)
 
     @DeleteMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

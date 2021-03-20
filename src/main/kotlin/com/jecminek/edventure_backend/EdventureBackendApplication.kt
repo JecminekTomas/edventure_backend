@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend
 
-
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 

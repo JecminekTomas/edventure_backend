@@ -1,18 +1,32 @@
 package com.jecminek.edventure_backend.domain.review
 
+import com.jecminek.edventure_backend.domain.user.UserDto
+import com.jecminek.edventure_backend.domain.user.convertToEntity
+
 data class ReviewDto(
+    var id: Long,
     var stars: Int,
     var verbalEvaluation: String,
     var helpful: Int,
     var unhelpful: Int,
-    var reviewTimestamp: Long
-    // TODO: 18.03.2021 var user: UserDTO?
+
+    /** Reviewer = Who is reviewing.
+     * Reviewed = Who is being reviewed.*/
+    var reviewer: UserDto,
+    var reviewed: UserDto
+    // TODO: 19.03.2021 var userPicture
 )
+
+// FIXME: 19.03.2021 In every UPDATE will change date of Review. Not sure if it's wrong.
+// FIXME: 20.03.2021 No way to send whole USER, just ID.
 
 fun ReviewDto.convertToEntity() = Review(
     stars = stars,
     verbalEvaluation = verbalEvaluation,
     helpful = helpful,
     unhelpful = unhelpful,
-    reviewTimestamp = reviewTimestamp
+    reviewTimestamp = System.currentTimeMillis() / 1000L,
+    reviewer = reviewer.convertToEntity(),
+    reviewed = reviewed.convertToEntity()
+    // TODO: 19.03.2021 var userPicture
 )

@@ -1,14 +1,10 @@
 package com.jecminek.edventure_backend.domain.review
 
 
-import com.jecminek.edventure_backend.domain.user.User
-import org.mapstruct.factory.Mappers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.server.ResponseStatusException
 
 @Service
@@ -17,34 +13,27 @@ class ReviewService {
     @Autowired
     lateinit var repository: ReviewRepository
 
-    fun findByIdOrNull(id: Long): Review? = repository.findByIdOrNull(id)
+    fun findByIdOrNull(id: Long): ReviewDto =
+        repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun findReviewsByUserId(user_id: Long): List<Review>? = repository.findReviewsByUserId(user_id)
+    fun findReviewsByReviewedId(reviewed_id: Long): List<ReviewDto> =
+        repository.findReviewsByReviewedId(reviewed_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun create(review: ReviewDto): Review =
-        repository.save(review.convertToEntity())
+    fun findReviewsByReviewerId(reviewer_id: Long): List<ReviewDto> =
+        repository.findReviewsByReviewerId(reviewer_id)?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun update(id: Long, reviewDto: ReviewDto): Review? {
+    fun create(reviewDto: ReviewDto): ReviewDto =
+        repository.save(reviewDto.convertToEntity()).convertToDto()
+
+    fun update(id: Long, reviewDto: ReviewDto): ReviewDto {
         val oldReview = findByIdOrNull(id)
-        val newReview = reviewDto.convertToEntity()
-        if (oldReview != null) {
-            oldReview.stars = newReview.stars
-            oldReview.verbalEvaluation = newReview.verbalEvaluation
-            oldReview.helpful = newReview.helpful
-            oldReview.unhelpful = newReview.unhelpful
-            oldReview.user = newReview.user
-        } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Review Not Found")
-        }
-        return newReview
+        oldReview.stars = reviewDto.stars
+        oldReview.verbalEvaluation = reviewDto.verbalEvaluation
+        oldReview.helpful = reviewDto.helpful
+        oldReview.unhelpful = reviewDto.unhelpful
+        // TODO: 19.03.2021 oldReview.profilePicture = reviewDto.profilePicture
+        return repository.save(oldReview.convertToEntity()).convertToDto()
     }
 
-    fun delete(id: Long) {
-        val review = findByIdOrNull(id)
-        if (review != null) {
-            repository.delete(review)
-        } else {
-            throw ResponseStatusException(HttpStatus.NOT_FOUND, "Review Not Found")
-        }
-    }
+    fun delete(id: Long) = repository.delete(findByIdOrNull(id).convertToEntity())
 }

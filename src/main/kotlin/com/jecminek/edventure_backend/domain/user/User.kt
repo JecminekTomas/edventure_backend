@@ -8,6 +8,7 @@ import com.jecminek.edventure_backend.enums.UserStatus
 import javax.persistence.*
 
 @Entity
+@Table(name = "\"USER\"")
 class User(
     var firstName: String = "",
     var lastName: String = "",
@@ -19,13 +20,30 @@ class User(
     var status: UserStatus = UserStatus.ONLINE,
 
     @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "UserRole", joinColumns = [JoinColumn(name = "id")])
+    @CollectionTable(name = "USER_ROLE")
     @Enumerated(EnumType.STRING)
     var roles: MutableList<UserRole> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "users")
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable( name = "USER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "lesson_id")]
+    )
     var lessons: MutableList<Lesson> = mutableListOf(),
 
-    @OneToMany
-    var reviews: MutableList<Review> = mutableListOf()
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewer")
+    var reviewerReviews: MutableList<Review> = mutableListOf(),
+
+    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewed")
+    var reviewedReviews: MutableList<Review> = mutableListOf()
+
 ) : BaseEntity()
+
+fun User.convertToDto() = UserDto(
+    id = id,
+    firstName = firstName,
+    lastName = lastName,
+    email = email,
+    biography = biography,
+    phoneNumber = phoneNumber,
+    roles = roles
+)

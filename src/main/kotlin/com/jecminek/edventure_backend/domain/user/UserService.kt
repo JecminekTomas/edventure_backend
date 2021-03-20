@@ -1,8 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
-import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.enums.UserRole
-import com.jecminek.edventure_backend.enums.UserStatus
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -12,62 +10,31 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 // TODO - Vytvořit inteface pro CRUD metody
 class UserService {
-    // TODO: ROLE, STATUS
+    // TODO: STATUS
 
     @Autowired
     lateinit var repository: UserRepository
 
-    fun findByIdOrNull(id: Long): User? = repository.findByIdOrNull(id)
+    fun findById(id: Long): UserDto =
+        repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun findUserByRole(role: UserRole): List<User>? = repository.findUserByRoles(role)
+    fun findUserByRole(role: UserRole): List<User>? =
+        repository.findUserByRoles(role) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun create(
-        firstName: String,
-        lastName: String,
-        email: String,
-        biography: String,
-        phoneNumber: String,
-        roles: MutableList<UserRole>,
-    ): User = repository.save(User(firstName, lastName, email, biography, phoneNumber, UserStatus.ONLINE, roles))
+    fun create(userDto: UserDto): UserDto = repository.save(userDto.convertToEntity()).convertToDto()
 
-
-    fun delete(id: Long) {
-        val teacher = findByIdOrNull(id)
-        if (teacher != null) {
-            repository.delete(teacher)
-        } else {
-            throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "User Not Found"
-            )
-        }
+    fun update(id: Long, userDto: UserDto): UserDto {
+        val user = findById(id)
+        user.firstName = userDto.firstName
+        user.lastName = userDto.lastName
+        user.email = userDto.email
+        user.biography = userDto.biography
+        user.phoneNumber = userDto.phoneNumber
+        user.roles = userDto.roles
+        return repository.save(user.convertToEntity()).convertToDto()
     }
 
-    fun update(
-        id: Long,
-        firstName: String,
-        lastName: String,
-        email: String,
-        biography: String,
-        phoneNumber: String,
-        status: UserStatus,
-        roles: MutableList<UserRole>,
-        lessons: MutableList<Lesson>
-    ) {
-        // FIXME - Vytvořit DTO!.
-        val user = findByIdOrNull(id)
-        if (user != null) {
-            user.firstName = firstName
-            user.lastName = lastName
-            user.email = email
-            user.biography = biography
-            user.phoneNumber = phoneNumber
-            user.status = status
-            user.roles = roles
-            user.lessons = lessons
-        } else {
-            throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "User Not Found"
-            )
-        }
-    } // FIXME - Návratový typ
+    fun delete(id: Long) = repository.delete(findById(id).convertToEntity())
+
+
 }
