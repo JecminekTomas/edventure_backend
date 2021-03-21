@@ -9,8 +9,12 @@ import javax.persistence.*
 @Entity
 @Table(name = "REVIEW")
 class Review(
-    var stars: Int = 0,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    override val id: Long = 0,
+    var stars: Double = 0.0,
     var verbalEvaluation: String = "",
+    // FIXME: 21.03.2021 IT IS STUPID TO SEND HELPFUL AND UNHELPFUL IN CREATE (It's possible to have more likes...)
     var helpful: Int = 0,
     var unhelpful: Int = 0,
     var reviewTimestamp: Long = 0,
@@ -35,7 +39,5 @@ fun Review.convertToDto() = ReviewDto(
     stars = stars,
     verbalEvaluation = verbalEvaluation,
     helpful = helpful,
-    unhelpful = unhelpful,
-    reviewer =  reviewer.convertToDto(),
-    reviewed = reviewed.convertToDto()
+    unhelpful = unhelpful
 )

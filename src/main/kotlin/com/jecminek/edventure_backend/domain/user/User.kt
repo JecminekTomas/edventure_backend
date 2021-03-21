@@ -25,10 +25,16 @@ class User(
     var roles: MutableList<UserRole> = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable( name = "USER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+    @JoinTable( name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
     )
-    var lessons: MutableList<Lesson> = mutableListOf(),
+    var studentLessons: MutableList<Lesson> = mutableListOf(),
+
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable( name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name = "lesson_id")]
+    )
+    var teacherLessons: MutableList<Lesson> = mutableListOf(),
 
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewer")
     var reviewerReviews: MutableList<Review> = mutableListOf(),

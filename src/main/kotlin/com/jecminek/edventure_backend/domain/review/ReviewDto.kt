@@ -5,15 +5,13 @@ import com.jecminek.edventure_backend.domain.user.convertToEntity
 
 data class ReviewDto(
     var id: Long,
-    var stars: Int,
+    var stars: Double,
     var verbalEvaluation: String,
     var helpful: Int,
     var unhelpful: Int,
 
     /** Reviewer = Who is reviewing.
      * Reviewed = Who is being reviewed.*/
-    var reviewer: UserDto,
-    var reviewed: UserDto
     // TODO: 19.03.2021 var userPicture
 )
 
@@ -26,7 +24,5 @@ fun ReviewDto.convertToEntity() = Review(
     helpful = helpful,
     unhelpful = unhelpful,
     reviewTimestamp = System.currentTimeMillis() / 1000L,
-    reviewer = reviewer.convertToEntity(),
-    reviewed = reviewed.convertToEntity()
     // TODO: 19.03.2021 var userPicture
 )
