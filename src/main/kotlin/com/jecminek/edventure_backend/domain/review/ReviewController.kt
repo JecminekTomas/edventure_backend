@@ -14,7 +14,7 @@ class ReviewController {
     @Autowired
     lateinit var userService: UserService
 
-    @GetMapping("/reviews/reviewer/{id}")
+    @GetMapping("/reviews/reviewers/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findReviewsByReviewerId(@PathVariable id: Long): List<ReviewDto> =
         reviewService.findReviewsByReviewerId(id)
@@ -30,9 +30,8 @@ class ReviewController {
         @RequestBody review: ReviewDto,
         @RequestParam(required = true) reviewerId: Long,
         @RequestParam(required = true) reviewedId: Long
-    ): ReviewDto{
-        return reviewService.create(userService.findById(reviewerId), userService.findById(reviewedId), review)
-    }
+    ): ReviewDto = reviewService.create(userService.findById(reviewerId), userService.findById(reviewedId), review)
+
 
     @PutMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)

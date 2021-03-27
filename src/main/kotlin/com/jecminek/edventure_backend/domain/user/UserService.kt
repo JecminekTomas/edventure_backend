@@ -16,10 +16,10 @@ class UserService {
     lateinit var repository: UserRepository
 
     fun findById(id: Long): UserDto =
-        repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User With Id: $id, Not Found")
 
     fun findUserByRole(role: UserRole): List<User>? =
-        repository.findUserByRoles(role) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        repository.findUserByRoles(role) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User With Role: $role, Not Found")
 
     fun create(userDto: UserDto): UserDto = repository.save(userDto.convertToEntity()).convertToDto()
 

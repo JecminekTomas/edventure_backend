@@ -1,9 +1,9 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.jecminek.edventure_backend.domain.user.User
-import com.jecminek.edventure_backend.domain.user.UserService
-import com.jecminek.edventure_backend.domain.user.convertToEntity
+import com.jecminek.edventure_backend.domain.review.ReviewDto
+import com.jecminek.edventure_backend.domain.user.*
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -15,34 +15,44 @@ class LessonController {
     @Autowired
     lateinit var userService: UserService
 
-    @GetMapping("/lessons")
-    fun findLessonByUsersId(@RequestParam(required = true) userId: Long): List<Lesson>? =
-        lessonService.findLessonByUsersId(userId)
+
+    @GetMapping("/lessons/teachers/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findLessonByTeachersId(@PathVariable id: Long): List<LessonDto> =
+        lessonService.findLessonByTeachersId(id)
+
+    @GetMapping("/lessons/students/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findLessonByStudentsId(@PathVariable id: Long): List<LessonDto> =
+        lessonService.findLessonByStudentsId(id)
+
 
     @PostMapping("/lessons")
+    @ResponseStatus(HttpStatus.CREATED)
     fun create(
-        @RequestParam(required = true) teacherId: Long,
         @RequestBody lesson: LessonDto
-    ){
-        val teacher = userService.findById(teacherId)
-        val newLesson = lesson.convertToEntity()
-
-        newLesson.teachers.add(teacher.convertToEntity())
-        lessonService.create(newLesson.convertToDto())
+    )  {
+        // TODO: 27.03.2021 Throws exception and stops, or save the rest?
+        lesson.teachers.forEach { teacher ->
+            userService.findById(teacher.id)
+        }
+        lesson.students.forEach { student ->
+            userService.findById(student.id)
+        }
+        lessonService.create(lesson)
     }
+
 
     /** fun create(@RequestBody lesson: Lesson)*/
 
     @DeleteMapping("/lessons/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = lessonService.delete(id)
 
     @PutMapping("/lessons/{id}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
-        @RequestParam(required = true) startDateTime: Long,
-        @RequestParam(required = true) endDateTime: Long,
-        @RequestParam(required = true) price: Double,
-        @RequestParam(required = true) online: Boolean,
-        @RequestParam(required = true) users: MutableList<User>
-    ) = lessonService.update(startDateTime, endDateTime, endDateTime, price, online, users)
+        @RequestBody lesson: LessonDto
+    ) = lessonService.update(id, lesson)
 }

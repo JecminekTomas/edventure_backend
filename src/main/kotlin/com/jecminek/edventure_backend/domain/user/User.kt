@@ -53,3 +53,9 @@ fun User.convertToDto() = UserDto(
     phoneNumber = phoneNumber,
     roles = roles
 )
+
+fun User.convertToNameDto() = UserNameDto(
+    id = id,
+    firstName = firstName,
+    lastName = lastName
+)

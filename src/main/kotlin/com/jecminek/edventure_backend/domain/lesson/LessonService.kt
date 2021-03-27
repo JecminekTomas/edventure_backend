@@ -22,36 +22,28 @@ class LessonService {
         "Lesson Not Found"
     )
 
-    fun findLessonByUsersId(id: Long): List<Lesson>? =
-        repository.findLessonByUsersId(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found")
+    fun findLessonByTeachersId(teacherId: Long): MutableList<LessonDto> =
+        convertLessonsMutableListToLessonsDtoMutableList(
+            repository.findLessonByTeachersId(teacherId) ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Lesson Of Teacher With Id: $teacherId, Not found"
+            )
+        )
+
+    fun findLessonByStudentsId(studentId: Long): MutableList<LessonDto> =
+        convertLessonsMutableListToLessonsDtoMutableList(
+            repository.findLessonByStudentsId(studentId) ?: throw ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Lesson Of Teacher With Id: $studentId, Not found"
+            )
+        )
 
 
-    fun update(
-        @RequestBody lesson: LessonDto,
-        @RequestParam(required = true) teachers: MutableList<User>,
-        @RequestParam(required = true) students: MutableList<User>): LessonDto {
-        val updatedLesson: Lesson = findById(lesson.id).convertToEntity()
-        updatedLesson.startTimestamp = lesson.startTimestamp
-        updatedLesson.endTimestamp = lesson.endTimestamp
-        updatedLesson.price = lesson.price
-        updatedLesson.online = lesson.online
-        updatedLesson.teachers = teachers
-        updatedLesson.students = students
-        return repository.save(lesson.convertToEntity()).convertToDto()
-        )).convertToDto()
-    }
+    fun update(id: Long, lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()
 
     fun create(lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()
 
-    fun delete(id: Long) {
-        val lesson = repository.findByIdOrNull(id)
-        if (lesson != null) {
-            repository.delete(lesson)
-        } else {
-            throw ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Lesson Not Found"
-            )
-        }
-    }
+    fun delete(id: Long) = repository.delete(findById(id).convertToEntity())
+
 
 }
