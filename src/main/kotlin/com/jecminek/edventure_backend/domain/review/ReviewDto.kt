@@ -1,8 +1,5 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.domain.user.UserDto
-import com.jecminek.edventure_backend.domain.user.convertToEntity
-
 data class ReviewDto(
     var id: Long,
     var stars: Double,

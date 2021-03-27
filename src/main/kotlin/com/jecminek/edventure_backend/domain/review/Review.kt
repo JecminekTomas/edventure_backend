@@ -1,9 +1,7 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.BaseEntity
-
 import com.jecminek.edventure_backend.domain.user.User
-import com.jecminek.edventure_backend.domain.user.convertToDto
 import javax.persistence.*
 
 @Entity

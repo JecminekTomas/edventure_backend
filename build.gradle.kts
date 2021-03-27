@@ -6,6 +6,8 @@ plugins {
     kotlin("jvm") version "1.4.21"
     kotlin("plugin.spring") version "1.4.21"
     kotlin("plugin.allopen") version "1.3.61"
+    id("com.github.johnrengelman.processes") version "0.5.0"
+    id("org.springdoc.openapi-gradle-plugin") version "1.3.0"
 }
 
 group = "com.jecminek"
@@ -34,8 +36,15 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-parent:2.4.0")
 
     //Springfox + Swagger
-    implementation("io.springfox:springfox-boot-starter:3.0.0")
-    implementation("io.springfox:springfox-swagger-ui:3.0.0")
+    implementation("org.springdoc:springdoc-openapi-ui:1.5.6")
+    implementation("org.springdoc:springdoc-openapi-data-rest:1.5.6")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.5.6")
+
+    /** Old way through springfox.(Not original swagger way)
+     * implementation("io.springfox:springfox-boot-starter:3.0.0")
+     * implementation("io.springfox:springfox-swagger-ui:3.0.0")
+     **/
+
 
     // Spring Data JPA (Hibernate)
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")

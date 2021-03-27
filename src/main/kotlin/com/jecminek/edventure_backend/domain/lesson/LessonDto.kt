@@ -2,7 +2,6 @@ package com.jecminek.edventure_backend.domain.lesson
 
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserDto
-import com.jecminek.edventure_backend.domain.user.convertToDto
 import com.jecminek.edventure_backend.domain.user.convertToEntity
 
 data class LessonDto(

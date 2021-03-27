@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.domain.user.UserService
-import com.jecminek.edventure_backend.domain.user.convertToEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
