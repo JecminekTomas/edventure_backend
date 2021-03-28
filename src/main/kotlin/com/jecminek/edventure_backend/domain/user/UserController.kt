@@ -20,15 +20,15 @@ class UserController {
 
     @Operation(summary = "Get all users with certain role")
     @ApiResponses(value = [
-        ApiResponse(responseCode = "200", description = "Users Found", content = [
+        ApiResponse(responseCode = "200", description = "User(s) found", content = [
             (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]),
         ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-        ApiResponse(responseCode = "404", description = "Users With This Role Not Found", content = [Content()])]
+        ApiResponse(responseCode = "404", description = "User(s) With This Role Not Found", content = [Content()])]
     )
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
 
-    fun findUserByRole(@Parameter(description = "Role of User to be found", example = "TEACHER") @RequestParam(required = true) role: UserRole): List<UserDto>? = service.findUserByRole(role)
+    fun findUserByRole(@Parameter(description = "Role of user to be found", example = "TEACHER") @RequestParam(required = true) role: UserRole): List<UserDto>? = service.findUserByRole(role)
 
     @Operation(summary = "Get user by id")
     @ApiResponses(value = [
@@ -39,7 +39,7 @@ class UserController {
     )
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun findById(@Parameter(description = "Id of User to be found", example = "1") @PathVariable id: Long) = service.findById(id)
+    fun findById(@Parameter(description = "Id of user to be found", example = "1") @PathVariable id: Long) = service.findById(id)
 
     @Operation(summary = "Creation of user")
     @ApiResponses(value = [
@@ -52,11 +52,14 @@ class UserController {
     fun create(@RequestBody user: UserDto): UserDto = service.create(user)
 
     @Operation(summary = "Update user")
-    @ApiResponses(value = [
-        ApiResponse(responseCode = "202", description = "User updated", content = [
-            (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]),
-        ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-        ApiResponse(responseCode = "404", description = "User with this ID not found", content = [Content()])]
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "202", description = "User updated", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "User with this ID not found", content = [Content()])]
     )
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)

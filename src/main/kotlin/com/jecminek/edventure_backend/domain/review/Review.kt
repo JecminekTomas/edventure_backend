@@ -17,6 +17,9 @@ class Review(
     var unhelpful: Int = 0,
     var reviewTimestamp: Long = 0,
 
+    /** Reviewer = Who is reviewing.
+     * Reviewed = Who is being reviewed.*/
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id")
     var reviewed: User = User(),

@@ -34,8 +34,8 @@ class UserService : EntityMutableListToDtoMutableListConverter<User, UserDto> {
     fun create(userDto: UserDto): UserDto = repository.save(userDto.convertToEntity()).convertEntityToDto()
 
     fun update(id: Long, userDto: UserDto): UserDto {
+        //QUESTION: Or this way?
         val user = findById(id)
-        user.id = id
         user.firstName = userDto.firstName
         user.lastName = userDto.lastName
         user.email = userDto.email

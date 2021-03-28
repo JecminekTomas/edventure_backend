@@ -8,7 +8,7 @@ import javax.validation.constraints.Size
 
 data class UserDto(
 
-    @Schema(description = "ID is only for response", hidden = true)
+    @Schema(description = "ID is only for response")
     var id: Long,
 
     @Schema(description = "Firstname of user", example = "Muhammad")
