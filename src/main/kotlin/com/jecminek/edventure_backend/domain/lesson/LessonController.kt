@@ -14,7 +14,6 @@ class LessonController {
     @Autowired
     lateinit var userService: UserService
 
-
     @GetMapping("/lessons/teachers/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findLessonByTeachersId(@PathVariable id: Long): List<LessonDto> =

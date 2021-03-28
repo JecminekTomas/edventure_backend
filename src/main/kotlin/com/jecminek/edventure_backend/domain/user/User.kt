@@ -5,16 +5,21 @@ import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.enums.UserRole
 import com.jecminek.edventure_backend.enums.UserStatus
+import io.swagger.v3.oas.annotations.media.Schema
 import javax.persistence.*
+import javax.validation.constraints.*
 
 @Entity
 @Table(name = "\"USER\"")
 class User(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    override var id: Long = 0,
     var firstName: String = "",
     var lastName: String = "",
     var email: String = "",
-    var biography: String = "",
-    var phoneNumber: String = "",
+    var biography: String? = "",
+    var phoneNumber: String? = "",
 
     @Enumerated(EnumType.STRING)
     var status: UserStatus = UserStatus.ONLINE,
@@ -22,13 +27,14 @@ class User(
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "USER_ROLE")
     @Enumerated(EnumType.STRING)
+    @NotEmpty
     var roles: MutableList<UserRole> = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable( name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
     )
-    var studentLessons: MutableList<Lesson> = mutableListOf(),
+    var studentLessons: MutableList<Lesson>? = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable( name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],

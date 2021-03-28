@@ -18,6 +18,7 @@ class UserService {
     fun findById(id: Long): UserDto =
         repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User With Id: $id, Not Found")
 
+    // FIXME: 28.03.2021 Repo MUST return Entity, but Dto MUST be in respose.
     fun findUserByRole(role: UserRole): List<User> =
         repository.findUserByRoles(role) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User With Role: $role, Not Found")
 
@@ -25,6 +26,7 @@ class UserService {
 
     fun update(id: Long, userDto: UserDto): UserDto {
         val user = findById(id)
+        user.id = id
         user.firstName = userDto.firstName
         user.lastName = userDto.lastName
         user.email = userDto.email
