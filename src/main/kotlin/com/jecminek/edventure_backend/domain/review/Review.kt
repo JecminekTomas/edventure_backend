@@ -18,15 +18,11 @@ class Review(
     var reviewTimestamp: Long = 0,
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "USER_REVIEWED", joinColumns = [JoinColumn(name = "review_id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id")]
-    )
+    @JoinColumn(name = "reviewer_id")
     var reviewed: User = User(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "USER_REVIEWER", joinColumns = [JoinColumn(name = "review_id")],
-        inverseJoinColumns = [JoinColumn(name = "user_id")]
-    )
+    @JoinColumn(name = "reviewed_id")
     var reviewer: User = User()
 
 ): BaseEntity()

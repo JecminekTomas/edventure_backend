@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : PagingAndSortingRepository<User, Long> {
-    fun findUserByRoles(role: UserRole): List<User>?
+    fun findUserByRoles(role: UserRole): MutableList<User>?
 }

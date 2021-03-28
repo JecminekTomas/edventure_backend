@@ -10,6 +10,7 @@ data class LessonDto(
     var endTimestamp: Long,
     var price: Double,
     var online: Boolean,
+    // TODO Array of Long (Id)
     var teachers: MutableList<UserDto>,
     var students: MutableList<UserDto>
 )

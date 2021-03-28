@@ -27,6 +27,7 @@ class ReviewService {
         repository.findReviewsByReviewerId(reviewer_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     fun create(reviewer: UserDto, reviewed: UserDto, reviewDto: ReviewDto): ReviewDto =
+        //Question: Is this right?
         repository.save(
             Review(
                 stars = reviewDto.stars,
@@ -35,6 +36,7 @@ class ReviewService {
                 reviewed = reviewed.convertToEntity()
             )
         ).convertToDto()
+
 
 
     // FIXME: 21.03.2021 What if I forgot some argument?  Same as previous approach

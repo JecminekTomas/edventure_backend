@@ -3,7 +3,7 @@ package com.jecminek.edventure_backend.domain.lesson
 import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserDto
-import com.jecminek.edventure_backend.domain.user.convertToDto
+import com.jecminek.edventure_backend.domain.user.convertEntityToDto
 import javax.persistence.*
 
 @Entity
@@ -24,14 +24,15 @@ class Lesson(
     var students: MutableList<User> = mutableListOf()
 ) : BaseEntity()
 
+
+// Question: 28.03.2021 Should these method be here, or somewhere Else?
 fun convertUsersMutableListToUsersDtoMutableList(users: MutableList<User>): MutableList<UserDto> {
-    val usersDto: MutableList<UserDto> = mutableListOf();
-    for (user in users) {
-        usersDto.add(user.convertToDto())
+    val usersDto = mutableListOf<UserDto>();
+    users.forEach { user ->
+        usersDto.add(user.convertEntityToDto())
     }
     return usersDto
 }
-
 fun convertLessonsMutableListToLessonsDtoMutableList(lessons: MutableList<Lesson>): MutableList<LessonDto> {
     val lessonsDto: MutableList<LessonDto> = mutableListOf();
     for (lesson in lessons) {

@@ -35,6 +35,7 @@ class LessonService {
         )
 
 
+    // FIXME: 28.03.2021 This is wrong. I must find the ID.
     fun update(id: Long, lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()
 
     fun create(lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()

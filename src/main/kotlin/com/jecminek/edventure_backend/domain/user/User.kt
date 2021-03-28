@@ -4,8 +4,7 @@ import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.enums.UserRole
-import com.jecminek.edventure_backend.enums.UserStatus
-import io.swagger.v3.oas.annotations.media.Schema
+import com.jecminek.edventure_backend.extensions.EntityToDtoExtension
 import javax.persistence.*
 import javax.validation.constraints.*
 
@@ -21,8 +20,9 @@ class User(
     var biography: String? = "",
     var phoneNumber: String? = "",
 
-    @Enumerated(EnumType.STRING)
-    var status: UserStatus = UserStatus.ONLINE,
+    /** TODO 28.3.21 - Future feature.
+     * @Enumerated(EnumType.STRING)
+     * var status: UserStatus = UserStatus.ONLINE,*/
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "USER_ROLE")
@@ -30,6 +30,8 @@ class User(
     @NotEmpty
     var roles: MutableList<UserRole> = mutableListOf(),
 
+
+    // Question: Is this right? Left them there, even if I don't need them.
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable( name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
@@ -37,7 +39,7 @@ class User(
     var studentLessons: MutableList<Lesson>? = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable( name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+    @JoinTable(name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
     )
     var teacherLessons: MutableList<Lesson> = mutableListOf(),
@@ -50,7 +52,7 @@ class User(
 
 ) : BaseEntity()
 
-fun User.convertToDto() = UserDto(
+fun User.convertEntityToDto(): UserDto = UserDto(
     id = id,
     firstName = firstName,
     lastName = lastName,
@@ -60,8 +62,3 @@ fun User.convertToDto() = UserDto(
     roles = roles
 )
 
-fun User.convertToNameDto() = UserNameDto(
-    id = id,
-    firstName = firstName,
-    lastName = lastName
-)

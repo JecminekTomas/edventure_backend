@@ -28,7 +28,7 @@ class UserController {
     @GetMapping("/users")
     @ResponseStatus(HttpStatus.OK)
 
-    fun findUserByRole(@Parameter(description = "Role of User to be found", example = "TEACHER") @RequestParam(required = true) role: UserRole): List<User>? = service.findUserByRole(role)
+    fun findUserByRole(@Parameter(description = "Role of User to be found", example = "TEACHER") @RequestParam(required = true) role: UserRole): List<UserDto>? = service.findUserByRole(role)
 
     @Operation(summary = "Get user by id")
     @ApiResponses(value = [
