@@ -28,7 +28,7 @@ class UserService {
             "User With Role: $role, Not Found"
         )
 
-    fun create(userDto: UserDto): User = repository.save(userDto.convertIdDtoToEntity())
+    fun create(userDto: UserDto): User = repository.save(userDto.convertDtoToEntity())
 
     fun update(id: Long, userDto: UserDto): User {
         val updatedUser = findById(id)

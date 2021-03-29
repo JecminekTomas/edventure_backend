@@ -2,6 +2,8 @@ package com.jecminek.edventure_backend.domain.review
 
 
 import com.jecminek.edventure_backend.domain.user.UserDto
+import com.jecminek.edventure_backend.domain.user.UserIdDto
+import com.jecminek.edventure_backend.domain.user.convertDtoToEntity
 import com.jecminek.edventure_backend.domain.user.convertIdDtoToEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -26,20 +28,20 @@ class ReviewService {
     fun findReviewsByReviewerId(reviewer_id: Long): List<Review> =
         repository.findReviewsByReviewerId(reviewer_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun create(reviewer: UserDto, reviewed: UserDto, reviewDto: ReviewDto): Review =
-        /**In request user is not capable to make review helpful, or unhelpful*/
+    fun create(review: Review): Review =
+        /**In request user is not capable to make review helpful, or unhelpful - it is bigger, but no need for new DTO*/
         repository.save(
             Review(
-                stars = reviewDto.stars,
-                verbalEvaluation = reviewDto.verbalEvaluation,
-                reviewer = reviewer.convertIdDtoToEntity(),
-                reviewed = reviewed.convertIdDtoToEntity(),
+                stars = review.stars,
+                verbalEvaluation = review.verbalEvaluation,
+                reviewer = review.reviewer,
+                reviewed = review.reviewed,
                 reviewTimestamp = System.currentTimeMillis() / 1000L
             )
         )
 
     // FIXME: 21.03.2021 What if I forgot some argument?  Same as previous approach
-    fun update(id: Long, updatedReview: ReviewDto): Review {
+    fun update(id: Long, updatedReview: Review): Review {
         /**In request user is not capable to change reviewTimeStamp*/
         val review = findById(id)
         review.stars = updatedReview.stars

@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
+import com.jecminek.edventure_backend.domain.user.UserIdDto
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
@@ -24,6 +25,12 @@ data class ReviewDto(
     @Schema(description = "Unhelpfulness of review", example = "2")
     var unhelpful: Int,
 
+
+    // FIXME: 30.03.2021 Schemas
+    var reviewerId: Long,
+
+    var reviewedId: Long
+
     //FIXME: 28.03.2021 I must send in update reviewer and reviewed!
     //FIXME: 28.03.2021 In create there is no way to send helpful and unhelpful.
     // FIXME: 28.03.2021 Reviewer must be student/ teacher and Reviewed must be teacher/student
@@ -34,11 +41,3 @@ data class ReviewDto(
 // FIXME: 19.03.2021 In every UPDATE will change date of Review. Not sure if it's wrong.
 // FIXME: 20.03.2021 No way to send whole USER, just ID.
 
-fun ReviewDto.convertDtoToEntity() = Review(
-    stars = stars,
-    verbalEvaluation = verbalEvaluation,
-    helpful = helpful,
-    unhelpful = unhelpful,
-    reviewTimestamp = System.currentTimeMillis() / 1000L,
-    // TODO: 19.03.2021 var userPicture
-)

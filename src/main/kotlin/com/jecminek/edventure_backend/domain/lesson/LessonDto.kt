@@ -27,7 +27,10 @@ data class LessonDto(
     @Schema(description = "Says, if lecture will be online, or not", example = "true")
     var online: Boolean,
 
+    @Schema(description = "List of teachers ids at lecture", example = "[\"1\"]")
     var teachers: MutableList<UserIdDto>,
+
+    @Schema(description = "List of students ids at lecture", example = "[\"2\"]")
     var students: MutableList<UserIdDto>
 
 )

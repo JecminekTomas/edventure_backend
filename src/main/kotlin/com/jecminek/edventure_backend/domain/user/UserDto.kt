@@ -40,7 +40,7 @@ data class UserDto(
     var roles: MutableList<UserRole>
 )
 
-fun UserDto.convertIdDtoToEntity() =
+fun UserDto.convertDtoToEntity() =
     User(
         firstName = firstName,
         lastName = lastName,

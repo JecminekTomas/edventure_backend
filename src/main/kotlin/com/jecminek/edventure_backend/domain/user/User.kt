@@ -4,7 +4,6 @@ import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.enums.UserRole
-import com.jecminek.edventure_backend.extensions.EntityToDtoExtension
 import javax.persistence.*
 import javax.validation.constraints.*
 

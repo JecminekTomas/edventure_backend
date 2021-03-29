@@ -1,8 +1,14 @@
 package com.jecminek.edventure_backend.domain.lesson
 
+import com.jecminek.edventure_backend.domain.review.ReviewDto
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.enums.UserRole
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -17,6 +23,20 @@ class LessonController {
     @Autowired
     lateinit var userService: UserService
 
+    @Operation(summary = "Find lessons by ID of user, who is in position of teacher at lesson")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Lesson(s) found", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = LessonDto::class)))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
+            ApiResponse(
+                responseCode = "404",
+                description = "Lesson(s) with this ID of user in position of teacher not found",
+                content = [Content()]
+            )]
+    )
     @GetMapping("/lessons/teachers/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findLessonsByTeachersId(@PathVariable id: Long): List<LessonDto> =
@@ -24,6 +44,20 @@ class LessonController {
             it.convertEntityToDto()
         }
 
+    @Operation(summary = "Find lessons by ID of user, who is in position of student at lesson")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", description = "Lesson(s) found", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = LessonDto::class)))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
+            ApiResponse(
+                responseCode = "404",
+                description = "Lesson(s) with this ID of user in position of student not found",
+                content = [Content()]
+            )]
+    )
     @GetMapping("/lessons/students/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findLessonsByStudentsId(@PathVariable id: Long): List<LessonDto> =
@@ -32,6 +66,15 @@ class LessonController {
         }
 
 
+    @Operation(summary = "Creation of lesson")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201", description = "Lesson created", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = LessonDto::class)))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
+    )
     @PostMapping("/lessons")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
@@ -58,10 +101,16 @@ class LessonController {
         return lessonService.create(lesson.convertDtoToEntity()).convertEntityToDto()
     }
 
-
-    // FIXME: 28.03.2021 This is wrong. I must find the ID.
-    // FIXME: 28.03.2021 WARNING: WHAT THE HELL, IT IS COMPLETELY WRONG
-
+    @Operation(summary = "Update lesson")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "202", description = "Lesson updated", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = LessonDto::class)))]
+            ),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Lesson with this ID not found", content = [Content()])]
+    )
     @PutMapping("/lessons/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
@@ -89,6 +138,14 @@ class LessonController {
         return lessonService.update(id, lesson.convertDtoToEntity()).convertEntityToDto()
     }
 
+
+    @Operation(summary = "Delete lesson")
+    @ApiResponses(
+        value = [
+            ApiResponse(responseCode = "204", description = "Lesson deleted", content = [Content()]),
+            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
+            ApiResponse(responseCode = "404", description = "Lesson with this ID not found", content = [Content()])]
+    )
     @DeleteMapping("/lessons/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = lessonService.delete(id)
