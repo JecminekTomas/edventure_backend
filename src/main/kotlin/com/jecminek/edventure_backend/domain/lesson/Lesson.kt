@@ -1,17 +1,12 @@
 package com.jecminek.edventure_backend.domain.lesson
 
 import com.jecminek.edventure_backend.BaseEntity
-import com.jecminek.edventure_backend.domain.user.User
-import com.jecminek.edventure_backend.domain.user.UserDto
-import com.jecminek.edventure_backend.domain.user.convertEntityToDto
+import com.jecminek.edventure_backend.domain.user.*
 import javax.persistence.*
 
 @Entity
 @Table(name = "LESSON")
 class Lesson(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    override val id: Long = 0,
     var startTimestamp: Long = 0,
     var endTimestamp: Long = 0,
     var price: Double = 0.0,
@@ -24,33 +19,22 @@ class Lesson(
     var students: MutableList<User> = mutableListOf()
 ) : BaseEntity()
 
+fun Lesson.convertEntityToDto() = LessonDto(
+    id = id,
+    startTimestamp = endTimestamp,
+    endTimestamp = endTimestamp,
+    price = price,
+    online = online,
+    teachers = teachers.map {
+        UserIdDto(it.id)
+    } as MutableList<UserIdDto>,
+    students = students.map {
+        UserIdDto(it.id)
+    } as MutableList<UserIdDto>
+)
 
-// Question: 28.03.2021 Should these method be here, or somewhere Else?
-fun convertUsersMutableListToUsersDtoMutableList(users: MutableList<User>): MutableList<UserDto> {
-    val usersDto = mutableListOf<UserDto>();
-    users.forEach { user ->
-        usersDto.add(user.convertEntityToDto())
-    }
-    return usersDto
-}
-fun convertLessonsMutableListToLessonsDtoMutableList(lessons: MutableList<Lesson>): MutableList<LessonDto> {
-    val lessonsDto: MutableList<LessonDto> = mutableListOf();
-    for (lesson in lessons) {
-        lessonsDto.add(lesson.convertToDto())
-    }
-    return lessonsDto
-}
+// FIXME: 28.03.2021 Make an naming convention!
 
-fun Lesson.convertToDto() =
-    LessonDto(
-        id = id,
-        startTimestamp = startTimestamp,
-        endTimestamp = endTimestamp,
-        price = price,
-        online = online,
-        teachers = convertUsersMutableListToUsersDtoMutableList(teachers),
-        students = convertUsersMutableListToUsersDtoMutableList(students)
-    )
 
 
 

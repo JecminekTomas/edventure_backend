@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.lesson
 
+import com.jecminek.edventure_backend.domain.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -13,34 +14,35 @@ class LessonService {
     @Autowired
     lateinit var repository: LessonRepository
 
-    fun findById(id: Long): LessonDto = repository.findByIdOrNull(id)?.convertToDto() ?: throw ResponseStatusException(
+    fun findById(id: Long): Lesson = repository.findByIdOrNull(id) ?: throw ResponseStatusException(
         HttpStatus.NOT_FOUND,
-        "Lesson Not Found"
+        "Lesson with ID: $id, not found"
     )
 
-    fun findLessonByTeachersId(teacherId: Long): MutableList<LessonDto> =
-        convertLessonsMutableListToLessonsDtoMutableList(
-            repository.findLessonByTeachersId(teacherId) ?: throw ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Lesson Of Teacher With Id: $teacherId, Not found"
-            )
+    fun findLessonsByTeachersId(teacherId: Long): MutableList<Lesson> =
+        repository.findLessonsByTeachersId(teacherId) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Lesson of teacher with id: $teacherId, not found"
         )
 
-    fun findLessonByStudentsId(studentId: Long): MutableList<LessonDto> =
-        convertLessonsMutableListToLessonsDtoMutableList(
-            repository.findLessonByStudentsId(studentId) ?: throw ResponseStatusException(
-                HttpStatus.NOT_FOUND,
-                "Lesson Of Teacher With Id: $studentId, Not found"
-            )
+    fun findLessonsByStudentsId(studentId: Long): MutableList<Lesson> =
+        repository.findLessonsByStudentsId(studentId) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Lesson of teacher with id: $studentId, not found"
         )
 
+    fun create(lesson: Lesson): Lesson = repository.save(lesson)
 
-    // FIXME: 28.03.2021 This is wrong. I must find the ID.
-    fun update(id: Long, lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()
+    fun update(id: Long, updatedLesson: Lesson): Lesson {
+        val lesson= findById(id)
+        lesson.startTimestamp = updatedLesson.startTimestamp
+        lesson.endTimestamp = updatedLesson.endTimestamp
+        lesson.price = updatedLesson.price
+        lesson.online = updatedLesson.online
+        lesson.teachers = updatedLesson.teachers
+        lesson.students = updatedLesson.students
+        return repository.save(updatedLesson)
+    }
 
-    fun create(lesson: LessonDto): LessonDto = repository.save(lesson.convertToEntity()).convertToDto()
-
-    fun delete(id: Long) = repository.delete(findById(id).convertToEntity())
-
-
+    fun delete(id: Long) = repository.delete(findById(id))
 }

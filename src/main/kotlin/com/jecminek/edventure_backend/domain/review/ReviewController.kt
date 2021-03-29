@@ -2,6 +2,7 @@ package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.domain.user.UserDto
 import com.jecminek.edventure_backend.domain.user.UserService
+import com.jecminek.edventure_backend.domain.user.convertEntityToDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -20,8 +21,7 @@ class ReviewController {
     @Autowired
     lateinit var userService: UserService
 
-
-    @Operation(summary = "Get reviews by ID of user, who is in position of reviewer in review")
+    @Operation(summary = "Find reviews by ID of user, who is in position of reviewer in review")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -43,9 +43,17 @@ class ReviewController {
             example = "1"
         ) @PathVariable id: Long
     ): List<ReviewDto> =
-        reviewService.findReviewsByReviewerId(id)
+        reviewService.findReviewsByReviewerId(id).map {
+            ReviewDto(
+                id = it.id,
+                stars = it.stars,
+                verbalEvaluation = it.verbalEvaluation,
+                helpful = it.helpful,
+                unhelpful = it.unhelpful
+            )
+        }
 
-    @Operation(summary = "Get reviews by ID of user, who is in position of reviewed in review")
+    @Operation(summary = "Find reviews by ID of user, who is in position of reviewed in review")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -67,7 +75,15 @@ class ReviewController {
             example = "1"
         ) @PathVariable id: Long
     ): List<ReviewDto> =
-        reviewService.findReviewsByReviewedId(id)
+        reviewService.findReviewsByReviewedId(id).map {
+            ReviewDto(
+                id = it.id,
+                stars = it.stars,
+                verbalEvaluation = it.verbalEvaluation,
+                helpful = it.helpful,
+                unhelpful = it.unhelpful
+            )
+        }
 
 
     @Operation(summary = "Creation of review")
@@ -85,8 +101,11 @@ class ReviewController {
         @RequestBody review: ReviewDto,
         @RequestParam(required = true) reviewerId: Long,
         @RequestParam(required = true) reviewedId: Long
-    ): ReviewDto = reviewService.create(userService.findById(reviewerId), userService.findById(reviewedId), review)
-
+    ): ReviewDto = reviewService.create(
+        userService.findById(reviewerId).convertEntityToDto(),
+        userService.findById(reviewedId).convertEntityToDto(),
+        review
+    ).convertEntityToDto()
 
     @Operation(summary = "Update review")
     @ApiResponses(
@@ -104,7 +123,7 @@ class ReviewController {
         @Parameter(description = "ID of updated review", example = "1")
         @PathVariable id: Long,
         @RequestBody review: ReviewDto
-    ): ReviewDto = reviewService.update(id, review)
+    ): ReviewDto = reviewService.update(id, review).convertEntityToDto()
 
     @Operation(summary = "Delete review")
     @ApiResponses(
@@ -118,6 +137,5 @@ class ReviewController {
     fun delete(
         @Parameter(description = "ID of deleted review", example = "1")
         @PathVariable id: Long
-    ) =
-        reviewService.delete(id)
+    ) = reviewService.delete(id)
 }

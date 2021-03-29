@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface LessonRepository : PagingAndSortingRepository<Lesson, Long> {
 
-    fun findLessonByTeachersId(teachersId: Long): MutableList<Lesson>?
+    fun findLessonsByTeachersId(teachersId: Long): MutableList<Lesson>?
 
-    fun findLessonByStudentsId(studentsId: Long): MutableList<Lesson>?
+    fun findLessonsByStudentsId(studentsId: Long): MutableList<Lesson>?
 }

@@ -34,7 +34,7 @@ data class ReviewDto(
 // FIXME: 19.03.2021 In every UPDATE will change date of Review. Not sure if it's wrong.
 // FIXME: 20.03.2021 No way to send whole USER, just ID.
 
-fun ReviewDto.convertToEntity() = Review(
+fun ReviewDto.convertDtoToEntity() = Review(
     stars = stars,
     verbalEvaluation = verbalEvaluation,
     helpful = helpful,

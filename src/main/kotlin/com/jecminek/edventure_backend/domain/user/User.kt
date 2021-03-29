@@ -30,27 +30,30 @@ class User(
     @NotEmpty
     var roles: MutableList<UserRole> = mutableListOf(),
 
-
-    // Question: Is this right? Left them there, even if I don't need them.
     @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable( name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+    @JoinTable(
+        name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
     )
     var studentLessons: MutableList<Lesson>? = mutableListOf(),
 
     @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable(name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
+    @JoinTable(
+        name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "lesson_id")]
     )
     var teacherLessons: MutableList<Lesson> = mutableListOf(),
 
+    // fetch type lazy
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewer")
     var reviewerReviews: MutableList<Review> = mutableListOf(),
 
+    // fetch type lazy
     @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewed")
     var reviewedReviews: MutableList<Review> = mutableListOf()
 
 ) : BaseEntity()
+
 
 fun User.convertEntityToDto(): UserDto = UserDto(
     id = id,
@@ -61,4 +64,6 @@ fun User.convertEntityToDto(): UserDto = UserDto(
     phoneNumber = phoneNumber,
     roles = roles
 )
+
+
 

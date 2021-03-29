@@ -30,11 +30,13 @@ class Review(
 
 ): BaseEntity()
 
-// FIXME: 20.03.2021 MUST SEND REVIEWER ID IN DTO, THEN CONVERT
-fun Review.convertToDto() = ReviewDto(
+fun Review.convertEntityToDto() = ReviewDto(
     id= id,
     stars = stars,
     verbalEvaluation = verbalEvaluation,
     helpful = helpful,
     unhelpful = unhelpful
 )
+
+// FIXME: 20.03.2021 MUST SEND REVIEWER ID IN DTO, THEN CONVERT
+
