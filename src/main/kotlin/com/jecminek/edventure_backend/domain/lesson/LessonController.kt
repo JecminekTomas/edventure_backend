@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.jecminek.edventure_backend.domain.review.ReviewDto
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.enums.UserRole
@@ -80,8 +79,8 @@ class LessonController {
     fun create(
         @RequestBody lesson: LessonDto
     ): LessonDto {
-        lesson.teachers.forEach { newTeacher ->
-            val teacher = userService.findById(newTeacher.id)
+        lesson.teachersIds.forEach { teacherId ->
+            val teacher = userService.findById(teacherId)
             if (!teacher.roles.contains(UserRole.TEACHER)) {
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -89,8 +88,8 @@ class LessonController {
                 )
             }
         }
-        lesson.students.forEach { newStudent ->
-            val student = userService.findById(newStudent.id)
+        lesson.studentsIds.forEach { studentId ->
+            val student = userService.findById(studentId)
             if (!student.roles.contains(UserRole.STUDENT)) {
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -117,8 +116,8 @@ class LessonController {
         @PathVariable id: Long,
         @RequestBody lesson: LessonDto
     ): LessonDto {
-        lesson.teachers.forEach { newTeacher ->
-            val teacher = userService.findById(newTeacher.id)
+        lesson.teachersIds.forEach { teacherId ->
+            val teacher = userService.findById(teacherId)
             if (!teacher.roles.contains(UserRole.TEACHER)) {
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -126,8 +125,8 @@ class LessonController {
                 )
             }
         }
-        lesson.students.forEach { newStudent ->
-            val student = userService.findById(newStudent.id)
+        lesson.studentsIds.forEach { studentId->
+            val student = userService.findById(studentId)
             if (!student.roles.contains(UserRole.STUDENT)) {
                 throw ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -156,12 +155,26 @@ class LessonController {
         endTimestamp = endTimestamp,
         price = price,
         online = online,
-        teachers = teachers.map {
-            userService.findById(it.id)
+        teachers = teachersIds.map {
+            userService.findById(it)
         } as MutableList<User>,
-        students = students.map {
-            userService.findById(it.id)
+        students = studentsIds.map {
+            userService.findById(it)
         } as MutableList<User>
+    )
+
+    fun Lesson.convertEntityToDto() = LessonDto(
+        id = id,
+        startTimestamp = endTimestamp,
+        endTimestamp = endTimestamp,
+        price = price,
+        online = online,
+        teachersIds = teachers.map {
+            it.id
+        } as MutableList<Long>,
+        studentsIds = students.map {
+            it.id
+        } as MutableList<Long>
     )
 
 

@@ -5,7 +5,7 @@ import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.enums.UserRole
 import javax.persistence.*
-import javax.validation.constraints.*
+import javax.validation.constraints.NotEmpty
 
 @Entity
 @Table(name = "\"USER\"")

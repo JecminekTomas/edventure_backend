@@ -1,10 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 
-import com.jecminek.edventure_backend.domain.user.UserDto
-import com.jecminek.edventure_backend.domain.user.UserIdDto
-import com.jecminek.edventure_backend.domain.user.convertDtoToEntity
-import com.jecminek.edventure_backend.domain.user.convertIdDtoToEntity
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus

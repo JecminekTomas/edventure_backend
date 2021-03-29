@@ -7,6 +7,9 @@ import javax.persistence.*
 @Entity
 @Table(name = "LESSON")
 class Lesson(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    override var id: Long = 0,
     var startTimestamp: Long = 0,
     var endTimestamp: Long = 0,
     var price: Double = 0.0,
@@ -19,19 +22,6 @@ class Lesson(
     var students: MutableList<User> = mutableListOf()
 ) : BaseEntity()
 
-fun Lesson.convertEntityToDto() = LessonDto(
-    id = id,
-    startTimestamp = endTimestamp,
-    endTimestamp = endTimestamp,
-    price = price,
-    online = online,
-    teachers = teachers.map {
-        UserIdDto(it.id)
-    } as MutableList<UserIdDto>,
-    students = students.map {
-        UserIdDto(it.id)
-    } as MutableList<UserIdDto>
-)
 
 // FIXME: 28.03.2021 Make an naming convention!
 

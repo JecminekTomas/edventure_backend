@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.jecminek.edventure_backend.domain.user.User
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -20,13 +19,13 @@ class LessonService {
     )
 
     fun findLessonsByTeachersId(teacherId: Long): MutableList<Lesson> =
-        repository.findLessonsByTeachersId(teacherId) ?: throw ResponseStatusException(
+        repository.findLessonByTeachersId(teacherId) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Lesson of teacher with id: $teacherId, not found"
         )
 
     fun findLessonsByStudentsId(studentId: Long): MutableList<Lesson> =
-        repository.findLessonsByStudentsId(studentId) ?: throw ResponseStatusException(
+        repository.findLessonByStudentsId(studentId) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Lesson of teacher with id: $studentId, not found"
         )
@@ -45,4 +44,5 @@ class LessonService {
     }
 
     fun delete(id: Long) = repository.delete(findById(id))
+
 }

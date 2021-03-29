@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.jecminek.edventure_backend.domain.user.UserIdDto
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
@@ -28,9 +27,9 @@ data class LessonDto(
     var online: Boolean,
 
     @Schema(description = "List of teachers ids at lecture", example = "[\"1\"]")
-    var teachers: MutableList<UserIdDto>,
+    var teachersIds: MutableList<Long>,
 
     @Schema(description = "List of students ids at lecture", example = "[\"2\"]")
-    var students: MutableList<UserIdDto>
+    var studentsIds: MutableList<Long>
 
 )

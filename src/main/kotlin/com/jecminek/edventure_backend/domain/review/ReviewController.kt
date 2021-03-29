@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.domain.user.UserService
-import com.jecminek.edventure_backend.domain.user.convertEntityToDto
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content

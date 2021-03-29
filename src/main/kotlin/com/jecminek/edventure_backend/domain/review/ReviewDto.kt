@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.domain.user.UserIdDto
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
