@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.lesson
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.user.*
 import javax.persistence.*
@@ -15,10 +16,18 @@ class Lesson(
     var price: Double = 0.0,
     var online: Boolean = false,
 
-    @ManyToMany(mappedBy = "teacherLessons")
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable(
+        name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "lesson_id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    )
     var teachers: MutableList<User> = mutableListOf(),
 
-    @ManyToMany(mappedBy = "studentLessons")
+    @ManyToMany(cascade = [CascadeType.ALL])
+    @JoinTable(
+        name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "lesson_id")],
+        inverseJoinColumns = [JoinColumn(name = "user_id")]
+    )
     var students: MutableList<User> = mutableListOf()
 ) : BaseEntity()
 

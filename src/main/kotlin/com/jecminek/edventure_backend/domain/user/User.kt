@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
@@ -29,26 +30,20 @@ class User(
     @NotEmpty
     var roles: MutableList<UserRole> = mutableListOf(),
 
-    @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable(
-        name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "lesson_id")]
-    )
+    /** These lists are only for compatibility issue.
+     *  This is the side mappedBy, so it is not primary, and there is
+     *  explicitly said, there are FetchType lazy, which is default value.
+     * */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "students")
     var studentLessons: MutableList<Lesson>? = mutableListOf(),
 
-    @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable(
-        name = "TEACHER_LESSON", joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "lesson_id")]
-    )
-    var teacherLessons: MutableList<Lesson> = mutableListOf(),
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "teachers")
+    private var teacherLessons: MutableList<Lesson> = mutableListOf(),
 
-    // fetch type lazy
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
     var reviewerReviews: MutableList<Review> = mutableListOf(),
 
-    // fetch type lazy
-    @OneToMany(cascade = [CascadeType.ALL], mappedBy = "reviewed")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewed")
     var reviewedReviews: MutableList<Review> = mutableListOf()
 
 ) : BaseEntity()

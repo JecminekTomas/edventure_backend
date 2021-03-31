@@ -63,7 +63,7 @@ class ReviewController {
     @ResponseStatus(HttpStatus.OK)
     fun findReviewsByReviewedId(
         @Parameter(
-            description = "Id of user who is in position of reviewer",
+            description = "Id of user who is in position of reviewed",
             example = "1"
         ) @PathVariable id: Long
     ): List<ReviewDto> =

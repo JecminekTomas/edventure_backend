@@ -40,7 +40,7 @@ class LessonService {
         lesson.online = updatedLesson.online
         lesson.teachers = updatedLesson.teachers
         lesson.students = updatedLesson.students
-        return repository.save(updatedLesson)
+        return repository.save(lesson)
     }
 
     fun delete(id: Long) = repository.delete(findById(id))

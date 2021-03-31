@@ -26,8 +26,10 @@ data class ReviewDto(
 
 
     // FIXME: 30.03.2021 Schemas
+    @Schema(description = "ID of user, who is in position of reviewer in review", example = "2")
     var reviewerId: Long,
 
+    @Schema(description = "ID of user, who is in position of reviewed in review", example = "1")
     var reviewedId: Long
 
     //FIXME: 28.03.2021 I must send in update reviewer and reviewed!
