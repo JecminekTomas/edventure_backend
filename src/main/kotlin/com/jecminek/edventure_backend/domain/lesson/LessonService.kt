@@ -1,6 +1,9 @@
 package com.jecminek.edventure_backend.domain.lesson
 
+import com.jecminek.edventure_backend.constant.Constants
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -18,17 +21,11 @@ class LessonService {
         "Lesson with ID: $id, not found"
     )
 
-    fun findLessonsByTeachersId(teacherId: Long): MutableList<Lesson> =
-        repository.findLessonByTeachersId(teacherId) ?: throw ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "Lesson of teacher with id: $teacherId, not found"
-        )
+    fun findLessonsByTeachersId(teacherId: Long, page: Int): Page<Lesson> =
+        repository.findLessonByTeachersId(teacherId, PageRequest.of(page, Constants.defaultPageSize))
 
-    fun findLessonsByStudentsId(studentId: Long): MutableList<Lesson> =
-        repository.findLessonByStudentsId(studentId) ?: throw ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "Lesson of teacher with id: $studentId, not found"
-        )
+    fun findLessonsByStudentsId(studentId: Long, page: Int): Page<Lesson> =
+        repository.findLessonByStudentsId(studentId, PageRequest.of(page, Constants.defaultPageSize))
 
     fun create(lesson: Lesson): Lesson = repository.save(lesson)
 

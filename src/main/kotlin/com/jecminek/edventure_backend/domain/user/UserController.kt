@@ -35,7 +35,7 @@ class UserController {
             example = "TEACHER"
         ) @RequestParam(required = true) role: UserRole,
         @Parameter(
-            description = "Number of page, to be found. Counting from 0. Size is 50.",
+            description = "Number of page, to be found. Default page size is 50.",
             example = "0"
         )
         @RequestParam(required = true) page: Int

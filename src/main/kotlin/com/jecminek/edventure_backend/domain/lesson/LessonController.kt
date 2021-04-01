@@ -5,6 +5,7 @@ import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.enums.UserRole
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -42,10 +43,16 @@ class LessonController {
     )
     @GetMapping("/lessons/teachers/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun findLessonsByTeachersId(@PathVariable id: Long): List<LessonDto> =
-        lessonService.findLessonsByTeachersId(id).map {
+    fun findLessonsByTeachersId(
+        @PathVariable id: Long, @Parameter(
+            description = "Number of page, to be found. Default page size is 50.",
+            example = "0"
+        )
+        @RequestParam(required = true) page: Int
+    ): List<LessonDto> =
+        lessonService.findLessonsByTeachersId(id, page).map {
             it.convertEntityToDto()
-        }
+        }.content
 
     @Operation(summary = "Find lessons by ID of user, who is in position of student at lesson")
     @ApiResponses(
@@ -63,10 +70,16 @@ class LessonController {
     )
     @GetMapping("/lessons/students/{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun findLessonsByStudentsId(@PathVariable id: Long): List<LessonDto> =
-        lessonService.findLessonsByStudentsId(id).map {
+    fun findLessonsByStudentsId(
+        @PathVariable id: Long, @Parameter(
+            description = "Number of page, to be found. Default page size is 50.",
+            example = "0"
+        )
+        @RequestParam(required = true) page: Int
+    ): List<LessonDto> =
+        lessonService.findLessonsByStudentsId(id, page).map {
             it.convertEntityToDto()
-        }
+        }.content
 
 
     @Operation(summary = "Creation of lesson")

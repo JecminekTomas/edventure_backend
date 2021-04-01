@@ -39,11 +39,16 @@ class ReviewController {
         @Parameter(
             description = "Id of user who is in position of reviewer",
             example = "1"
-        ) @PathVariable id: Long
+        ) @PathVariable id: Long,
+        @Parameter(
+            description = "Number of page, to be found. Default page size is 50.",
+            example = "0"
+        )
+        @RequestParam(required = true) page: Int
     ): List<ReviewDto> =
-        reviewService.findReviewsByReviewerId(id).map {
+        reviewService.findReviewsByReviewerId(id, page).map {
             it.convertEntityToDto()
-        }
+        }.content
 
     @Operation(summary = "Find reviews by ID of user, who is in position of reviewed in review")
     @ApiResponses(
@@ -65,11 +70,16 @@ class ReviewController {
         @Parameter(
             description = "Id of user who is in position of reviewed",
             example = "1"
-        ) @PathVariable id: Long
+        ) @PathVariable id: Long,
+        @Parameter(
+            description = "Number of page, to be found. Default page size is 50.",
+            example = "0"
+        )
+        @RequestParam(required = true) page: Int
     ): List<ReviewDto> =
-        reviewService.findReviewsByReviewedId(id).map {
+        reviewService.findReviewsByReviewedId(id, page).map {
             it.convertEntityToDto()
-        }
+        }.content
 
 
     @Operation(summary = "Creation of review")

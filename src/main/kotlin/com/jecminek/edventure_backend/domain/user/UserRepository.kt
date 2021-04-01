@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface UserRepository : PagingAndSortingRepository<User, Long> {
-    fun findUserByRoles(role: UserRole, page: Pageable): Page<User>?
+    fun findUserByRoles(role: UserRole, page: Pageable): Page<User>
 }

@@ -1,7 +1,10 @@
 package com.jecminek.edventure_backend.domain.review
 
 
+import com.jecminek.edventure_backend.constant.Constants
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -18,11 +21,11 @@ class ReviewService {
     fun findById(id: Long): Review =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun findReviewsByReviewedId(reviewed_id: Long): List<Review> =
-        repository.findReviewsByReviewedId(reviewed_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun findReviewsByReviewedId(reviewed_id: Long, page: Int): Page<Review> =
+        repository.findReviewsByReviewedId(reviewed_id, PageRequest.of(page, Constants.defaultPageSize))
 
-    fun findReviewsByReviewerId(reviewer_id: Long): List<Review> =
-        repository.findReviewsByReviewerId(reviewer_id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun findReviewsByReviewerId(reviewer_id: Long, page: Int): Page<Review> =
+        repository.findReviewsByReviewerId(reviewer_id, PageRequest.of(page, Constants.defaultPageSize))
 
     fun create(review: Review): Review =
         /**In request user is not capable to make review helpful, or unhelpful - it is bigger, but no need for new DTO*/

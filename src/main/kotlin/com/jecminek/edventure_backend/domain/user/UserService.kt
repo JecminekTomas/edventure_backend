@@ -24,10 +24,7 @@ class UserService {
         )
 
     fun findUserByRole(role: UserRole, page: Int): Page<User> =
-        repository.findUserByRoles(role, PageRequest.of(page, defaultPageSize)) ?: throw ResponseStatusException(
-            HttpStatus.NOT_FOUND,
-            "User With Role: $role, Not Found"
-        )
+        repository.findUserByRoles(role, PageRequest.of(page, defaultPageSize))
 
     fun create(userDto: UserDto): User = repository.save(userDto.convertDtoToEntity())
 
