@@ -32,15 +32,16 @@ class LessonService {
 
     fun create(lesson: Lesson): Lesson = repository.save(lesson)
 
-    fun update(id: Long, updatedLesson: Lesson): Lesson {
-        val lesson= findById(id)
-        lesson.startTimestamp = updatedLesson.startTimestamp
-        lesson.endTimestamp = updatedLesson.endTimestamp
-        lesson.price = updatedLesson.price
-        lesson.online = updatedLesson.online
-        lesson.teachers = updatedLesson.teachers
-        lesson.students = updatedLesson.students
-        return repository.save(lesson)
+    // FIXME: 31.03.2021 Name
+    fun update(id: Long, lesson: Lesson): Lesson {
+        val updatedLesson = findById(id)
+        updatedLesson.startTimestamp = lesson.startTimestamp
+        updatedLesson.endTimestamp = lesson.endTimestamp
+        updatedLesson.price = lesson.price
+        updatedLesson.online = lesson.online
+        updatedLesson.teachers = lesson.teachers
+        updatedLesson.students = lesson.students
+        return repository.save(updatedLesson)
     }
 
     fun delete(id: Long) = repository.delete(findById(id))

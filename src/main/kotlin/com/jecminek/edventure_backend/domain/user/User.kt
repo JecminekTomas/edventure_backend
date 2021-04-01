@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.user
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jecminek.edventure_backend.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
@@ -11,9 +10,6 @@ import javax.validation.constraints.NotEmpty
 @Entity
 @Table(name = "\"USER\"")
 class User(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    override var id: Long = 0,
     var firstName: String = "",
     var lastName: String = "",
     var email: String = "",

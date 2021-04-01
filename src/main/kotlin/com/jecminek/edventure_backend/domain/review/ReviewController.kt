@@ -85,6 +85,10 @@ class ReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody review: ReviewDto,
+
+        // FIXME: 31.03.2021 Reviewer = student/teacher, Reviewed = teacher/student
+        // FIXME: 31.03.2021 Reviewer != Reviewed
+
     ): ReviewDto = reviewService.create(review.convertDtoToEntity()).convertEntityToDto()
 
     @Operation(summary = "Update review")
@@ -131,7 +135,7 @@ class ReviewController {
     )
 
     fun Review.convertEntityToDto() = ReviewDto(
-        id= id,
+        id = id,
         stars = stars,
         verbalEvaluation = verbalEvaluation,
         helpful = helpful,

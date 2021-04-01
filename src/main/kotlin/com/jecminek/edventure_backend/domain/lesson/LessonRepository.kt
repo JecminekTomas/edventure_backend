@@ -1,8 +1,5 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import org.hibernate.hql.internal.antlr.HqlSqlTokenTypes.FROM
-import org.hibernate.hql.internal.antlr.HqlSqlTokenTypes.SELECT
-import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 

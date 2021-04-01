@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.lesson
 
+import com.jecminek.edventure_backend.domain.subject.SubjectService
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.enums.UserRole
@@ -21,6 +22,9 @@ class LessonController {
 
     @Autowired
     lateinit var userService: UserService
+
+    @Autowired
+    lateinit var subjectService: SubjectService
 
     @Operation(summary = "Find lessons by ID of user, who is in position of teacher at lesson")
     @ApiResponses(
@@ -75,6 +79,7 @@ class LessonController {
             ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
     )
     @PostMapping("/lessons")
+    // FIXME: 31.03.2021 Student cannot be teacher at the same time
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody lesson: LessonDto
@@ -125,7 +130,7 @@ class LessonController {
                 )
             }
         }
-        lesson.studentsIds.forEach { studentId->
+        lesson.studentsIds.forEach { studentId ->
             val student = userService.findById(studentId)
             if (!student.roles.contains(UserRole.STUDENT)) {
                 throw ResponseStatusException(
@@ -154,13 +159,15 @@ class LessonController {
         startTimestamp = startTimestamp,
         endTimestamp = endTimestamp,
         price = price,
-        online = online,
+        place = place,
+        note = note,
         teachers = teachersIds.map {
             userService.findById(it)
         } as MutableList<User>,
         students = studentsIds.map {
             userService.findById(it)
-        } as MutableList<User>
+        } as MutableList<User>,
+        subject = subjectService.findById(subjectId)
     )
 
     fun Lesson.convertEntityToDto() = LessonDto(
@@ -168,13 +175,15 @@ class LessonController {
         startTimestamp = endTimestamp,
         endTimestamp = endTimestamp,
         price = price,
-        online = online,
+        place = place,
+        note = note,
         teachersIds = teachers.map {
             it.id
         } as MutableList<Long>,
         studentsIds = students.map {
             it.id
-        } as MutableList<Long>
+        } as MutableList<Long>,
+        subjectId = subject.id
     )
 
 

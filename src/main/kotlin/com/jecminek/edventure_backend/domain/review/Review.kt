@@ -7,12 +7,8 @@ import javax.persistence.*
 @Entity
 @Table(name = "REVIEW")
 class Review(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    override val id: Long = 0,
     var stars: Double = 0.0,
     var verbalEvaluation: String = "",
-    // FIXME: 21.03.2021 IT IS STUPID TO SEND HELPFUL AND UNHELPFUL IN CREATE (It's possible to have more likes...)
     var helpful: Int = 0,
     var unhelpful: Int = 0,
     var reviewTimestamp: Long = 0,
@@ -28,7 +24,5 @@ class Review(
     @JoinColumn(name = "reviewed_id")
     var reviewer: User = User()
 
-): BaseEntity()
-
-// FIXME: 20.03.2021 MUST SEND REVIEWER ID IN DTO, THEN CONVERT
+) : BaseEntity()
 

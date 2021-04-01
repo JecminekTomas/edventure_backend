@@ -7,8 +7,8 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class EdventureBackendApplication
 
-    fun main(args: Array<String>) {
-        runApplication<EdventureBackendApplication>(*args)
-    }
+fun main(args: Array<String>) {
+    runApplication<EdventureBackendApplication>(*args)
+}
 
 

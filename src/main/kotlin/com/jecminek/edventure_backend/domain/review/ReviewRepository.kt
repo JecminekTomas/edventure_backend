@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReviewRepository : PagingAndSortingRepository<Review, Long> {
-    // FIXME: 27.03.2021 RETURNS REVIEW!!! 
     fun findReviewsByReviewedId(reviewedId: Long?): List<Review>?
     fun findReviewsByReviewerId(reviewerId: Long?): List<Review>?
 }

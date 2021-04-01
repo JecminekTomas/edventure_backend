@@ -1,20 +1,18 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.jecminek.edventure_backend.BaseEntity
-import com.jecminek.edventure_backend.domain.user.*
+import com.jecminek.edventure_backend.domain.subject.Subject
+import com.jecminek.edventure_backend.domain.user.User
 import javax.persistence.*
 
 @Entity
 @Table(name = "LESSON")
 class Lesson(
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    override var id: Long = 0,
     var startTimestamp: Long = 0,
     var endTimestamp: Long = 0,
     var price: Double = 0.0,
-    var online: Boolean = false,
+    var place: String? = "",
+    var note: String? = "",
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable(
@@ -28,11 +26,13 @@ class Lesson(
         name = "STUDENT_LESSON", joinColumns = [JoinColumn(name = "lesson_id")],
         inverseJoinColumns = [JoinColumn(name = "user_id")]
     )
-    var students: MutableList<User> = mutableListOf()
+    var students: MutableList<User> = mutableListOf(),
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "subject_id")
+    var subject: Subject = Subject()
+
 ) : BaseEntity()
-
-
-// FIXME: 28.03.2021 Make an naming convention!
 
 
 

@@ -10,7 +10,6 @@ import org.springframework.web.server.ResponseStatusException
 @Service
 // TODO - Vytvořit inteface pro CRUD metody
 class UserService {
-    // TODO: STATUS
 
     @Autowired
     lateinit var repository: UserRepository
@@ -21,7 +20,6 @@ class UserService {
             "User With Id: $id, Not Found"
         )
 
-    // FIXME: 28.03.2021 Repo MUST return Entity, but Dto MUST be in respose.
     fun findUserByRole(role: UserRole): MutableList<User> =
         repository.findUserByRoles(role) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,

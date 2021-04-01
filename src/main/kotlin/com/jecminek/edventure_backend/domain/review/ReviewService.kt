@@ -36,7 +36,6 @@ class ReviewService {
             )
         )
 
-    // FIXME: 21.03.2021 What if I forgot some argument?  Same as previous approach
     fun update(id: Long, updatedReview: Review): Review {
         /**In request user is not capable to change reviewTimeStamp*/
         val review = findById(id)
@@ -47,8 +46,6 @@ class ReviewService {
         return repository.save(review)
         // TODO: 19.03.2021 oldReview.profilePicture = reviewDto.profilePicture
     }
-
-        
 
 
     fun delete(id: Long) = repository.delete(findById(id))
