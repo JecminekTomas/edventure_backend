@@ -33,8 +33,13 @@ class UserController {
         @Parameter(
             description = "Role of user to be found",
             example = "TEACHER"
-        ) @RequestParam(required = true) role: UserRole
-    ): List<UserDto> = service.findUserByRole(role).map {
+        ) @RequestParam(required = true) role: UserRole,
+        @Parameter(
+            description = "Number of page, to be found. Counting from 0. Size is 50.",
+            example = "0"
+        )
+        @RequestParam(required = true) page: Int
+    ): List<UserDto> = service.findUserByRole(role, page).map {
         UserDto(
             id = it.id,
             firstName = it.firstName,
@@ -44,7 +49,7 @@ class UserController {
             phoneNumber = it.phoneNumber,
             roles = it.roles
         )
-    }
+    }.content
 
     @Operation(summary = "Find user by id")
     @ApiResponses(

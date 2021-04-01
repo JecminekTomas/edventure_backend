@@ -38,7 +38,6 @@ class LessonService {
         updatedLesson.startTimestamp = lesson.startTimestamp
         updatedLesson.endTimestamp = lesson.endTimestamp
         updatedLesson.price = lesson.price
-        updatedLesson.online = lesson.online
         updatedLesson.teachers = lesson.teachers
         updatedLesson.students = lesson.students
         return repository.save(updatedLesson)

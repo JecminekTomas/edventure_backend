@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend
+package com.jecminek.edventure_backend.base
 
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

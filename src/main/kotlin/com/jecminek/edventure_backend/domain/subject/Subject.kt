@@ -1,6 +1,6 @@
 package com.jecminek.edventure_backend.domain.subject
 
-import com.jecminek.edventure_backend.BaseEntity
+import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.enums.Faculty
 import javax.persistence.*

@@ -1,6 +1,6 @@
 package com.jecminek.edventure_backend.domain.lesson
 
-import com.jecminek.edventure_backend.BaseEntity
+import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.subject.Subject
 import com.jecminek.edventure_backend.domain.user.User
 import javax.persistence.*
