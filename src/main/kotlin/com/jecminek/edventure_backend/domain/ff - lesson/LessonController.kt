@@ -10,12 +10,15 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-@RestController
+// TODO: UNCOMMENT WHEN DEPLOY
+// @RestController
+@Tag(name = "Future feature - Lessons", description = "In future teachers will be able to create lessons and students will be able to make reservations to these lessons")
 class LessonController {
 
     @Autowired

@@ -1,8 +1,8 @@
 package com.jecminek.edventure_backend.domain.subject
 
 import com.jecminek.edventure_backend.base.BaseEntity
-import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.enums.Faculty
+import com.jecminek.edventure_backend.enums.University
 import javax.persistence.*
 import javax.validation.constraints.NotEmpty
 
@@ -15,11 +15,21 @@ class Subject(
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
-    var faculty: Faculty = Faculty.INSTITUTE_OF_LIFELONG_LEARNING,
+    var faculty: Faculty = Faculty.FACULTY,
 
-    @OneToMany(mappedBy = "subject", fetch = FetchType.EAGER)
-    var lessons: MutableList<Lesson> = mutableListOf()
+    @Enumerated(EnumType.STRING)
+    @NotEmpty
+    var university: University= University.UNIVERSITY,
 
 ) : BaseEntity()
+
+fun Subject.convertEntityToDto() = SubjectDto(
+    id = id,
+    code = code,
+    title = title,
+    faculty = faculty,
+    university = university
+)
+
 
 

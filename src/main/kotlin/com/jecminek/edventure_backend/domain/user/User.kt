@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
 import com.jecminek.edventure_backend.base.BaseEntity
-import com.jecminek.edventure_backend.domain.lesson.Lesson
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.enums.UserRole
 import javax.persistence.*
@@ -30,11 +29,6 @@ class User(
      *  This is the side mappedBy, so it is not primary, and there is
      *  explicitly said, there are FetchType lazy, which is default value.
      * */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "students")
-    var studentLessons: MutableList<Lesson>? = mutableListOf(),
-
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "teachers")
-    private var teacherLessons: MutableList<Lesson> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
     var reviewerReviews: MutableList<Review> = mutableListOf(),
@@ -43,7 +37,6 @@ class User(
     var reviewedReviews: MutableList<Review> = mutableListOf()
 
 ) : BaseEntity()
-
 
 fun User.convertEntityToDto(): UserDto = UserDto(
     id = id,
@@ -54,6 +47,5 @@ fun User.convertEntityToDto(): UserDto = UserDto(
     phoneNumber = phoneNumber,
     roles = roles
 )
-
 
 

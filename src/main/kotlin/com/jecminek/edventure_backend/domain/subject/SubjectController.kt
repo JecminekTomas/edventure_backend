@@ -1,94 +1,155 @@
 package com.jecminek.edventure_backend.domain.subject
 
+import com.jecminek.edventure_backend.enums.Faculty
+import com.jecminek.edventure_backend.enums.University
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 // TODO: 31.03.2021 Add to Theses difference between RestCont. and Cont.
 @RestController
+@Tag(name = "Subjects", description = "Teachers can teach different subjects")
 class SubjectController {
 
     @Autowired
     lateinit var subjectService: SubjectService
 
-    @Operation(summary = "Find all subjects")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200", description = "Subjects found", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))]
-            ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(
-                responseCode = "404",
-                description = "Subjects not found",
-                content = [Content()]
-            )]
-    )
-    @GetMapping("/subjects")
-    fun findAll(): List<SubjectDto> = subjectService.findAll().map {
-        SubjectDto(id = it.id, code = it.code, title = it.title, faculty = it.faculty)
-    }
+    // FIXME: 17.08.2021 The wrong schema.
+//    @Operation(summary = "Finds all subject with requested parameters.")
+//    @ApiResponses(
+//        value = [
+//            ApiResponse(
+//                responseCode = "200", content = [
+//                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))]
+//            ),
+//            ApiResponse(responseCode = "400"),
+//            ApiResponse(
+//                responseCode = "404",
+//            )]
+//    )
+//    @GetMapping("/subjects")
+//    fun findAll(
+//        @Parameter(
+//            description = "University, where faculty is being part of",
+//            example = "MENDELU"
+//        ) @RequestParam(required = false, defaultValue = "UNIVERSITY") university: University,
+//        @Parameter(
+//            description = "Faculty where subject is being taught",
+//            example = "PEF"
+//        )
+//        @RequestParam(required = false, defaultValue = "FACULTY") faculty: Faculty,
+//        @Parameter(
+//            description = "Name of subject",
+//            example = "Programovací techniky"
+//        )
+//        @RequestParam(required = false) title: String,
+//        @Parameter(
+//            description = "Code of subject",
+//            example = "PTN"
+//        )
+//        @RequestParam(required = false) code: String
+//    ): List<SubjectDto> = when {
+//        university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isNotBlank() && code.isBlank() -> {
+//            listOf(subjectService.findSubjectByTitle(university, faculty, title).convertEntityToDto())
+//        }
+//        university != University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
+//            subjectService.findSubjectsByUniversity(university).map {
+//                SubjectDto(
+//                    id = it.id,
+//                    code = it.code,
+//                    title = it.title,
+//                    faculty = it.faculty,
+//                    university = it.university
+//                )
+//            }
+//        }
+//        university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
+//            subjectService.findSubjectsByUniversityAndFaculty(university, faculty).map {
+//                SubjectDto(
+//                    id = it.id,
+//                    code = it.code,
+//                    title = it.title,
+//                    faculty = it.faculty,
+//                    university = it.university
+//                )
+//            }
+//        }
+//        university == University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isNotBlank() -> {
+//            listOf(subjectService.findByCode(code).convertEntityToDto())
+//        }
+//        university == University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
+//            subjectService.findAll().map {
+//                SubjectDto(
+//                    id = it.id,
+//                    code = it.code,
+//                    title = it.title,
+//                    faculty = it.faculty,
+//                    university = it.university
+//                )
+//            }
+//        }
+//        else -> throw ResponseStatusException(
+//            HttpStatus.BAD_REQUEST,
+//            "Bad request"
+//        )
+//    }
 
     @Operation(summary = "Creation of subject")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "201", description = "Subject created", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))]
+                responseCode = "201",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))
+                ]
             ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
+            ApiResponse(responseCode = "400")
+        ]
     )
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody subject: SubjectDto): SubjectDto =
-        subjectService.create(subject.convertDtoToEntity()).convertEntityToDto()
+        subjectService.create(subject)
 
     @Operation(summary = "Update subject")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "202", description = "Subject updated", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))]
+                responseCode = "202",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))
+                ]
             ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "Subject with this ID not found", content = [Content()])]
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
     )
     @PutMapping("/subjects/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
         @RequestBody subject: SubjectDto
-    ): SubjectDto = subjectService.update(id, subject.convertDtoToEntity()).convertEntityToDto()
+    ): SubjectDto = subjectService.update(id, subject)
 
     @Operation(summary = "Delete subject")
     @ApiResponses(
         value = [
-            ApiResponse(responseCode = "204", description = "Subject deleted", content = [Content()]),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "Subject with this ID not found", content = [Content()])]
+            ApiResponse(responseCode = "204"),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
     )
     @DeleteMapping("/subjects/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = subjectService.delete(id)
-
-    fun Subject.convertEntityToDto() = SubjectDto(
-        id = id,
-        code = code,
-        title = title,
-        faculty = faculty
-    )
-
-    fun SubjectDto.convertDtoToEntity() = Subject(
-        code = code,
-        title = title,
-        faculty = faculty
-    )
 
 }
 

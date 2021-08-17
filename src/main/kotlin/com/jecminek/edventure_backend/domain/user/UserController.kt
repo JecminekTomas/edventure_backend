@@ -1,5 +1,7 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.review.ReviewService
+import com.jecminek.edventure_backend.domain.subject.SubjectService
 import com.jecminek.edventure_backend.enums.UserRole
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -7,39 +9,84 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Tag(name = "Users", description = "User might be teacher, student or both.")
 class UserController {
 
     @Autowired
-    lateinit var service: UserService
+    lateinit var userService: UserService
 
-    @Operation(summary = "Find all users with certain role")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200", description = "User(s) found", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]
-            ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "User(s) With This Role Not Found", content = [Content()])]
-    )
-    @GetMapping("/users")
-    @ResponseStatus(HttpStatus.OK)
-    fun findUserByRole(
+    @Autowired
+    lateinit var reviewService: ReviewService
+
+    @Autowired
+    lateinit var subjectService: SubjectService
+
+    /*@GetMapping("/users/subjects")
+    fun findTeachersBySubject(
         @Parameter(
-            description = "Role of user to be found",
-            example = "TEACHER"
-        ) @RequestParam(required = true) role: UserRole,
+            description = "University, faculty belongs to",
+            example = "MENDELU"
+        ) @RequestParam(required = false, defaultValue = "UNIVERSITY") university: University,
         @Parameter(
-            description = "Number of page, to be found. Default page size is 50.",
-            example = "0"
+            description = "Faculty, where subject is being taught",
+            example = "PEF"
         )
-        @RequestParam(required = true) page: Int
-    ): List<UserDto> = service.findUserByRole(role, page).map {
+        @RequestParam(required = false, defaultValue = "FACULTY") faculty: Faculty,
+        @Parameter(
+            description = "Title of subject",
+            example = "Programovací techniky"
+        )
+        @RequestParam(required = false) title: String,
+        @Parameter(
+            description = "Subject code",
+            example = "PTN"
+        )
+        @RequestParam(required = false) code: String,
+        page: Int
+    ): List<UserDto> = when {
+        university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isNotBlank() && code.isBlank() -> {
+            userService.findTeachersBySubjectTitle(university, faculty, title, page).map {
+                UserDto(
+                    id = it.id,
+                    firstName = it.firstName,
+                    lastName = it.lastName,
+                    email = it.email,
+                    biography = it.biography,
+                    phoneNumber = it.phoneNumber,
+                    roles = it.roles
+                )
+            }.content
+        }
+        university != University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
+            listOf(userService.findUsersBySubjectCode(code).convertEntityToDto())
+        }
+        university == University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {userService.findAll().map{
+            UserDto(
+                id = it.id,
+                firstName = it.firstName,
+                lastName = it.lastName,
+                email = it.email,
+                biography = it.biography,
+                phoneNumber = it.phoneNumber,
+                roles = it.roles
+            )
+        }
+        }
+        else -> throw ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Bad request"
+        )
+    }*/
+
+    /*{
+    if(university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isNotBlank())
+    return userService.findTeachersBySubjectTitle(university, faculty, title, page).map {
         UserDto(
             id = it.id,
             firstName = it.firstName,
@@ -50,63 +97,79 @@ class UserController {
             roles = it.roles
         )
     }.content
+    else {
+        throw ResponseStatusException(
+            HttpStatus.BAD_REQUEST,
+            "Bad request"
+        )
+    }*/
 
     @Operation(summary = "Find user by id")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "200", description = "User found", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]
+                responseCode = "200",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))
+                ]
             ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "Users with this role not found", content = [Content()])]
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
     )
     @GetMapping("/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(@Parameter(description = "Id of user to be found", example = "1") @PathVariable id: Long): UserDto =
-        service.findById(id).convertEntityToDto()
+        userService.findById(id)
 
     @Operation(summary = "Creation of user")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "201", description = "User created", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]
+                responseCode = "201",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))
+                ]
             ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()])]
+            ApiResponse(responseCode = "400")
+        ]
     )
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody user: UserDto): UserDto = service.create(user).convertEntityToDto()
+    fun create(@RequestBody user: UserDto): UserDto = userService.create(user)
 
     @Operation(summary = "Update user")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "202", description = "User updated", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))]
+                responseCode = "202",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserDto::class)))
+                ]
             ),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "User with this ID not found", content = [Content()])]
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
     )
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long,
         @RequestBody user: UserDto
-    ): UserDto = service.update(id, user).convertEntityToDto()
+    ): UserDto =
+        userService.update(id, user)
 
     @Operation(summary = "Delete user")
     @ApiResponses(
         value = [
-            ApiResponse(responseCode = "204", description = "User deleted", content = [Content()]),
-            ApiResponse(responseCode = "400", description = "Bad request", content = [Content()]),
-            ApiResponse(responseCode = "404", description = "User with this ID not found", content = [Content()])]
+            ApiResponse(responseCode = "204"),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
     )
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long) =
-        service.delete(id)
-
+        userService.delete(id)
 
 }

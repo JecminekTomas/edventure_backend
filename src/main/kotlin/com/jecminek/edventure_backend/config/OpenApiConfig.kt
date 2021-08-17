@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend.configs
+package com.jecminek.edventure_backend.config
 
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
@@ -17,7 +17,7 @@ class OpenApiConfig {
     private fun apiInfo(): Info = Info()
         .title("Edventure REST API")
         .description("This is documentation of REST API made for bachelor theses made by Tomáš Ječmínek. ")
-        .version("v0.2.0")
+        .version("v0.6.0")
         .contact(
             Contact().name("Tomáš Ječmínek").email("xjecmine@mendelu.cz")
                 .url("https://www.linkedin.com/in/tomas-jecminek/")

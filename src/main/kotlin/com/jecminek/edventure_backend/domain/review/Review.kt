@@ -17,12 +17,22 @@ class Review(
      * Reviewed = Who is being reviewed.*/
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reviewer_id")
+    @JoinColumn(name = "reviewed_id")
     var reviewed: User = User(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reviewed_id")
+    @JoinColumn(name = "reviewer_id")
     var reviewer: User = User()
 
 ) : BaseEntity()
+
+fun Review.convertEntityToDto() = ReviewDto(
+    id = id,
+    stars = stars,
+    verbalEvaluation = verbalEvaluation,
+    helpful = helpful,
+    unhelpful = unhelpful,
+    reviewerId = reviewer.id,
+    reviewedId = reviewed.id
+)
 
