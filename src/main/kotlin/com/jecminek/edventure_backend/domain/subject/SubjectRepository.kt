@@ -14,7 +14,6 @@ interface SubjectRepository : PagingAndSortingRepository<Subject, Long> {
     ): Subject
 
     fun findSubjectsByUniversityAndFaculty(university: University, faculty: Faculty): List<Subject>
-
     fun findSubjectsByUniversity(university: University): List<Subject>
 
     fun findSubjectByCode(code: String): Subject

@@ -73,7 +73,7 @@ class ReviewController {
     ): List<ReviewDto> = reviewService.findReviewsByReviewedId(id, page)
 
 
-    @Operation(summary = "Creation of review")
+    @Operation(summary = "Create review")
     @ApiResponses(
         value = [
             ApiResponse(

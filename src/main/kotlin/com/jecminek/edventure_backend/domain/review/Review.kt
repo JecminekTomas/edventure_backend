@@ -14,13 +14,14 @@ class Review(
     var reviewTimestamp: Long = 0,
 
     /** Reviewer = Who is reviewing.
-     * Reviewed = Who is being reviewed.*/
+     * Reviewed = Who is being reviewed.
+     * */
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinColumn(name = "reviewed_id")
     var reviewed: User = User(),
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinColumn(name = "reviewer_id")
     var reviewer: User = User()
 

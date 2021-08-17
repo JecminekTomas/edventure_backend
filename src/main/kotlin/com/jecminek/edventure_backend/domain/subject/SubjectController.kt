@@ -102,7 +102,7 @@ class SubjectController {
 //        )
 //    }
 
-    @Operation(summary = "Creation of subject")
+    @Operation(summary = "Create subject")
     @ApiResponses(
         value = [
             ApiResponse(

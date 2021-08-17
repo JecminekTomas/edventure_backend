@@ -21,8 +21,8 @@ class User(
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "USER_ROLE")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotEmpty
     var roles: MutableList<UserRole> = mutableListOf(),
 
     /** These lists are only for compatibility issue.
@@ -38,14 +38,6 @@ class User(
 
 ) : BaseEntity()
 
-fun User.convertEntityToDto(): UserDto = UserDto(
-    id = id,
-    firstName = firstName,
-    lastName = lastName,
-    email = email,
-    biography = biography,
-    phoneNumber = phoneNumber,
-    roles = roles
-)
+
 
 
