@@ -20,20 +20,11 @@ data class ReviewDto(
     )
     var verbalEvaluation: String,
 
-    @Min(0, message = "Helpful cannot be negative, use unhelpful parameter instead")
-    @Schema(description = "Helpfulness of review (used only in update)", example = "10")
-    var helpful: Int,
-
-    @Min(0, message = "Unhelpful cannot be negative, use unhelpful parameter instead")
-    @Schema(description = "Unhelpfulness of review (used only in update)", example = "2")
-    var unhelpful: Int,
-
     @Schema(description = "ID of user, who is in position of reviewer in review", example = "2")
     var reviewerId: Long,
 
     @Schema(description = "ID of user, who is in position of reviewed in review", example = "1")
     var reviewedId: Long
 
-    // TODO: 19.03.2021 var userPicture
 )
 

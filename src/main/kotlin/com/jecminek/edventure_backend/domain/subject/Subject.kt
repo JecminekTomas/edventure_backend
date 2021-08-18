@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.domain.subject
 
 import com.jecminek.edventure_backend.base.BaseEntity
+import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.enums.Faculty
 import com.jecminek.edventure_backend.enums.University
 import javax.persistence.*
@@ -19,7 +20,13 @@ class Subject(
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
-    var university: University= University.UNIVERSITY,
+    var university: University = University.UNIVERSITY,
+
+    @ManyToMany(mappedBy = "studiedSubjects")
+    var students: MutableList<User> = mutableListOf(),
+
+    @ManyToMany(mappedBy = "taughtSubjects")
+    var teachers: MutableList<User> = mutableListOf()
 
 ) : BaseEntity()
 
@@ -28,7 +35,9 @@ fun Subject.convertEntityToDto() = SubjectDto(
     code = code,
     title = title,
     faculty = faculty,
-    university = university
+    university = university,
+    students = students,
+    teachers = teachers,
 )
 
 
