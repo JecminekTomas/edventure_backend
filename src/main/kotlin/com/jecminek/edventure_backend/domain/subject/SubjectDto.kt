@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.subject
 
+import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.enums.Faculty
 import com.jecminek.edventure_backend.enums.University
 import io.swagger.v3.oas.annotations.media.Schema
@@ -14,13 +15,19 @@ data class SubjectDto(
     @Schema(description = "Faculty, where subject being taught", example = "PEF")
     var faculty: Faculty,
     @Schema(description = "University, the faculty belongs to", example = "MENDELU")
-    var university: University
+    var university: University,
+    @Schema(description = "Students, who study subject", example = "[]")
+    var students: MutableList<User>,
+    @Schema(description = "Teachers, who taught subject", example = "[]")
+    var teachers: MutableList<User>
 )
 
 fun SubjectDto.convertDtoToEntity() = Subject(
     code = code,
     title = title,
     faculty = faculty,
-    university = university
+    university = university,
+    students = students,
+    teachers = teachers
 )
 

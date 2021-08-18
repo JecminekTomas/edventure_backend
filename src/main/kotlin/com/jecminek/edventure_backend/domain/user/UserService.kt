@@ -42,23 +42,5 @@ class UserService {
 
 }
 
-fun User.convertEntityToDto(): UserDto = UserDto(
-    id = id,
-    firstName = firstName,
-    lastName = lastName,
-    email = email,
-    biography = biography,
-    phoneNumber = phoneNumber,
-    roles = roles
-)
-
-fun UserDto.convertDtoToEntity() = User(
-    firstName = firstName,
-    lastName = lastName,
-    email = email,
-    biography = biography,
-    phoneNumber = phoneNumber,
-    roles = roles
-)
 
 

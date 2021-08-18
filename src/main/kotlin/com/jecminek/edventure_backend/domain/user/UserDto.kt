@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.subject.Subject
 import com.jecminek.edventure_backend.enums.UserRole
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Email
@@ -37,7 +38,24 @@ data class UserDto(
     var phoneNumber: String?,
 
     @Schema(description = "Is the User student or teacher or both?", example = "[\"TEACHER\"]")
-    var roles: MutableList<UserRole>
+    var roles: MutableList<UserRole>,
+
+    @Schema(description = "Subjects, user study", example = "[]")
+    var studiedSubjects: MutableList<Subject>?,
+
+    @Schema(description = "Subjects, user teach", example = "[]")
+    var taughtSubjects: MutableList<Subject>?
+)
+
+fun UserDto.convertDtoToEntity() = User(
+    firstName = firstName,
+    lastName = lastName,
+    email = email,
+    biography = biography,
+    phoneNumber = phoneNumber,
+    roles = roles,
+    studiedSubjects = studiedSubjects,
+    taughtSubjects = taughtSubjects
 )
 
 
