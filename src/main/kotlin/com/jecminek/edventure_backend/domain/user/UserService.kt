@@ -1,12 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
-import com.jecminek.edventure_backend.constant.Constants.defaultPageSize
-import com.jecminek.edventure_backend.enums.Faculty
-import com.jecminek.edventure_backend.enums.University
-import com.jecminek.edventure_backend.enums.UserRole
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -19,26 +13,28 @@ class UserService {
     @Autowired
     lateinit var repository: UserRepository
 
-    fun findById(id: Long): UserDto =
-        repository.findByIdOrNull(id)?.convertEntityToDto() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun findById(id: Long): UserResponse =
+        repository.findByIdOrNull(id)?.convertEntityToResponse() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+
+    fun getById(id: Long): User = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
 //    fun findTeachersBySubjectTitle(university: University, faculty: Faculty, title: String, page: Int): Page<User> =
 //        repository.findTeachersBySubjectTitle(university, faculty, title, PageRequest.of(page, defaultPageSize), UserRole.TEACHER)
 
-    fun create(userDto: UserDto): UserDto = repository.save(userDto.convertDtoToEntity()).convertEntityToDto()
+    fun create(userRequest: UserRequest): UserResponse = repository.save(userRequest.convertRequestToEntity()).convertEntityToResponse()
 
-    fun update(id: Long, userDto: UserDto): UserDto {
-        val updatedUser = findById(id)
-        updatedUser.firstName = userDto.firstName
-        updatedUser.lastName = userDto.lastName
-        updatedUser.email = userDto.email
-        updatedUser.biography = userDto.biography
-        updatedUser.phoneNumber = userDto.phoneNumber
-        updatedUser.roles = userDto.roles
-        return repository.save(userDto.convertDtoToEntity()).convertEntityToDto()
+    fun update(id: Long, userRequest: UserRequest): UserResponse {
+        val updatedUser = getById(id)
+        updatedUser.firstName = userRequest.firstName
+        updatedUser.lastName = userRequest.lastName
+        updatedUser.email = userRequest.email
+        updatedUser.biography = userRequest.biography
+        updatedUser.phoneNumber = userRequest.phoneNumber
+        updatedUser.roles = userRequest.roles
+        return repository.save(userRequest.convertRequestToEntity()).convertEntityToResponse()
     }
 
-    fun delete(id: Long) = repository.delete(findById(id).convertDtoToEntity())
+    fun delete(id: Long) = repository.delete(getById(id))
 
 }
 

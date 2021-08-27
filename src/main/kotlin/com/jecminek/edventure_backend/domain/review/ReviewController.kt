@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.domain.user.UserService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -24,7 +23,7 @@ class ReviewController {
             ApiResponse(
                 responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
@@ -39,19 +38,19 @@ class ReviewController {
             example = "1"
         ) @PathVariable id: Long,
         @Parameter(
-            description = "Number of page, to be found. Default page size is 50.",
+            description = "Page number, to be found. Default page size is 50.",
             example = "0"
         )
         @RequestParam(required = true) page: Int
-    ): List<ReviewDto> = reviewService.findReviewsByReviewerId(id, page)
+    ): List<ReviewResponse> = reviewService.findReviewsByReviewerId(id, page)
 
     @Operation(summary = "Find reviews by ID of user, who is in position of reviewed in review")
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "200", description = "Review(s) found",
+                responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
@@ -66,12 +65,11 @@ class ReviewController {
             example = "1"
         ) @PathVariable id: Long,
         @Parameter(
-            description = "Number of page, to be found. Default page size is 50.",
+            description = "Page number, to be found. Default page size is 50.",
             example = "0"
         )
         @RequestParam(required = true) page: Int
-    ): List<ReviewDto> = reviewService.findReviewsByReviewedId(id, page)
-
+    ): List<ReviewResponse> = reviewService.findReviewsByReviewedId(id, page)
 
     @Operation(summary = "Create review")
     @ApiResponses(
@@ -79,7 +77,7 @@ class ReviewController {
             ApiResponse(
                 responseCode = "201", description = "Review created",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")
@@ -89,7 +87,7 @@ class ReviewController {
     // FIXME: 31.03.2021 Reviewer != Reviewed
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody review: ReviewDto): ReviewDto = reviewService.create(review)
+    fun create(@RequestBody review: ReviewRequest): ReviewResponse = reviewService.create(review)
 
     @Operation(summary = "Update review")
     @ApiResponses(
@@ -97,7 +95,7 @@ class ReviewController {
             ApiResponse(
                 responseCode = "202", description = "Review updated",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
@@ -109,8 +107,8 @@ class ReviewController {
     fun update(
         @Parameter(description = "ID of updated review", example = "1")
         @PathVariable id: Long,
-        @RequestBody review: ReviewDto
-    ): ReviewDto = reviewService.update(id, review)
+        @RequestBody review: ReviewRequest
+    ): ReviewResponse = reviewService.update(id, review)
 
     @Operation(summary = "Delete review")
     @ApiResponses(

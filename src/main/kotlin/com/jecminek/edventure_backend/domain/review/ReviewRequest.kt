@@ -5,7 +5,7 @@ import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
-data class ReviewDto(
+data class ReviewRequest(
     @Schema(description = "ID is only for response", hidden = true)
     var id: Long,
 
@@ -15,7 +15,7 @@ data class ReviewDto(
 
     @Size(min = 10, max = 500)
     @Schema(
-        description = "Verbal evaulation from student to teacher or vice versa",
+        description = "Verbal evaluation from student to teacher or vice versa",
         example = "The lesson was OK. Only no added materials are included in EXPENSIVE lecture."
     )
     var verbalEvaluation: String,

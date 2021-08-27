@@ -7,10 +7,7 @@ import javax.validation.constraints.Email
 import javax.validation.constraints.Pattern
 import javax.validation.constraints.Size
 
-data class UserDto(
-
-    @Schema(description = "ID is only for response")
-    var id: Long,
+data class UserRequest(
 
     @Schema(description = "Firstname of user", example = "Muhammad")
     var firstName: String,
@@ -47,7 +44,7 @@ data class UserDto(
     var taughtSubjects: MutableList<Subject>?
 )
 
-fun UserDto.convertDtoToEntity() = User(
+fun UserRequest.convertRequestToEntity() = User(
     firstName = firstName,
     lastName = lastName,
     email = email,
