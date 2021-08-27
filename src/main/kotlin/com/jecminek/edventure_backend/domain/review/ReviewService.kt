@@ -38,12 +38,11 @@ class ReviewService {
     fun create(review: ReviewRequest): ReviewResponse =
         repository.save(review.convertRequestToEntity()).convertEntityToResponse()
 
-    // TODO: 17.08.2021 Create a new endpoint to send helpful or unhelpful
-
-    fun update(id: Long, updatedReview: ReviewRequest): ReviewResponse {
+    fun update(id: Long, reviewRequest: ReviewRequest): ReviewResponse {
         val review = getById(id)
-        review.stars = updatedReview.stars
-        review.verbalEvaluation = updatedReview.verbalEvaluation
+        review.stars = reviewRequest.stars
+        review.verbalEvaluation = reviewRequest.verbalEvaluation
+        review.anonymous = reviewRequest.anonymous
         return repository.save(review).convertEntityToResponse()
     }
 
@@ -52,6 +51,7 @@ class ReviewService {
     fun ReviewRequest.convertRequestToEntity() = Review(
         stars = stars,
         verbalEvaluation = verbalEvaluation,
+        anonymous = anonymous,
         reviewTimestamp = System.currentTimeMillis() / 1000L,
         reviewer = userService.getById(reviewerId),
         reviewed = userService.getById(reviewedId)

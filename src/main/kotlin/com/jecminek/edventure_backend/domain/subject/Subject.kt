@@ -22,12 +22,6 @@ class Subject(
     @NotEmpty
     var university: University = University.UNIVERSITY,
 
-    @ManyToMany(mappedBy = "studiedSubjects")
-    var students: MutableList<User> = mutableListOf(),
-
-    @ManyToMany(mappedBy = "taughtSubjects")
-    var teachers: MutableList<User> = mutableListOf()
-
 ) : BaseEntity()
 
 fun Subject.convertEntityToDto() = SubjectDto(
@@ -36,8 +30,6 @@ fun Subject.convertEntityToDto() = SubjectDto(
     title = title,
     faculty = faculty,
     university = university,
-    students = students,
-    teachers = teachers,
 )
 
 

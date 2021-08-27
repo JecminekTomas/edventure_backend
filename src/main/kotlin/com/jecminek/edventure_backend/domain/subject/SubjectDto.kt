@@ -16,10 +16,6 @@ data class SubjectDto(
     var faculty: Faculty,
     @Schema(description = "University, the faculty belongs to", example = "MENDELU")
     var university: University,
-    @Schema(description = "Students, who study subject", example = "[]")
-    var students: MutableList<User>,
-    @Schema(description = "Teachers, who taught subject", example = "[]")
-    var teachers: MutableList<User>
 )
 
 fun SubjectDto.convertDtoToEntity() = Subject(
@@ -27,7 +23,5 @@ fun SubjectDto.convertDtoToEntity() = Subject(
     title = title,
     faculty = faculty,
     university = university,
-    students = students,
-    teachers = teachers
 )
 

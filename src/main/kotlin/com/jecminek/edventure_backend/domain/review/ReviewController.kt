@@ -83,8 +83,7 @@ class ReviewController {
             ApiResponse(responseCode = "400")
         ]
     )
-    // FIXME: 31.03.2021 Reviewer = student/teacher, Reviewed = teacher/student
-    // FIXME: 31.03.2021 Reviewer != Reviewed
+
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody review: ReviewRequest): ReviewResponse = reviewService.create(review)
@@ -93,7 +92,7 @@ class ReviewController {
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "202", description = "Review updated",
+                responseCode = "202",
                 content = [
                     (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
                 ]

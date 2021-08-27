@@ -7,10 +7,11 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
 data class ReviewResponse(
-    @Schema(description = "ID is only for response", hidden = true)
+    @Schema(description = "ID of review")
     var id: Long,
 
-    @Min(1, message = "Minimum is 1 star") @Max(5, message = "Maximum is 5 stars")
+    @Min(1, message = "Minimum is 1 star")
+    @Max(5, message = "Maximum is 5 stars")
     @Schema(description = "Rating in stars", example = "3")
     var stars: Double,
 
@@ -21,19 +22,11 @@ data class ReviewResponse(
     )
     var verbalEvaluation: String,
 
-    @Min(0)
-    @Schema(description = "Helpfulness of review", example = "10")
-    var helpful: Int,
-
-    @Min(0)
-    @Schema(description = "Unhelpfulness of review", example = "2")
-    var unhelpful: Int,
-
     @Schema(description = "Time, when review was made.")
     var reviewTimestamp: Long,
 
     @Schema(description = "ID of user, who is in position of reviewer in review")
-    var reviewer: UserReviewResponse,
+    var reviewer: UserReviewResponse?,
 
     @Schema(description = "ID of user, who is in position of reviewed in review")
     var reviewed: UserReviewResponse

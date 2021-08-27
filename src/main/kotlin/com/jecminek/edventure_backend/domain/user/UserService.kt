@@ -24,13 +24,10 @@ class UserService {
     fun create(userRequest: UserRequest): UserResponse = repository.save(userRequest.convertRequestToEntity()).convertEntityToResponse()
 
     fun update(id: Long, userRequest: UserRequest): UserResponse {
-        val updatedUser = getById(id)
-        updatedUser.firstName = userRequest.firstName
-        updatedUser.lastName = userRequest.lastName
-        updatedUser.email = userRequest.email
-        updatedUser.biography = userRequest.biography
-        updatedUser.phoneNumber = userRequest.phoneNumber
-        updatedUser.roles = userRequest.roles
+        val user = getById(id)
+        user.firstName = userRequest.firstName
+        user.lastName = userRequest.lastName
+        user.email = userRequest.email
         return repository.save(userRequest.convertRequestToEntity()).convertEntityToResponse()
     }
 

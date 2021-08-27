@@ -6,9 +6,6 @@ import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
 data class ReviewRequest(
-    @Schema(description = "ID is only for response", hidden = true)
-    var id: Long,
-
     @Min(1, message = "Minimum is 1 star") @Max(5, message = "Maximum is 5 stars")
     @Schema(description = "Rating in stars", example = "3")
     var stars: Double,
@@ -19,6 +16,9 @@ data class ReviewRequest(
         example = "The lesson was OK. Only no added materials are included in EXPENSIVE lecture."
     )
     var verbalEvaluation: String,
+
+    @Schema(description = "Does reviewer want to stay anonymous", example = "false")
+    var anonymous: Boolean,
 
     @Schema(description = "ID of user, who is in position of reviewer in review", example = "2")
     var reviewerId: Long,
