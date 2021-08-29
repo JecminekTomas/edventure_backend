@@ -1,11 +1,7 @@
 package com.jecminek.edventure_backend.domain.user
 
-import com.jecminek.edventure_backend.domain.subject.Subject
-import com.jecminek.edventure_backend.enums.UserRole
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Email
-import javax.validation.constraints.Pattern
-import javax.validation.constraints.Size
 
 data class UserRequest(
 

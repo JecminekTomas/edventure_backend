@@ -1,10 +1,12 @@
 package com.jecminek.edventure_backend.domain.user
 
 import com.jecminek.edventure_backend.base.BaseEntity
+import com.jecminek.edventure_backend.domain.contact.Contact
 import com.jecminek.edventure_backend.domain.review.Review
-import com.jecminek.edventure_backend.domain.subject.Subject
-import com.jecminek.edventure_backend.enums.UserRole
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "\"USER\"")
@@ -21,7 +23,10 @@ class User(
     var reviewerReviews: MutableList<Review> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewed")
-    var reviewedReviews: MutableList<Review> = mutableListOf()
+    var reviewedReviews: MutableList<Review> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactOwner")
+    var userContacts: MutableList<Contact> = mutableListOf()
 
 ) : BaseEntity()
 

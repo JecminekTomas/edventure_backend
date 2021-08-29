@@ -1,9 +1,6 @@
 package com.jecminek.edventure_backend.domain.subject
 
-import com.jecminek.edventure_backend.enums.Faculty
-import com.jecminek.edventure_backend.enums.University
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -12,7 +9,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
 
 // TODO: 31.03.2021 Add to Theses difference between RestCont. and Cont.
 @RestController
@@ -108,15 +104,18 @@ class SubjectController {
             ApiResponse(
                 responseCode = "201",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")
         ]
     )
+
+    // FIXME: 29.08.2021 RENAME ALL xxx: XxxDTO to xxx: Xxx
+
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody subject: SubjectDto): SubjectDto =
+    fun create(@RequestBody subject: SubjectDTO): SubjectDTO =
         subjectService.create(subject)
 
     @Operation(summary = "Update subject")
@@ -125,7 +124,7 @@ class SubjectController {
             ApiResponse(
                 responseCode = "202",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
@@ -136,8 +135,8 @@ class SubjectController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
-        @RequestBody subject: SubjectDto
-    ): SubjectDto = subjectService.update(id, subject)
+        @RequestBody subject: SubjectDTO
+    ): SubjectDTO = subjectService.update(id, subject)
 
     @Operation(summary = "Delete subject")
     @ApiResponses(

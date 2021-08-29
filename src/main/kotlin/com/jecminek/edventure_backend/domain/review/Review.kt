@@ -5,11 +5,12 @@ import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.convertEntityToReviewResponse
 import javax.persistence.*
 
+
 @Entity
 @Table(name = "REVIEW")
 class Review(
     var stars: Double = 0.0,
-    var verbalEvaluation: String = "",
+    var verbalEvaluation: String? = null,
     var reviewTimestamp: Long = 0,
     var anonymous: Boolean = false,
 
@@ -30,7 +31,7 @@ class Review(
 fun Review.convertEntityToResponse() = ReviewResponse(
     id = id,
     stars = stars,
-    verbalEvaluation = verbalEvaluation,
+    verbalEvaluation = verbalEvaluation ?: "",
     reviewTimestamp = reviewTimestamp,
     reviewer = when {
         !anonymous -> reviewer.convertEntityToReviewResponse()

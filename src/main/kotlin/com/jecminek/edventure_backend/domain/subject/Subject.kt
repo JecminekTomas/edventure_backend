@@ -1,10 +1,12 @@
 package com.jecminek.edventure_backend.domain.subject
 
 import com.jecminek.edventure_backend.base.BaseEntity
-import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.enums.Faculty
 import com.jecminek.edventure_backend.enums.University
-import javax.persistence.*
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.Table
 import javax.validation.constraints.NotEmpty
 
 
@@ -24,7 +26,7 @@ class Subject(
 
 ) : BaseEntity()
 
-fun Subject.convertEntityToDto() = SubjectDto(
+fun Subject.convertToDTO() = SubjectDTO(
     id = id,
     code = code,
     title = title,
