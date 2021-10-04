@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 
 // TODO: 31.03.2021 Add to Theses difference between RestCont. and Cont.
 @RestController
-@Tag(name = "Subjects", description = "Teachers can teach different subjects")
+@Tag(name = "Subject", description = "Users can teach different subjects")
 class SubjectController {
 
     @Autowired
@@ -115,8 +115,8 @@ class SubjectController {
 
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody subject: SubjectDTO): SubjectDTO =
-        subjectService.create(subject)
+    fun create(@RequestBody subjectDTO: SubjectDTO): SubjectDTO =
+        subjectService.create(subjectDTO)
 
     @Operation(summary = "Update subject")
     @ApiResponses(
@@ -135,8 +135,8 @@ class SubjectController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
-        @RequestBody subject: SubjectDTO
-    ): SubjectDTO = subjectService.update(id, subject)
+        @RequestBody subjectDTO: SubjectDTO
+    ): SubjectDTO = subjectService.update(id, subjectDTO)
 
     @Operation(summary = "Delete subject")
     @ApiResponses(

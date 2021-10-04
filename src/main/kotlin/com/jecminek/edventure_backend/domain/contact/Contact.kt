@@ -12,7 +12,6 @@ class Contact(
     var contactType: ContactType = ContactType.NONE,
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-    @JoinColumn(name = "")
     var contactOwner: User = User()
 ) : BaseEntity()
 

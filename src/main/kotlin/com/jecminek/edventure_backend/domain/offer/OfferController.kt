@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend.domain.user
+package com.jecminek.edventure_backend.domain.offer
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -12,73 +12,73 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "User", description = "User controller")
-class UserController {
-
+@Tag(name = "offer", description = "Offers can create offers")
+class OfferController {
     @Autowired
-    lateinit var userService: UserService
+    lateinit var offerService: OfferService
 
-    @Operation(summary = "Find user by id")
+    @Operation(summary = "Find offer by id")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/users/{id}")
+    @GetMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(
         @Parameter(
-            description = "Id of user to be found",
+            description = "Id of offer to be found",
             example = "1"
         ) @PathVariable id: Long
-    ): UserResponse =
-        userService.findById(id)
+    ): OfferDTO =
+        offerService.findById(id).convertToDTO()
 
-    @Operation(summary = "Create user")
+    @Operation(summary = "Create offer")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "201",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody userRequest: UserRequest): UserResponse = userService.create(userRequest)
 
-    @Operation(summary = "Update user")
+    @PostMapping("/offers")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun create(@RequestBody offerDTO: OfferDTO): OfferDTO =
+        offerService.create(offerDTO)
+
+    @Operation(summary = "Update offer")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "202",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/users/{id}")
+    @PutMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
-        @Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long,
-        @RequestBody userRequest: UserRequest
-    ): UserResponse =
-        userService.update(id, userRequest)
+        @PathVariable id: Long,
+        @RequestBody offerDTO: OfferDTO
+    ): OfferDTO = offerService.update(id, offerDTO)
 
-    @Operation(summary = "Delete user")
+    @Operation(summary = "Delete offer")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "204"),
@@ -86,8 +86,7 @@ class UserController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long) =
-        userService.delete(id)
+    fun delete(@PathVariable id: Long) = offerService.delete(id)
 }

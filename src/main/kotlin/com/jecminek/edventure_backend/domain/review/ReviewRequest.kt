@@ -13,7 +13,7 @@ data class ReviewRequest(
     @Size(min = 10, max = 500)
     @Schema(
         description = "Verbal evaluation from student to teacher or vice versa",
-        example = "The lesson was OK. Only no added materials are included in EXPENSIVE lecture."
+        example = "The offer was OK. Only no added materials are included in EXPENSIVE lecture."
     )
     var verbalEvaluation: String,
 

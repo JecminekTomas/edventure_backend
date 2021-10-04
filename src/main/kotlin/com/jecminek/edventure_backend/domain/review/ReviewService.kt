@@ -19,10 +19,7 @@ class ReviewService {
     @Autowired
     lateinit var userService: UserService
 
-    fun findById(id: Long): ReviewResponse =
-        repository.findByIdOrNull(id)?.convertEntityToResponse() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-
-    fun getById(id: Long): Review =
+    fun findById(id: Long): Review =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     fun findReviewsByReviewedId(reviewed_id: Long, page: Int): List<ReviewResponse> =
@@ -39,20 +36,20 @@ class ReviewService {
         repository.save(review.convertRequestToEntity()).convertEntityToResponse()
 
     fun update(id: Long, reviewRequest: ReviewRequest): ReviewResponse {
-        val review = getById(id)
+        val review = findById(id)
         review.stars = reviewRequest.stars
         review.verbalEvaluation = reviewRequest.verbalEvaluation
         review.anonymous = reviewRequest.anonymous
         return repository.save(review).convertEntityToResponse()
     }
 
-    fun delete(id: Long) = repository.delete(getById(id))
+    fun delete(id: Long) = repository.delete(findById(id))
 
     fun ReviewRequest.convertRequestToEntity() = Review(
         stars = stars,
         verbalEvaluation = verbalEvaluation,
         anonymous = anonymous,
-        reviewTimestamp = System.currentTimeMillis() / 1000L,
+        reviewTimestamp = System.currentTimeMillis(),
         reviewer = userService.getById(reviewerId),
         reviewed = userService.getById(reviewedId)
     )

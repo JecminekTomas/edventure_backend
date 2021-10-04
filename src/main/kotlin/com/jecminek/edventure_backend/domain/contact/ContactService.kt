@@ -16,24 +16,40 @@ class ContactService {
     @Autowired
     lateinit var userService: UserService
 
-    fun create(contactRequest: ContactRequest): ContactResponse{
+    fun create(userId: Long, contactRequest: ContactRequest): ContactResponse {
+        userService.getById(userId)
         return repository.save(contactRequest.convertToEntity()).convertToResponse()
     }
 
-    fun getById(id: Long): Contact {
-        return repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun getById(contactId: Long): Contact {
+        return repository.findByIdOrNull(contactId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 
-    fun update(id: Long, contactRequest: ContactRequest): ContactResponse {
-        val contact = getById(id)
+    fun update(userId: Long, contactId: Long, contactRequest: ContactRequest): ContactResponse {
+        //CHECK USER EXISTENCE
+        userService.getById(userId)
+
+        val contact = getById(contactId)
         contact.contactType = contactRequest.contactType
         contact.value = contactRequest.value
         return repository.save(contact).convertToResponse()
     }
 
-    fun delete(id: Long) {
-        repository.delete(getById(id))
+    fun delete(userId: Long, contactId: Long) {
+        userService.getById(userId)
+        repository.delete(getById(contactId))
     }
+
+    fun findContactsByOwnerId(userId: Long): List<ContactResponse> {
+        return repository.findContactsByContactOwnerId(userId).map {
+            ContactResponse(
+                id = it.id,
+                contactType = it.contactType,
+                value = it.value
+            )
+        }
+    }
+
 
     fun ContactRequest.convertToEntity() = Contact(
         value = value,

@@ -36,15 +36,15 @@ class SubjectService {
 
     fun findByCode(code: String): Subject = repository.findSubjectByCode(code)
 
-    fun create(subject: SubjectDTO): SubjectDTO = repository.save(subject.convertToEntity()).convertToDTO()
+    fun create(subjectDTO: SubjectDTO): SubjectDTO = repository.save(subjectDTO.convertToEntity()).convertToDTO()
 
-    fun update(id: Long, subject: SubjectDTO): SubjectDTO {
-        val updatedSubject = findById(id)
-        updatedSubject.code = subject.code
-        updatedSubject.title = subject.title
-        updatedSubject.faculty = subject.faculty
-        updatedSubject.university = subject.university
-        return repository.save(subject.convertToEntity()).convertToDTO()
+    fun update(id: Long, subjectDTO: SubjectDTO): SubjectDTO {
+        val subject = findById(id)
+        subject.code = subjectDTO.code
+        subject.title = subjectDTO.title
+        subject.faculty = subjectDTO.faculty
+        subject.university = subjectDTO.university
+        return repository.save(subject).convertToDTO()
     }
 
     fun delete(id: Long) = repository.delete(findById(id))

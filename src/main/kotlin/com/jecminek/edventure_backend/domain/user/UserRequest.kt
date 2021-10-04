@@ -5,10 +5,10 @@ import javax.validation.constraints.Email
 
 data class UserRequest(
 
-    @Schema(description = "Firstname of user", example = "Muhammad")
+    @Schema(description = "Firstname of user", example = "Marek")
     var firstName: String,
 
-    @Schema(description = "Lastname of user", example = "Lee")
+    @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
 
     @Email(message = "This is not email")
