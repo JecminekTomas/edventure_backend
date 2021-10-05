@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.base.BaseEntity
+import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.convertEntityToReviewResponse
 import javax.persistence.*
@@ -24,7 +25,11 @@ class Review(
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     @JoinColumn(name = "reviewer_id")
-    var reviewer: User = User()
+    var reviewer: User = User(),
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @JoinColumn(name = "offer_id", referencedColumnName = "id")
+    var offer: Offer = Offer()
 
 ) : BaseEntity()
 

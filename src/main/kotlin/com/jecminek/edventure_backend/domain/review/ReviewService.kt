@@ -50,8 +50,8 @@ class ReviewService {
         verbalEvaluation = verbalEvaluation,
         anonymous = anonymous,
         reviewTimestamp = System.currentTimeMillis(),
-        reviewer = userService.getById(reviewerId),
-        reviewed = userService.getById(reviewedId)
+        reviewer = userService.findById(reviewerId),
+        reviewed = userService.findById(reviewedId)
     )
 
 }

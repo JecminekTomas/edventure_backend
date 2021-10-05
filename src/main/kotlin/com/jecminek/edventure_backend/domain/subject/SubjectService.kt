@@ -22,19 +22,7 @@ class SubjectService {
             "Subject With Id: $id, Not Found"
         )
 
-    fun findSubjectByTitle(
-        university: University,
-        faculty: Faculty,
-        title: String
-    ): Subject = repository.findSubjectByUniversityAndFacultyAndTitle(university, faculty, title)
-
-    fun findSubjectsByUniversityAndFaculty(university: University, faculty: Faculty): List<Subject> =
-        repository.findSubjectsByUniversityAndFaculty(university, faculty)
-
-    fun findSubjectsByUniversity(university: University): List<Subject> =
-        repository.findSubjectsByUniversity(university)
-
-    fun findByCode(code: String): Subject = repository.findSubjectByCode(code)
+    //fun findSubjectsByFacultyId(id: Long) = repository.findSu
 
     fun create(subjectDTO: SubjectDTO): SubjectDTO = repository.save(subjectDTO.convertToEntity()).convertToDTO()
 

@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.domain.subject
 
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
-// TODO: 31.03.2021 Add to Theses difference between RestCont. and Cont.
 @RestController
 @Tag(name = "Subject", description = "Users can teach different subjects")
 class SubjectController {
@@ -18,13 +18,13 @@ class SubjectController {
     @Autowired
     lateinit var subjectService: SubjectService
 
-    // FIXME: 17.08.2021 The wrong schema.
+    // FIXME: 5.10.21 Create University and faculty
 //    @Operation(summary = "Finds all subject with requested parameters.")
 //    @ApiResponses(
 //        value = [
 //            ApiResponse(
 //                responseCode = "200", content = [
-//                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDto::class)))]
+//                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))]
 //            ),
 //            ApiResponse(responseCode = "400"),
 //            ApiResponse(
@@ -34,68 +34,11 @@ class SubjectController {
 //    @GetMapping("/subjects")
 //    fun findAll(
 //        @Parameter(
-//            description = "University, where faculty is being part of",
-//            example = "MENDELU"
-//        ) @RequestParam(required = false, defaultValue = "UNIVERSITY") university: University,
-//        @Parameter(
-//            description = "Faculty where subject is being taught",
+//            description = "Id of faculty where subject is being taught",
 //            example = "PEF"
 //        )
-//        @RequestParam(required = false, defaultValue = "FACULTY") faculty: Faculty,
-//        @Parameter(
-//            description = "Name of subject",
-//            example = "Programovací techniky"
-//        )
-//        @RequestParam(required = false) title: String,
-//        @Parameter(
-//            description = "Code of subject",
-//            example = "PTN"
-//        )
-//        @RequestParam(required = false) code: String
-//    ): List<SubjectDto> = when {
-//        university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isNotBlank() && code.isBlank() -> {
-//            listOf(subjectService.findSubjectByTitle(university, faculty, title).convertEntityToDto())
-//        }
-//        university != University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
-//            subjectService.findSubjectsByUniversity(university).map {
-//                SubjectDto(
-//                    id = it.id,
-//                    code = it.code,
-//                    title = it.title,
-//                    faculty = it.faculty,
-//                    university = it.university
-//                )
-//            }
-//        }
-//        university != University.UNIVERSITY && faculty != Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
-//            subjectService.findSubjectsByUniversityAndFaculty(university, faculty).map {
-//                SubjectDto(
-//                    id = it.id,
-//                    code = it.code,
-//                    title = it.title,
-//                    faculty = it.faculty,
-//                    university = it.university
-//                )
-//            }
-//        }
-//        university == University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isNotBlank() -> {
-//            listOf(subjectService.findByCode(code).convertEntityToDto())
-//        }
-//        university == University.UNIVERSITY && faculty == Faculty.FACULTY && title.isBlank() && code.isBlank() -> {
-//            subjectService.findAll().map {
-//                SubjectDto(
-//                    id = it.id,
-//                    code = it.code,
-//                    title = it.title,
-//                    faculty = it.faculty,
-//                    university = it.university
-//                )
-//            }
-//        }
-//        else -> throw ResponseStatusException(
-//            HttpStatus.BAD_REQUEST,
-//            "Bad request"
-//        )
+//        @RequestParam(required = false) facultyId: Long?
+//    ): List<SubjectDTO> = if (facultyId == null)  subjectService.findAll() else subjectService.findSubjectsByUniversityAndFaculty()
 //    }
 
     @Operation(summary = "Create subject")
@@ -110,8 +53,6 @@ class SubjectController {
             ApiResponse(responseCode = "400")
         ]
     )
-
-    // FIXME: 29.08.2021 RENAME ALL xxx: XxxDTO to xxx: Xxx
 
     @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)

@@ -11,11 +11,9 @@ data class OfferDTO(
     var online: Boolean,
     @Schema(description = "Note for lecture", example = "Take a bag")
     var note: String,
+    @Schema(description = "ID of subject", example = "1")
+    var subjectId: Long
 )
 
-fun OfferDTO.convertToEntity() = Offer(
-    price = price,
-    online = online,
-    note = note
-)
+
 

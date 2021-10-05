@@ -17,7 +17,7 @@ class ContactService {
     lateinit var userService: UserService
 
     fun create(userId: Long, contactRequest: ContactRequest): ContactResponse {
-        userService.getById(userId)
+        userService.findById(userId)
         return repository.save(contactRequest.convertToEntity()).convertToResponse()
     }
 
@@ -27,7 +27,7 @@ class ContactService {
 
     fun update(userId: Long, contactId: Long, contactRequest: ContactRequest): ContactResponse {
         //CHECK USER EXISTENCE
-        userService.getById(userId)
+        userService.findById(userId)
 
         val contact = getById(contactId)
         contact.contactType = contactRequest.contactType
@@ -36,12 +36,12 @@ class ContactService {
     }
 
     fun delete(userId: Long, contactId: Long) {
-        userService.getById(userId)
+        userService.findById(userId)
         repository.delete(getById(contactId))
     }
 
     fun findContactsByOwnerId(userId: Long): List<ContactResponse> {
-        return repository.findContactsByContactOwnerId(userId).map {
+        return repository.findContactsByOwnerId(userId).map {
             ContactResponse(
                 id = it.id,
                 contactType = it.contactType,
@@ -54,7 +54,7 @@ class ContactService {
     fun ContactRequest.convertToEntity() = Contact(
         value = value,
         contactType = contactType,
-        contactOwner = userService.getById(ownerId)
+        owner = userService.findById(ownerId)
     )
 }
 

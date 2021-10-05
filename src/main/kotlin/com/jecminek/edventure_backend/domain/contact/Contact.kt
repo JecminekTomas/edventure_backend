@@ -12,7 +12,7 @@ class Contact(
     var contactType: ContactType = ContactType.NONE,
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-    var contactOwner: User = User()
+    var owner: User = User()
 ) : BaseEntity()
 
 fun Contact.convertToResponse() = ContactResponse(

@@ -1,7 +1,9 @@
 package com.jecminek.edventure_backend.domain.offer
 
 import com.jecminek.edventure_backend.base.BaseEntity
+import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.domain.subject.Subject
+import com.jecminek.edventure_backend.domain.user.User
 import javax.persistence.*
 
 @Entity
@@ -12,12 +14,19 @@ class Offer(
     var note: String = "",
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
-    var subject: Subject = Subject()
+    var subject: Subject = Subject(),
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    var creator: User = User(),
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer")
+    var reviews: MutableList<Review> = mutableListOf()
 ) : BaseEntity()
 
 fun Offer.convertToDTO() = OfferDTO(
     id = id,
     price = price,
     online = online,
-    note = note
+    note = note,
+    subjectId = subject.id
 )

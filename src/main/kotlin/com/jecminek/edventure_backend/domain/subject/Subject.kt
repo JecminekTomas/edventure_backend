@@ -15,10 +15,10 @@ class Subject(
     var code: String = "",
     var title: String = "",
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "contactOwner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
     var offers: MutableList<Offer> = mutableListOf(),
 
-    // TODO: DELETE
+    // TODO: CREATE TABLES
 
     @Enumerated(EnumType.STRING)
     @NotEmpty
@@ -35,7 +35,7 @@ fun Subject.convertToDTO() = SubjectDTO(
     code = code,
     title = title,
     faculty = faculty,
-    university = university,
+    university = university
 )
 
 

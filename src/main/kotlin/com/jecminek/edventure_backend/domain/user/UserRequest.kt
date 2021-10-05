@@ -12,7 +12,7 @@ data class UserRequest(
     var lastName: String,
 
     @Email(message = "This is not email")
-    @Schema(description = "E-mail address of user", example = "m_lee@email.com")
+    @Schema(description = "E-mail address of user", example = "m_vrana@email.com")
     var email: String,
 )
 

@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.offer
 
+import com.jecminek.edventure_backend.domain.subject.SubjectService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
@@ -10,6 +11,9 @@ import org.springframework.web.server.ResponseStatusException
 class OfferService {
     @Autowired
     lateinit var repository: OfferRepository
+
+    @Autowired
+    lateinit var subjectService: SubjectService
 
     fun findAll(): MutableIterable<Offer> = repository.findAll()
 
@@ -30,4 +34,11 @@ class OfferService {
     }
 
     fun delete(id: Long) = repository.delete(findById(id))
+
+    fun OfferDTO.convertToEntity() = Offer(
+        price = price,
+        online = online,
+        note = note,
+        subject = subjectService.findById(subjectId)
+    )
 }

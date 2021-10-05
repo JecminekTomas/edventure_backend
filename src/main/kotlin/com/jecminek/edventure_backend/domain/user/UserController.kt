@@ -39,7 +39,7 @@ class UserController {
             example = "1"
         ) @PathVariable id: Long
     ): UserResponse =
-        userService.findById(id)
+        userService.findById(id).convertEntityToResponse()
 
     @Operation(summary = "Create user")
     @ApiResponses(

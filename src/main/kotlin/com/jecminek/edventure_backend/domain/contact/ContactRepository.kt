@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ContactRepository : PagingAndSortingRepository<Contact, Long> {
-    fun findContactsByContactOwnerId(id: Long): List<Contact>
+    fun findContactsByOwnerId(id: Long): List<Contact>
 }
