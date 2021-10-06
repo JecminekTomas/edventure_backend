@@ -30,19 +30,19 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/reviews/reviewers/{id}")
+    @GetMapping("/reviews/reviewers/{userId}")
     @ResponseStatus(HttpStatus.OK)
     fun findReviewsByReviewerId(
         @Parameter(
             description = "Id of user who is in position of reviewer",
             example = "1"
-        ) @PathVariable id: Long,
+        ) @PathVariable userId: Long,
         @Parameter(
             description = "Page number, to be found. Default page size is 50.",
             example = "0"
         )
         @RequestParam(required = true) page: Int
-    ): List<ReviewResponse> = reviewService.findReviewsByReviewerId(id, page)
+    ): List<ReviewResponse> = reviewService.findReviewsByReviewerId(userId, page)
 
     @Operation(summary = "Find reviews by ID of user, who is in position of reviewed in review")
     @ApiResponses(
@@ -57,19 +57,19 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/reviews/reviewed/{id}")
+    @GetMapping("/reviews/reviewed/{userId}")
     @ResponseStatus(HttpStatus.OK)
     fun findReviewsByReviewedId(
         @Parameter(
             description = "Id of user who is in position of reviewed",
             example = "1"
-        ) @PathVariable id: Long,
+        ) @PathVariable userId: Long,
         @Parameter(
             description = "Page number, to be found. Default page size is 50.",
             example = "0"
         )
         @RequestParam(required = true) page: Int
-    ): List<ReviewResponse> = reviewService.findReviewsByReviewedId(id, page)
+    ): List<ReviewResponse> = reviewService.findReviewsByReviewedId(userId, page)
 
     @Operation(summary = "Create review")
     @ApiResponses(
