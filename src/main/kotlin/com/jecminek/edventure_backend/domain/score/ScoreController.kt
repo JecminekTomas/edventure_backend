@@ -46,7 +46,8 @@ class ScoreController {
                     (Content(mediaType = "application/json", schema = Schema(implementation = ScoreDTO::class)))
                 ]
             ),
-            ApiResponse(responseCode = "400")
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "403")
         ]
     )
 
@@ -64,7 +65,9 @@ class ScoreController {
                 ]
             ),
             ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "403"),
             ApiResponse(responseCode = "404")
+
         ]
     )
     @PutMapping("/scores/{id}")
@@ -75,7 +78,7 @@ class ScoreController {
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "204"),
-            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "403"),
             ApiResponse(responseCode = "404")
         ]
     )

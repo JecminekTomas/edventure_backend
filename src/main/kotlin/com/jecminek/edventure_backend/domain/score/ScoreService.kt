@@ -20,14 +20,20 @@ class ScoreService {
     @Autowired
     lateinit var reviewService: ReviewService
 
-    fun create(scoreDTO: ScoreDTO): ScoreDTO = repository.save(scoreDTO.convertToEntity()).convertToDTO()
+    fun create(scoreDTO: ScoreDTO): ScoreDTO =
+        if (repository.findScoreByUserId(scoreDTO.userId).isEmpty())
+            repository.save(scoreDTO.convertToEntity()).convertToDTO()
+        else throw ResponseStatusException(HttpStatus.FORBIDDEN)
 
     fun update(id: Long, scoreDTO: ScoreDTO): ScoreDTO {
-        val score = findById(id)
-        score.helpful = scoreDTO.helpful
-        score.review = reviewService.findById(scoreDTO.reviewId)
-        score.user = userService.findById(scoreDTO.userId)
-        return repository.save(score).convertToDTO()
+        if (repository.findScoreByUserId(scoreDTO.userId).isNotEmpty()) {
+            val score = findById(id)
+            score.helpful = scoreDTO.helpful
+            score.review = reviewService.findById(scoreDTO.reviewId)
+            score.user = userService.findById(scoreDTO.userId)
+            return repository.save(score).convertToDTO()
+        }
+        throw ResponseStatusException(HttpStatus.FORBIDDEN)
     }
 
     fun findById(id: Long): Score =
