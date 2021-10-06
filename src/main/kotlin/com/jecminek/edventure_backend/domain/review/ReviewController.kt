@@ -86,7 +86,7 @@ class ReviewController {
 
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody review: ReviewRequest): ReviewResponse = reviewService.create(review)
+    fun create(@RequestBody reviewRequest: ReviewRequest): ReviewResponse = reviewService.create(reviewRequest)
 
     @Operation(summary = "Update review")
     @ApiResponses(
@@ -106,8 +106,8 @@ class ReviewController {
     fun update(
         @Parameter(description = "ID of updated review", example = "1")
         @PathVariable id: Long,
-        @RequestBody review: ReviewRequest
-    ): ReviewResponse = reviewService.update(id, review)
+        @RequestBody reviewRequest: ReviewRequest
+    ): ReviewResponse = reviewService.update(id, reviewRequest)
 
     @Operation(summary = "Delete review")
     @ApiResponses(

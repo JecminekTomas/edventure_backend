@@ -11,7 +11,7 @@ import javax.persistence.*
 class Offer(
     var price: Double = 0.0,
     var online: Boolean = false,
-    var note: String = "",
+    var note: String? = null,
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     var subject: Subject = Subject(),

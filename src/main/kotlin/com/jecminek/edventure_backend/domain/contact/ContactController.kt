@@ -57,8 +57,8 @@ class ContactController {
     fun update(
         @PathVariable contactId: Long,
         @PathVariable userId: Long,
-        @RequestBody contact: ContactRequest
-    ): ContactResponse = contactService.update(userId, contactId, contact)
+        @RequestBody contactRequest: ContactRequest
+    ): ContactResponse = contactService.update(userId, contactId, contactRequest)
 
     @Operation(summary = "Delete contact")
     @ApiResponses(

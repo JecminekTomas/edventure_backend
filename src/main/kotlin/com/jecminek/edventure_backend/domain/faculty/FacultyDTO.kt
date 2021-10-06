@@ -9,9 +9,7 @@ data class FacultyDTO(
     var name: String,
     @Schema(description = "Faculty code", example = "AF")
     var code: String?,
+    @Schema(description = "ID of university where faculty belongs.", example = "1")
+    var universityId: Long,
 )
 
-fun FacultyDTO.convertToEntity() = Faculty(
-    name = name,
-    code = code
-)

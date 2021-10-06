@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FacultyRepository: CrudRepository<Faculty, Long> {
-    //fun findFacultiesByUniversityId(universityId: Long): List<Faculty>
+    fun findFacultiesByUniversityId(universityId: Long): List<Faculty>
 }

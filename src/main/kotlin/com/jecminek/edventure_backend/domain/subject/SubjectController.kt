@@ -18,28 +18,27 @@ class SubjectController {
     @Autowired
     lateinit var subjectService: SubjectService
 
-    // FIXME: 5.10.21 Create University and faculty
-//    @Operation(summary = "Finds all subject with requested parameters.")
-//    @ApiResponses(
-//        value = [
-//            ApiResponse(
-//                responseCode = "200", content = [
-//                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))]
-//            ),
-//            ApiResponse(responseCode = "400"),
-//            ApiResponse(
-//                responseCode = "404",
-//            )]
-//    )
-//    @GetMapping("/subjects")
-//    fun findAll(
-//        @Parameter(
-//            description = "Id of faculty where subject is being taught",
-//            example = "PEF"
-//        )
-//        @RequestParam(required = false) facultyId: Long?
-//    ): List<SubjectDTO> = if (facultyId == null)  subjectService.findAll() else subjectService.findSubjectsByUniversityAndFaculty()
-//    }
+    @Operation(summary = "Finds all subject with requested parameters.")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200", content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))]
+            ),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(
+                responseCode = "404",
+            )]
+    )
+    @GetMapping("/subjects")
+    fun findAll(
+        @Parameter(
+            description = "Id of faculty where subject is being taught",
+            example = "1"
+        )
+        @RequestParam(required = false) facultyId: Long?
+    ): List<SubjectDTO> = subjectService.findAll(facultyId)
+
 
     @Operation(summary = "Create subject")
     @ApiResponses(

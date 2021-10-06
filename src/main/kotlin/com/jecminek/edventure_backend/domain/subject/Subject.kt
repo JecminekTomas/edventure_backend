@@ -1,41 +1,30 @@
 package com.jecminek.edventure_backend.domain.subject
 
 import com.jecminek.edventure_backend.base.BaseEntity
-import com.jecminek.edventure_backend.domain.contact.Contact
+import com.jecminek.edventure_backend.domain.faculty.Faculty
 import com.jecminek.edventure_backend.domain.offer.Offer
-import com.jecminek.edventure_backend.enums.Faculty
-import com.jecminek.edventure_backend.enums.University
 import javax.persistence.*
-import javax.validation.constraints.NotEmpty
 
 
 @Entity
 @Table(name = "\"SUBJECT\"")
 class Subject(
     var code: String = "",
-    var title: String = "",
+    var name: String = "",
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
     var offers: MutableList<Offer> = mutableListOf(),
 
-    // TODO: CREATE TABLES
-
-    @Enumerated(EnumType.STRING)
-    @NotEmpty
-    var faculty: Faculty = Faculty.FACULTY,
-
-    @Enumerated(EnumType.STRING)
-    @NotEmpty
-    var university: University = University.UNIVERSITY,
+    @ManyToOne(fetch = FetchType.EAGER)
+    var faculty: Faculty = Faculty()
 
 ) : BaseEntity()
 
 fun Subject.convertToDTO() = SubjectDTO(
     id = id,
     code = code,
-    title = title,
-    faculty = faculty,
-    university = university
+    name = name,
+    facultyId = faculty.id
 )
 
 

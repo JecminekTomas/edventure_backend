@@ -1,4 +1,5 @@
-package com.jecminek.edventure_backend.domain.faculty
+package com.jecminek.edventure_backend.domain.university
+
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -12,99 +13,94 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class FacultyController {
+class UniversityController {
 
     @RestController
-    @Tag(name = "Faculty", description = "Admin will be able to create faculty")
-    class FacultyController {
+    @Tag(name = "University", description = "Admin will be able to create university")
+    class UniversityController {
         @Autowired
-        lateinit var facultyService: FacultyService
+        lateinit var universityService: UniversityService
 
-        @Operation(summary = "Find all faculties by parameters")
+        @Operation(summary = "Find all universities")
         @ApiResponses(
             value = [
                 ApiResponse(
                     responseCode = "200",
                     content = [
-                        (Content(mediaType = "application/json", schema = Schema(implementation = FacultyDTO::class)))
+                        (Content(mediaType = "application/json", schema = Schema(implementation = UniversityDTO::class)))
+                    ]
+                ),
+                ApiResponse(responseCode = "400", content = []),
+                ApiResponse(responseCode = "404", content = [])
+            ]
+        )
+        @GetMapping("/universities")
+        @ResponseStatus(HttpStatus.OK)
+        fun findAll(): List<UniversityDTO> =
+            universityService.findAll()
+
+        @Operation(summary = "Find university by id")
+        @ApiResponses(
+            value = [
+                ApiResponse(
+                    responseCode = "200",
+                    content = [
+                        (Content(mediaType = "application/json", schema = Schema(implementation = UniversityDTO::class)))
                     ]
                 ),
                 ApiResponse(responseCode = "400"),
                 ApiResponse(responseCode = "404")
             ]
         )
-        @GetMapping("/faculties")
+        @GetMapping("/universities/{id}")
         @ResponseStatus(HttpStatus.OK)
         fun findById(
             @Parameter(
-                description = "Id of university where faculties belongs to.",
-                example = "1"
-            ) @RequestParam universityId: Long?
-        ): List<FacultyDTO> =
-            facultyService.findAll(universityId)
-
-        @Operation(summary = "Find faculty by id")
-        @ApiResponses(
-            value = [
-                ApiResponse(
-                    responseCode = "200",
-                    content = [
-                        (Content(mediaType = "application/json", schema = Schema(implementation = FacultyDTO::class)))
-                    ]
-                ),
-                ApiResponse(responseCode = "400"),
-                ApiResponse(responseCode = "404")
-            ]
-        )
-        @GetMapping("/faculties/{id}")
-        @ResponseStatus(HttpStatus.OK)
-        fun findById(
-            @Parameter(
-                description = "Id of faculty to be found",
+                description = "Id of university to be found",
                 example = "1"
             ) @PathVariable id: Long
-        ): FacultyDTO =
-            facultyService.getById(id)
+        ): UniversityDTO =
+            universityService.getById(id)
 
-        @Operation(summary = "Create faculty")
+        @Operation(summary = "Create university")
         @ApiResponses(
             value = [
                 ApiResponse(
                     responseCode = "201",
                     content = [
-                        (Content(mediaType = "application/json", schema = Schema(implementation = FacultyDTO::class)))
+                        (Content(mediaType = "application/json", schema = Schema(implementation = UniversityDTO::class)))
                     ]
                 ),
                 ApiResponse(responseCode = "400")
             ]
         )
 
-        @PostMapping("/faculties")
+        @PostMapping("/universities")
         @ResponseStatus(HttpStatus.CREATED)
-        fun create(@RequestBody facultyDTO: FacultyDTO): FacultyDTO =
-            facultyService.create(facultyDTO)
+        fun create(@RequestBody universityDTO: UniversityDTO): UniversityDTO =
+            universityService.create(universityDTO)
 
-        @Operation(summary = "Update faculty")
+        @Operation(summary = "Update university")
         @ApiResponses(
             value = [
                 ApiResponse(
                     responseCode = "202",
                     content = [
-                        (Content(mediaType = "application/json", schema = Schema(implementation = FacultyDTO::class)))
+                        (Content(mediaType = "application/json", schema = Schema(implementation = UniversityDTO::class)))
                     ]
                 ),
                 ApiResponse(responseCode = "400"),
                 ApiResponse(responseCode = "404")
             ]
         )
-        @PutMapping("/faculties/{id}")
+        @PutMapping("/universities/{id}")
         @ResponseStatus(HttpStatus.ACCEPTED)
         fun update(
             @PathVariable id: Long,
-            @RequestBody facultyDTO: FacultyDTO
-        ): FacultyDTO = facultyService.update(id, facultyDTO)
+            @RequestBody universityDTO: UniversityDTO
+        ): UniversityDTO = universityService.update(id, universityDTO)
 
-        @Operation(summary = "Delete faculty")
+        @Operation(summary = "Delete university")
         @ApiResponses(
             value = [
                 ApiResponse(responseCode = "204"),
@@ -112,8 +108,8 @@ class FacultyController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @DeleteMapping("/faculties/{id}")
+        @DeleteMapping("/universities/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
-        fun delete(@PathVariable id: Long) = facultyService.delete(id)
+        fun delete(@PathVariable id: Long) = universityService.delete(id)
     }
 }

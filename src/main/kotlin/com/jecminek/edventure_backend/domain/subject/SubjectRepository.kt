@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface SubjectRepository : PagingAndSortingRepository<Subject, Long> {
-    //fun findSubjectsByFaculty(id: Long)
+    fun findSubjectsByFacultyId(id: Long): List<Subject>
 }

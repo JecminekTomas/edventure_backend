@@ -10,7 +10,7 @@ data class OfferDTO(
     @Schema(description = "Is lecture online?", example = "false")
     var online: Boolean,
     @Schema(description = "Note for lecture", example = "Take a bag")
-    var note: String,
+    var note: String?,
     @Schema(description = "ID of subject", example = "1")
     var subjectId: Long
 )
