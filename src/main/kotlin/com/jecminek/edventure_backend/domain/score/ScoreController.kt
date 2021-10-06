@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend.domain.subject
+package com.jecminek.edventure_backend.domain.score
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
@@ -6,79 +6,72 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
-import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "Subject", description = "Users can teach different subjects")
-class SubjectController {
+class ScoreController {
 
     @Autowired
-    lateinit var subjectService: SubjectService
+    lateinit var service: ScoreService
 
-    @Operation(summary = "Finds all subjects with requested parameters.")
+    @Operation(summary = "Finds all scores with requested parameters")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "200", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))]
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ScoreDTO::class)))]
             ),
             ApiResponse(responseCode = "400"),
             ApiResponse(
                 responseCode = "404",
             )]
     )
-    @GetMapping("/subjects")
-    fun findAll(
+    @GetMapping("/scores")
+    fun findScoresByReviewId(
         @Parameter(
-            description = "Id of faculty where subject is being taught",
+            description = "Id of review, which score belongs to.",
             example = "1"
         )
-        @RequestParam(required = false) facultyId: Long?
-    ): List<SubjectDTO> = subjectService.findAll(facultyId)
+        @RequestParam(required = true) reviewId: Long
+    ): List<ScoreDTO> = service.findScoresByReviewId(reviewId)
 
-
-    @Operation(summary = "Create subject")
+    @Operation(summary = "Create score")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "201",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ScoreDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")
         ]
     )
 
-    @PostMapping("/subjects")
+    @PostMapping("/scores")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody subjectDTO: SubjectDTO): SubjectDTO =
-        subjectService.create(subjectDTO)
+    fun create(scoreDTO: ScoreDTO): ScoreDTO = service.create(scoreDTO)
 
-    @Operation(summary = "Update subject")
+    @Operation(summary = "Update score")
     @ApiResponses(
         value = [
             ApiResponse(
                 responseCode = "202",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = SubjectDTO::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = ScoreDTO::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/subjects/{id}")
+    @PutMapping("/scores/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun update(
-        @PathVariable id: Long,
-        @RequestBody subjectDTO: SubjectDTO
-    ): SubjectDTO = subjectService.update(id, subjectDTO)
+    fun update(id: Long, scoreDTO: ScoreDTO) = service.update(id, scoreDTO)
 
-    @Operation(summary = "Delete subject")
+    @Operation(summary = "Delete score")
     @ApiResponses(
         value = [
             ApiResponse(responseCode = "204"),
@@ -86,9 +79,7 @@ class SubjectController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/subjects/{id}")
+    @DeleteMapping("/scores/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Long) = subjectService.delete(id)
-
+    fun delete(@PathVariable id: Long) = service.delete(id)
 }
-
