@@ -4,10 +4,8 @@ import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.contact.Contact
 import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.review.Review
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.OneToMany
-import javax.persistence.Table
+import com.jecminek.edventure_backend.domain.score.Score
+import javax.persistence.*
 
 @Entity
 @Table(name = "\"USER\"")
@@ -20,17 +18,20 @@ class User(
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer", cascade = [CascadeType.ALL])
     var reviewerReviews: MutableList<Review> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewed")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewed", cascade = [CascadeType.ALL])
     var reviewedReviews: MutableList<Review> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userContacts: MutableList<Contact> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
-    var userOffers: MutableList<Offer> = mutableListOf()
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator", cascade = [CascadeType.ALL])
+    var userOffers: MutableList<Offer> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
+    var userScores: MutableList<Score> = mutableListOf()
 
 ) : BaseEntity()
 

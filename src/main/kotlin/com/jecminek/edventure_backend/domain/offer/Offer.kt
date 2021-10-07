@@ -13,10 +13,10 @@ class Offer(
     var online: Boolean = false,
     var note: String? = null,
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToOne(fetch = FetchType.EAGER)
     var subject: Subject = Subject(),
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToOne(fetch = FetchType.EAGER)
     var creator: User = User(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer")

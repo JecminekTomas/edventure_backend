@@ -2,6 +2,7 @@ package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.offer.Offer
+import com.jecminek.edventure_backend.domain.score.Score
 import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.convertEntityToReviewResponse
 import javax.persistence.*
@@ -19,17 +20,20 @@ class Review(
      * Reviewed = Who is being reviewed.
      * */
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewed_id")
     var reviewed: User = User(),
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id")
     var reviewer: User = User(),
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "offer_id", referencedColumnName = "id")
-    var offer: Offer = Offer()
+    var offer: Offer? = Offer(),
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "review", cascade = [CascadeType.ALL])
+    var scores: MutableList<Score> = mutableListOf()
 
 ) : BaseEntity()
 

@@ -6,17 +6,19 @@ import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@Tag(name = "Score", description = "Score for review")
 class ScoreController {
 
     @Autowired
     lateinit var service: ScoreService
 
-    @Operation(summary = "Finds all scores with requested parameters")
+    @Operation(summary = "Finds all scores for review")
     @ApiResponses(
         value = [
             ApiResponse(

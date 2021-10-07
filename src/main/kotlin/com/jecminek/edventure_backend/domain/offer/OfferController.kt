@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "Offer", description = "Offers can create offers")
+@Tag(name = "Offer", description = "Users can create offers")
 class OfferController {
     @Autowired
     lateinit var offerService: OfferService

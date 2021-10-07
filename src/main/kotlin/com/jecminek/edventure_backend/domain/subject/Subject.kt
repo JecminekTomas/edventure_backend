@@ -12,7 +12,7 @@ class Subject(
     var code: String = "",
     var name: String = "",
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subject", cascade = [CascadeType.ALL])
     var offers: MutableList<Offer> = mutableListOf(),
 
     @ManyToOne(fetch = FetchType.EAGER)
