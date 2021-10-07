@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "Review", description = "Students can review teachers")
+@Tag(name = "Review", description = "Users can review other users")
 class ReviewController {
     @Autowired
     lateinit var reviewService: ReviewService

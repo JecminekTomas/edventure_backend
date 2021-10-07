@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "User - Contact", description = "Contact to user")
+@Tag(name = "User - Contact", description = "User's contact")
 class ContactController {
     @Autowired
     lateinit var contactService: ContactService

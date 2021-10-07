@@ -17,7 +17,7 @@ class Offer(
     var subject: Subject = Subject(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    var creator: User = User(),
+    var user: User = User(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "offer")
     var reviews: MutableList<Review> = mutableListOf()

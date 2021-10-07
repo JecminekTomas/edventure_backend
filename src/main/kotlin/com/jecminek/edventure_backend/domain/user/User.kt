@@ -27,7 +27,7 @@ class User(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userContacts: MutableList<Contact> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator", cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
     var userOffers: MutableList<Offer> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])

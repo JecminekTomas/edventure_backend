@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Tag(name = "Score", description = "Score for review")
+@Tag(name = "Score", description = "Review's score")
 class ScoreController {
 
     @Autowired
