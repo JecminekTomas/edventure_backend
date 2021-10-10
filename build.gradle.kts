@@ -45,9 +45,19 @@ dependencies {
      * implementation("io.springfox:springfox-swagger-ui:3.0.0")
      **/
 
+    // Spring Security
+    implementation("org.springframework.security:spring-security-core:5.5.2")
+    implementation("org.springframework.security:spring-security-web:5.5.2")
+    implementation("org.springframework.security:spring-security-config:5.5.2")
+
+    // JWT
+    implementation("com.auth0:java-jwt:3.18.2")
+
 
     // Spring Data JPA (Hibernate)
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.hibernate:hibernate-core:5.5.7.Final")
+
 
     // PostgreSQL
     runtimeOnly ("org.postgresql:postgresql")

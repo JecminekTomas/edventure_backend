@@ -15,7 +15,7 @@ data class ReviewResponse(
     @Schema(description = "Rating in stars", example = "3")
     var stars: Double,
 
-    @Size(min = 10, max = 500)
+    @Size(min = 10, max = 250)
     @Schema(
         description = "Verbal evaulation from student to teacher or vice versa",
         example = "The offer was OK. Only no added materials are included in EXPENSIVE lecture."

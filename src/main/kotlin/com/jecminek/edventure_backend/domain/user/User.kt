@@ -12,9 +12,9 @@ import javax.persistence.*
 class User(
     var firstName: String = "",
     var lastName: String = "",
+    @Column(unique = true)
     var email: String = "",
-
-    // TODO: 27.08.2021 PASSWORD
+    var password: String = "",
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
@@ -40,6 +40,7 @@ fun User.convertEntityToResponse() = UserResponse(
     firstName = firstName,
     lastName = lastName,
     email = email,
+    password = password
 )
 
 fun User.convertEntityToReviewResponse() = UserReviewResponse(

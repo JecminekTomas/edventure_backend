@@ -14,12 +14,17 @@ data class UserRequest(
     @Email(message = "This is not email")
     @Schema(description = "E-mail address of user", example = "m_vrana@email.com")
     var email: String,
+
+    @Schema(description = "User's password", example = "heslo")
+    var password: String
+
 )
 
 fun UserRequest.convertRequestToEntity() = User(
     firstName = firstName,
     lastName = lastName,
     email = email,
+    password = password
 )
 
 

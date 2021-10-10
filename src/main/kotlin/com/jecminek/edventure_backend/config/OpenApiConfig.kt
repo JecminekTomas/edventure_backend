@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 
-// TODO: 18.03.2021 CASCADE, FETCH TYPES 
 
 @Configuration
 class OpenApiConfig {
