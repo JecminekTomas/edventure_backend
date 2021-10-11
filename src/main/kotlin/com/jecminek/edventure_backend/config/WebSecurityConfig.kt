@@ -28,8 +28,7 @@ class WebSecurityConfig(
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
-        http.cors().and().csrf().disable()
-            .authorizeRequests()
+        http.cors().and().authorizeRequests()
             .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
             .antMatchers(
                 "/api-docs",
@@ -40,17 +39,16 @@ class WebSecurityConfig(
                 "/configuration/ui"
             ).permitAll() // swagger api docs
             .anyRequest().authenticated()
-
             .and()
-
             .addFilter(JWTAuthenticationFilter(authenticationManager()))
             .addFilter(JWTAuthorizationFilter(authenticationManager())) // this disables session creation on Spring Security
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().csrf().disable();
     }
 
     @Throws(Exception::class)
     public override fun configure(auth: AuthenticationManagerBuilder) {
-        // FIXME: userRepo.findByMail(mail)
+        // FIXME: userRepo.findByMail(mail)!!!
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder)
     }
 
