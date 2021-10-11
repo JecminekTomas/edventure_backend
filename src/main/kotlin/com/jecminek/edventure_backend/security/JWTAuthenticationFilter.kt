@@ -5,7 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.jecminek.edventure_backend.constant.SecurityConstants.EXPIRATION_TIME
 import com.jecminek.edventure_backend.constant.SecurityConstants.SECRET
-import com.jecminek.edventure_backend.domain.user.User
 import com.jecminek.edventure_backend.domain.user.UserRequest
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
