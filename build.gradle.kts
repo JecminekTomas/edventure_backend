@@ -52,6 +52,10 @@ dependencies {
     // PostgreSQL
     runtimeOnly ("org.postgresql:postgresql")
 
+    // Spring Security
+    implementation("org.springframework.boot:spring-boot-starter-security:2.5.5")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+
     //Mapper
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     implementation("org.mapstruct:mapstruct-processor:1.4.2.Final")

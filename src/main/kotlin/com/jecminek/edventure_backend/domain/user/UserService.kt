@@ -3,12 +3,14 @@ package com.jecminek.edventure_backend.domain.user
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
 @Service
 // TODO - Vytvořit inteface pro CRUD metody
-class UserService {
+class UserService: UserDetailsService {
 
     @Autowired
     lateinit var repository: UserRepository
@@ -21,11 +23,14 @@ class UserService {
         val user = findById(id)
         user.firstName = userRequest.firstName
         user.lastName = userRequest.lastName
-        user.email = userRequest.email
+        user.userName = userRequest.userName
         return repository.save(user).convertEntityToResponse()
     }
 
     fun delete(id: Long) = repository.delete(findById(id))
+
+    override fun loadUserByUsername(userName: String): UserDetails = repository.findUserByUserName(userName)
+
 
 }
 

@@ -5,6 +5,8 @@ import com.jecminek.edventure_backend.domain.contact.Contact
 import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.domain.score.Score
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
 @Entity
@@ -12,7 +14,11 @@ import javax.persistence.*
 class User(
     var firstName: String = "",
     var lastName: String = "",
-    var email: String = "",
+    @Column(unique = true) var userName: String = "",
+    private var password: String = "",
+    private var enabled: Boolean = true,
+    private var locked: Boolean = false,
+    private var expired: Boolean = false,
 
     // TODO: 27.08.2021 PASSWORD
 
@@ -33,13 +39,30 @@ class User(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
     var userScores: MutableList<Score> = mutableListOf()
 
-) : BaseEntity()
+) : BaseEntity(), UserDetails {
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getPassword(): String = this.password
+
+    override fun getUsername(): String = this.userName
+
+
+    override fun isAccountNonExpired(): Boolean = this.expired
+
+    override fun isAccountNonLocked(): Boolean = this.locked
+
+    override fun isCredentialsNonExpired(): Boolean = this.expired
+
+    override fun isEnabled(): Boolean = this.enabled
+}
 
 fun User.convertEntityToResponse() = UserResponse(
     id = id,
     firstName = firstName,
     lastName = lastName,
-    email = email,
+    userName = userName,
 )
 
 fun User.convertEntityToReviewResponse() = UserReviewResponse(
