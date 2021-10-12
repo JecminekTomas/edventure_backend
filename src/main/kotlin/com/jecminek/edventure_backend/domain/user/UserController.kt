@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -41,7 +42,7 @@ class UserController {
     ): UserResponse =
         userService.findById(id).convertEntityToResponse()
 
-    @Operation(summary = "Create user")
+    @Operation(summary = "Register user")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -53,9 +54,25 @@ class UserController {
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/users")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody userRequest: UserRequest): UserResponse = userService.create(userRequest)
+    fun register(@RequestBody userRequest: UserRequest): UserResponse = userService.register(userRequest)
+
+    @Operation(summary = "Register user")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "201",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                ]
+            ),
+            ApiResponse(responseCode = "400")
+        ]
+    )
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun login(@RequestBody userRequestLogin: UserRequestLogin): ResponseEntity<UserResponse> = userService.login(userRequestLogin)
 
     @Operation(summary = "Update user")
     @ApiResponses(

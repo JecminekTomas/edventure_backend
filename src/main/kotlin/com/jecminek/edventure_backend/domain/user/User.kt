@@ -14,13 +14,13 @@ import javax.persistence.*
 class User(
     var firstName: String = "",
     var lastName: String = "",
+
     @Column(unique = true) var userName: String = "",
     private var password: String = "",
+
     private var enabled: Boolean = true,
     private var locked: Boolean = false,
     private var expired: Boolean = false,
-
-    // TODO: 27.08.2021 PASSWORD
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
@@ -41,19 +41,22 @@ class User(
 
 ) : BaseEntity(), UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        TODO("Not yet implemented")
+        return HashSet<Role>()
     }
 
     override fun getPassword(): String = this.password
 
+    fun setPassword(password: String) {
+        this.password = password
+    }
+
     override fun getUsername(): String = this.userName
 
+    override fun isAccountNonExpired(): Boolean = !this.expired
 
-    override fun isAccountNonExpired(): Boolean = this.expired
+    override fun isAccountNonLocked(): Boolean = !this.locked
 
-    override fun isAccountNonLocked(): Boolean = this.locked
-
-    override fun isCredentialsNonExpired(): Boolean = this.expired
+    override fun isCredentialsNonExpired(): Boolean = !this.expired
 
     override fun isEnabled(): Boolean = this.enabled
 }

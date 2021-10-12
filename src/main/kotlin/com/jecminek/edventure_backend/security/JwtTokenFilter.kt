@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.security
 
 import com.jecminek.edventure_backend.domain.user.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,8 +18,12 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JwtTokenFilter : OncePerRequestFilter() {
-    private val jwtTokenUtil: JwtTokenUtil? = null
-    private val userRepository: UserRepository? = null
+
+    @Autowired
+    lateinit var jwtTokenUtil: JwtTokenUtil
+
+    @Autowired
+    lateinit var userRepository: UserRepository
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
@@ -28,20 +33,20 @@ class JwtTokenFilter : OncePerRequestFilter() {
     ) {
         // Get authorization header and validate
         val header = request.getHeader(HttpHeaders.AUTHORIZATION)
-        if (header.isEmpty() || !header.startsWith("Bearer ")) {
+        if (header.isNullOrEmpty() || !header.startsWith("Bearer ")) {
             chain.doFilter(request, response)
             return
         }
 
         // Get jwt token and validate
         val token = header.split(" ").toTypedArray()[1].trim { it <= ' ' }
-        if (!jwtTokenUtil!!.validate(token)) {
+        if (!jwtTokenUtil.validate(token)) {
             chain.doFilter(request, response)
             return
         }
 
         // Get user identity and set it on the spring security context
-        val userDetails: UserDetails = userRepository!!.findUserByUserName(jwtTokenUtil.getUsername(token))
+        val userDetails: UserDetails? = userRepository.findUserByUserName(jwtTokenUtil.getUsername(token))
         val authentication = UsernamePasswordAuthenticationToken(
             userDetails, null,
             Optional.ofNullable(userDetails).map { obj: UserDetails -> obj.authorities }.orElse(emptyList())

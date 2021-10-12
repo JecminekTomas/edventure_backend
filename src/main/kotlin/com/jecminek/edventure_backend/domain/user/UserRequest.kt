@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
 import io.swagger.v3.oas.annotations.media.Schema
-import javax.validation.constraints.Email
 
 data class UserRequest(
 
@@ -11,11 +10,11 @@ data class UserRequest(
     @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
 
-    @Email(message = "This is not email")
     @Schema(description = "E-mail address of user", example = "m_vrana@email.com")
     var userName: String,
 
-    var password: String
+    @Schema(description = "User password", example = "heslo")
+    var password: String,
 )
 
 fun UserRequest.convertRequestToEntity() = User(
