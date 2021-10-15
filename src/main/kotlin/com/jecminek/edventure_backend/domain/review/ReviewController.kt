@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
+import com.jecminek.edventure_backend.security.JwtTokenUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*
 class ReviewController {
     @Autowired
     lateinit var reviewService: ReviewService
+
+    @Autowired
+    lateinit var jwtTokenUtil: JwtTokenUtil
 
     @Operation(summary = "Find reviews by ID of user, who is in position of reviewer in review")
     @ApiResponses(
@@ -83,10 +88,15 @@ class ReviewController {
             ApiResponse(responseCode = "400")
         ]
     )
-
     @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody reviewRequest: ReviewRequest): ReviewResponse = reviewService.create(reviewRequest)
+    fun create(
+        @RequestBody reviewRequest: ReviewRequest,
+        @RequestHeader("authorization") headers: HttpHeaders
+    ): ReviewResponse {
+        val userId = jwtTokenUtil.getUserId(headers)
+        return reviewService.create(userId, reviewRequest)
+    }
 
     @Operation(summary = "Update review")
     @ApiResponses(

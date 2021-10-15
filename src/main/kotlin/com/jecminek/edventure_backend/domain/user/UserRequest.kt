@@ -10,7 +10,7 @@ data class UserRequest(
     @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
 
-    @Schema(description = "E-mail address of user", example = "m_vrana@email.com")
+    @Schema(description = "E-mail address of user", example = "xmarek")
     var userName: String,
 
     @Schema(description = "User password", example = "heslo")

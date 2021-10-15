@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.offer
 
+import com.jecminek.edventure_backend.security.JwtTokenUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -16,6 +18,9 @@ import org.springframework.web.bind.annotation.*
 class OfferController {
     @Autowired
     lateinit var offerService: OfferService
+
+    @Autowired
+    lateinit var jwtTokenUtil: JwtTokenUtil
 
     @Operation(summary = "Find offer by id")
     @ApiResponses(
@@ -55,8 +60,11 @@ class OfferController {
 
     @PostMapping("/offers")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody offerDTO: OfferDTO): OfferDTO =
-        offerService.create(offerDTO)
+    fun create(@RequestBody offerDTO: OfferDTO, @RequestHeader("authorization") headers: HttpHeaders): OfferDTO {
+        val userId = jwtTokenUtil.getUserId(headers)
+        return offerService.create(userId, offerDTO)
+    }
+
 
     @Operation(summary = "Update offer")
     @ApiResponses(

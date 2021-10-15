@@ -7,7 +7,6 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.builders.WebSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -33,22 +32,11 @@ class SecurityConfig(
     private val userRepository: UserRepository
     private val jwtTokenFilter: JwtTokenFilter
 
-    @Throws(Exception::class)
+
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(UserDetailsService { username: String ->
             userRepository.findUserByUserName(username)
         })
-    }
-
-    // Set password encoding schema
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
-
-    @Throws(Exception::class)
-    override fun configure(web: WebSecurity) {
-        web.ignoring().antMatchers("/swagger-ui/**", "/v3/api-docs/**")
     }
 
     @Throws(Exception::class)
@@ -71,12 +59,21 @@ class SecurityConfig(
             }
             .and()
 
+        // TODO: 12.10.2021 MORE MATCHERS, I.E. FACULTY, UNIVERSITY - FOR ADMIN ONLY
         // Set permissions on endpoints
-//        http.authorizeRequests() // Swagger endpoints must be publicly accessible
-//            .antMatchers("/").permitAll()
-//            .antMatchers("/register/**").permitAll()
-//            .antMatchers("/login/**").permitAll()
-//            .anyRequest().authenticated()
+        http.authorizeRequests() // Swagger endpoints must be publicly accessible
+            .antMatchers("/register/**").permitAll()
+            .antMatchers("/login/**").permitAll()
+            .antMatchers(
+                "/api-docs",
+                "/api-docs/swagger-config",
+                "/swagger-ui/**",
+                "/webjars/**",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/configuration/ui"
+            ).permitAll() // swagger api docs
+            .anyRequest().authenticated()
 
         // Add JWT token filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
@@ -88,7 +85,7 @@ class SecurityConfig(
         val source = UrlBasedCorsConfigurationSource()
         val config = CorsConfiguration()
         config.allowCredentials = true
-        config.addAllowedOrigin("*")
+        config.addAllowedOriginPattern("*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         source.registerCorsConfiguration("/**", config)
@@ -97,10 +94,10 @@ class SecurityConfig(
 
     // Expose authentication manager bean
     @Bean
-    @Throws(Exception::class)
-    override fun authenticationManagerBean(): AuthenticationManager {
-        return super.authenticationManagerBean()
-    }
+    override fun authenticationManagerBean(): AuthenticationManager = super.authenticationManagerBean()
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
 
     init {
         this.userRepository = userRepository

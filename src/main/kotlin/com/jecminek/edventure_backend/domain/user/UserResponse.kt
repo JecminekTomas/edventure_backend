@@ -13,8 +13,7 @@ data class UserResponse(
     @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
 
-    @Email(message = "This is not email")
-    @Schema(description = "E-mail address of user", example = "m_vrana@email.com")
+    @Schema(description = "User's username", example = "xmarek")
     var userName: String,
 )
 

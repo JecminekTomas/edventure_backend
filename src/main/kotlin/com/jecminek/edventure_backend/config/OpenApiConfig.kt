@@ -1,18 +1,25 @@
 package com.jecminek.edventure_backend.config
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
+import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
+import io.swagger.v3.oas.models.security.SecurityRequirement
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-
-// TODO: 18.03.2021 CASCADE, FETCH TYPES 
-
 @Configuration
+@SecurityScheme(
+    name = "bearerAuth",
+    type = SecuritySchemeType.HTTP,
+    bearerFormat = "JWT",
+    scheme = "bearer"
+)
 class OpenApiConfig {
     @Bean
-    fun api(): OpenAPI = OpenAPI().info(apiInfo())
+    fun api(): OpenAPI =
+        OpenAPI().info(apiInfo()).addSecurityItem(SecurityRequirement().addList("bearerAuth", listOf("read", "write")))
 
     private fun apiInfo(): Info = Info()
         .title("Edventure REST API")

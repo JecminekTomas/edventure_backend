@@ -16,11 +16,15 @@ class User(
     var lastName: String = "",
 
     @Column(unique = true) var userName: String = "",
-    private var password: String = "",
 
+    private var password: String = "",
     private var enabled: Boolean = true,
     private var locked: Boolean = false,
     private var expired: Boolean = false,
+
+    // TODO: 12.10.2021 HOW TO ADD AUTHORITIES TO USER
+    private var authorities: Role? = null,
+
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
@@ -39,9 +43,16 @@ class User(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
     var userScores: MutableList<Score> = mutableListOf()
 
+    /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
+
 ) : BaseEntity(), UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return HashSet<Role>()
+        // TODO: ZPRACOVAT
+        val list: MutableCollection<GrantedAuthority> = HashSet()
+        if (authorities != null) {
+            list.add(authorities!!)
+        }
+        return list
     }
 
     override fun getPassword(): String = this.password

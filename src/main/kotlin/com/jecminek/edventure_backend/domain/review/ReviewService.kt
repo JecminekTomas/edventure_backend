@@ -2,6 +2,7 @@ package com.jecminek.edventure_backend.domain.review
 
 
 import com.jecminek.edventure_backend.constant.Constants
+import com.jecminek.edventure_backend.domain.offer.OfferService
 import com.jecminek.edventure_backend.domain.user.UserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -19,6 +20,9 @@ class ReviewService {
     @Autowired
     lateinit var userService: UserService
 
+    @Autowired
+    lateinit var offerService: OfferService
+
     fun findById(id: Long): Review =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
@@ -32,8 +36,8 @@ class ReviewService {
             it.convertEntityToResponse()
         }.content
 
-    fun create(review: ReviewRequest): ReviewResponse =
-        repository.save(review.convertRequestToEntity()).convertEntityToResponse()
+    fun create(userId: Long, review: ReviewRequest): ReviewResponse =
+        repository.save(review.convertRequestToEntity(userId)).convertEntityToResponse()
 
     fun update(id: Long, reviewRequest: ReviewRequest): ReviewResponse {
         val review = findById(id)
@@ -45,13 +49,15 @@ class ReviewService {
 
     fun delete(id: Long) = repository.delete(findById(id))
 
-    fun ReviewRequest.convertRequestToEntity() = Review(
+
+    fun ReviewRequest.convertRequestToEntity(userId: Long) = Review(
         stars = stars,
         verbalEvaluation = verbalEvaluation,
         anonymous = anonymous,
         reviewTimestamp = System.currentTimeMillis(),
-        reviewer = userService.findById(reviewerId),
-        reviewed = userService.findById(reviewedId)
+        reviewer = userService.findById(userId),
+        reviewed = userService.findById(reviewedId),
+        offer = offerService.findById(offerId)
     )
 
 }

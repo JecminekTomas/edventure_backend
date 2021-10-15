@@ -3,6 +3,7 @@ package com.jecminek.edventure_backend.security
 import com.jecminek.edventure_backend.domain.user.User
 import io.jsonwebtoken.*
 import org.slf4j.Logger
+import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -18,6 +19,7 @@ class JwtTokenUtil {
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
             .compact()
     }
+
 
     fun getUserId(token: String?): String {
         val claims = Jwts.parser()
@@ -41,6 +43,12 @@ class JwtTokenUtil {
             .parseClaimsJws(token)
             .body
         return claims.expiration
+    }
+
+    fun getUserId(headers: HttpHeaders): Long {
+        val authorizationHeader = headers.getFirst(HttpHeaders.AUTHORIZATION)
+        val token = authorizationHeader!!.split(" ")[1].trim()
+        return getUserId(token).toLong()
     }
 
     fun validate(token: String?): Boolean {
