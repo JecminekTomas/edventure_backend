@@ -22,7 +22,10 @@ class ContactService {
     }
 
     fun getById(contactId: Long): Contact {
-        return repository.findByIdOrNull(contactId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        return repository.findByIdOrNull(contactId) ?: throw ResponseStatusException(
+            HttpStatus.NOT_FOUND,
+            "Contact not found"
+        )
     }
 
     fun update(userId: Long, contactId: Long, contactRequest: ContactRequest): ContactResponse {

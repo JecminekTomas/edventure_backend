@@ -20,9 +20,6 @@ data class ReviewRequest(
     @Schema(description = "Does reviewer want to stay anonymous", example = "false")
     var anonymous: Boolean,
 
-    @Schema(description = "ID of user, who is in position of reviewed in review", example = "1")
-    var reviewedId: Long,
-
     @Schema(description = "OfferId which being reviewed", example = "1")
     var offerId: Long
 

@@ -17,7 +17,7 @@ data class ReviewResponse(
 
     @Size(min = 10, max = 500)
     @Schema(
-        description = "Verbal evaulation from student to teacher or vice versa",
+        description = "Verbal evaluation from student to teacher or vice versa",
         example = "The offer was OK. Only no added materials are included in EXPENSIVE lecture."
     )
     var verbalEvaluation: String,
@@ -25,11 +25,11 @@ data class ReviewResponse(
     @Schema(description = "Time, when review was made.")
     var reviewTimestamp: Long,
 
-    @Schema(description = "ID of user, who is in position of reviewer in review")
-    var reviewer: UserReviewResponse?,
+    @Schema(description = "ID of user, who wrote review")
+    var userFrom: UserReviewResponse?,
 
-    @Schema(description = "ID of user, who is in position of reviewed in review")
-    var reviewed: UserReviewResponse
+    @Schema(description = "ID of user, who review is for")
+    var userTo: UserReviewResponse
 
 )
 

@@ -24,7 +24,7 @@ class OfferService {
     fun findById(id: Long): Offer =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
-            "Subject With Id: $id, Not Found"
+            "Offer With Id: $id, Not Found"
         )
 
     fun create(userId: Long, offerDTO: OfferDTO): OfferDTO =

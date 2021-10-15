@@ -28,11 +28,11 @@ class User(
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewer", cascade = [CascadeType.ALL])
-    var reviewerReviews: MutableList<Review> = mutableListOf(),
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userFrom", cascade = [CascadeType.ALL])
+    var userFromReviews: MutableList<Review> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reviewed", cascade = [CascadeType.ALL])
-    var reviewedReviews: MutableList<Review> = mutableListOf(),
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userTo", cascade = [CascadeType.ALL])
+    var userToReviews: MutableList<Review> = mutableListOf(),
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userContacts: MutableList<Contact> = mutableListOf(),

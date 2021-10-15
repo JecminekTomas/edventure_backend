@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.security.JwtTokenUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -19,10 +18,7 @@ class ReviewController {
     @Autowired
     lateinit var reviewService: ReviewService
 
-    @Autowired
-    lateinit var jwtTokenUtil: JwtTokenUtil
-
-    @Operation(summary = "Find reviews by ID of user, who is in position of reviewer in review")
+    @Operation(summary = "Find reviews by ID of user, where user write review")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -35,21 +31,22 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/reviews/reviewers/{userId}")
+    @GetMapping("/reviews/from/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    fun findReviewsByReviewerId(
+    fun findReviewsByUserFrom(
         @Parameter(
-            description = "Id of user who is in position of reviewer",
+            description = "ID of user, who wrote review",
             example = "1"
         ) @PathVariable userId: Long,
+        @RequestHeader httpHeaders: HttpHeaders,
         @Parameter(
             description = "Page number, to be found. Default page size is 50.",
             example = "0"
         )
-        @RequestParam(required = true) page: Int
-    ): List<ReviewResponse> = reviewService.findReviewsByReviewerId(userId, page)
+        @RequestParam(required = true) page: Int,
+    ): List<ReviewResponse> = reviewService.findReviewsByUserFromId(userId, httpHeaders, page)
 
-    @Operation(summary = "Find reviews by ID of user, who is in position of reviewed in review")
+    @Operation(summary = "Find reviews by ID of user, where user got review")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -62,11 +59,11 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/reviews/reviewed/{userId}")
+    @GetMapping("/reviews/to/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    fun findReviewsByReviewedId(
+    fun findReviewsByUserTo(
         @Parameter(
-            description = "Id of user who is in position of reviewed",
+            description = "ID of user, who review is for",
             example = "1"
         ) @PathVariable userId: Long,
         @Parameter(
@@ -74,7 +71,7 @@ class ReviewController {
             example = "0"
         )
         @RequestParam(required = true) page: Int
-    ): List<ReviewResponse> = reviewService.findReviewsByReviewedId(userId, page)
+    ): List<ReviewResponse> = reviewService.findReviewsByUserToId(userId, page)
 
     @Operation(summary = "Create review")
     @ApiResponses(
@@ -92,11 +89,9 @@ class ReviewController {
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody reviewRequest: ReviewRequest,
-        @RequestHeader("authorization") headers: HttpHeaders
-    ): ReviewResponse {
-        val userId = jwtTokenUtil.getUserId(headers)
-        return reviewService.create(userId, reviewRequest)
-    }
+        @RequestHeader httpHeaders: HttpHeaders
+    ): ReviewResponse = reviewService.create(httpHeaders, reviewRequest)
+
 
     @Operation(summary = "Update review")
     @ApiResponses(
@@ -116,8 +111,9 @@ class ReviewController {
     fun update(
         @Parameter(description = "ID of updated review", example = "1")
         @PathVariable id: Long,
+        @RequestHeader httpHeaders: HttpHeaders,
         @RequestBody reviewRequest: ReviewRequest
-    ): ReviewResponse = reviewService.update(id, reviewRequest)
+    ): ReviewResponse = reviewService.update(id, httpHeaders, reviewRequest)
 
     @Operation(summary = "Delete review")
     @ApiResponses(
@@ -131,6 +127,7 @@ class ReviewController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(
         @Parameter(description = "ID of deleted review", example = "1")
-        @PathVariable id: Long
-    ) = reviewService.delete(id)
+        @PathVariable id: Long,
+        @RequestHeader httpHeaders: HttpHeaders
+    ) = reviewService.delete(id, httpHeaders)
 }

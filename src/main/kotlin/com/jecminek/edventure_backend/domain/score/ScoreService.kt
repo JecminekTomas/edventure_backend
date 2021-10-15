@@ -23,7 +23,7 @@ class ScoreService {
     fun create(scoreDTO: ScoreDTO): ScoreDTO =
         if (repository.findScoreByUserId(scoreDTO.userId).isEmpty())
             repository.save(scoreDTO.convertToEntity()).convertToDTO()
-        else throw ResponseStatusException(HttpStatus.FORBIDDEN)
+        else throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more than one score per review")
 
     fun update(id: Long, scoreDTO: ScoreDTO): ScoreDTO {
         if (repository.findScoreByUserId(scoreDTO.userId).isNotEmpty()) {
@@ -33,13 +33,13 @@ class ScoreService {
             score.user = userService.findById(scoreDTO.userId)
             return repository.save(score).convertToDTO()
         }
-        throw ResponseStatusException(HttpStatus.FORBIDDEN)
+        throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score when he did not create any.")
     }
 
     fun findById(id: Long): Score =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
-            "Subject With Id: $id, Not Found"
+            "Score With Id: $id, Not Found"
         )
 
     fun findScoresByReviewId(reviewId: Long): List<ScoreDTO> =

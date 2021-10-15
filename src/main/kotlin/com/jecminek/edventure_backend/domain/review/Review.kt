@@ -16,17 +16,13 @@ class Review(
     var reviewTimestamp: Long = 0,
     var anonymous: Boolean = false,
 
-    /** Reviewer = Who is reviewing.
-     * Reviewed = Who is being reviewed.
-     * */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_to_id")
+    var userTo: User = User(),
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reviewed_id")
-    var reviewed: User = User(),
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "reviewer_id")
-    var reviewer: User = User(),
+    @JoinColumn(name = "user_from_id")
+    var userFrom: User = User(),
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "offer_id", referencedColumnName = "id")
@@ -42,10 +38,10 @@ fun Review.convertEntityToResponse() = ReviewResponse(
     stars = stars,
     verbalEvaluation = verbalEvaluation ?: "",
     reviewTimestamp = reviewTimestamp,
-    reviewer = when {
-        !anonymous -> reviewer.convertEntityToReviewResponse()
+    userFrom = when {
+        !anonymous -> userFrom.convertEntityToReviewResponse()
         else -> null
     },
-    reviewed = reviewed.convertEntityToReviewResponse()
+    userTo = userTo.convertEntityToReviewResponse()
 )
 

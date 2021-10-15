@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReviewRepository : PagingAndSortingRepository<Review, Long> {
-    fun findReviewsByReviewedId(reviewedId: Long, page: Pageable): Page<Review>
-    fun findReviewsByReviewerId(reviewerId: Long, page: Pageable): Page<Review>
+    fun findReviewsByUserToId(userToId: Long, page: Pageable): Page<Review>
+    fun findReviewsByUserFromId(userFromId: Long, page: Pageable): Page<Review>
+    fun findReviewsByOfferIdAndUserFromId(offerId: Long, userId: Long): List<Review>
 }
