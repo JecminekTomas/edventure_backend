@@ -9,6 +9,7 @@ import java.util.*
 
 @Component
 class JwtTokenUtil {
+    //FIXME
     private val jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP"
     private val logger: Logger? = null
     fun generateAccessToken(user: User): String {

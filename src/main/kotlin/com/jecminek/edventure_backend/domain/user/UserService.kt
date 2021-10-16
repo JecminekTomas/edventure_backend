@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.enums.AuthorityType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -40,17 +41,19 @@ class UserService : UserDetailsService {
     fun register(userRequest: UserRequest): UserResponse {
         if (repository.findUserByUserName(userRequest.userName) != null)
             throw ValidationException("Username exists!")
+
         else {
             val user = User()
             user.userName = userRequest.userName
             user.firstName = userRequest.firstName
             user.lastName = userRequest.lastName
             user.password = passwordEncoder.encode(userRequest.password)
+            user.setAuthority(AuthorityType.USER)
             return repository.save(user).convertEntityToResponse()
         }
     }
 
-    fun login(@RequestBody request: @Valid UserRequestLogin): ResponseEntity<UserResponse> {
+    fun login(@RequestBody request: @Valid LoginRequest): ResponseEntity<UserResponse> {
         return try {
             val authenticate: Authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(request.userName, request.password))

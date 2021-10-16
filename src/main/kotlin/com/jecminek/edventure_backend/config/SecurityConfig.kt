@@ -73,6 +73,8 @@ class SecurityConfig(
                 "/configuration/security",
                 "/configuration/ui"
             ).permitAll() // swagger api docs
+            //FIXME
+            //.antMatchers("/universities").hasAuthority("USER")
             .anyRequest().authenticated()
 
         // Add JWT token filter

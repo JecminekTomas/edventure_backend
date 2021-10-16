@@ -65,7 +65,7 @@ class UserController {
     @ApiResponses(
         value = [
             ApiResponse(
-                responseCode = "201",
+                responseCode = "200",
                 content = [
                     (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
                 ]
@@ -75,7 +75,7 @@ class UserController {
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
-    fun login(@RequestBody userRequestLogin: UserRequestLogin): ResponseEntity<UserResponse> = userService.login(userRequestLogin)
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<UserResponse> = userService.login(loginRequest)
 
     @Operation(summary = "Update user")
     @ApiResponses(

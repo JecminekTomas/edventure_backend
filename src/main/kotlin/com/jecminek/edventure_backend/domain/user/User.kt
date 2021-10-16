@@ -5,9 +5,11 @@ import com.jecminek.edventure_backend.domain.contact.Contact
 import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.domain.score.Score
+import com.jecminek.edventure_backend.enums.AuthorityType
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
+import kotlin.reflect.typeOf
 
 @Entity
 @Table(name = "\"USER\"")
@@ -22,8 +24,7 @@ class User(
     private var locked: Boolean = false,
     private var expired: Boolean = false,
 
-    // TODO: 12.10.2021 HOW TO ADD AUTHORITIES TO USER
-    private var authorities: Role? = null,
+    private var authority: String? = null,
 
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
@@ -46,19 +47,17 @@ class User(
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
 
 ) : BaseEntity(), UserDetails {
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        // TODO: ZPRACOVAT
-        val list: MutableCollection<GrantedAuthority> = HashSet()
-        if (authorities != null) {
-            list.add(authorities!!)
-        }
-        return list
-    }
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> = hashSetOf(GrantedAuthority { authority })
 
     override fun getPassword(): String = this.password
 
     fun setPassword(password: String) {
         this.password = password
+    }
+
+    fun setAuthority(authorityType: AuthorityType) {
+        this.authority = authorityType.toString()
     }
 
     override fun getUsername(): String = this.userName

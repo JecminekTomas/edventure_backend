@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -55,7 +56,7 @@ class ScoreController {
 
     @PostMapping("/scores")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(scoreDTO: ScoreDTO): ScoreDTO = service.create(scoreDTO)
+    fun create(scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders): ScoreDTO = service.create(scoreDTO, httpHeaders)
 
     @Operation(summary = "Update score")
     @ApiResponses(
@@ -74,7 +75,7 @@ class ScoreController {
     )
     @PutMapping("/scores/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun update(id: Long, scoreDTO: ScoreDTO) = service.update(id, scoreDTO)
+    fun update(id: Long, scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders) = service.update(id, scoreDTO, httpHeaders)
 
     @Operation(summary = "Delete score")
     @ApiResponses(
@@ -86,5 +87,5 @@ class ScoreController {
     )
     @DeleteMapping("/scores/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Long) = service.delete(id)
+    fun delete(@PathVariable id: Long, @RequestHeader httpHeaders: HttpHeaders) = service.delete(id, httpHeaders)
 }

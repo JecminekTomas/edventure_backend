@@ -24,6 +24,5 @@ class Score(
 fun Score.convertToDTO() = ScoreDTO(
     id = id,
     helpful = helpful,
-    userId = user.id,
     reviewId = review.id
 )

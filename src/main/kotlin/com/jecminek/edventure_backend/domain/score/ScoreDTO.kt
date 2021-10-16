@@ -7,8 +7,6 @@ data class ScoreDTO(
     var id: Long,
     @Schema(description = "If true, helpful, if false unhelpful", example = "true")
     var helpful: Boolean,
-    @Schema(description = "Id of user, who add score", example = "1")
-    var userId: Long,
     @Schema(description = "Id of review, which getting score.", example = "2")
     var reviewId: Long,
 )
