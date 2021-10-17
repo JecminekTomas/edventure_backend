@@ -38,7 +38,7 @@ class ScoreController {
             example = "1"
         )
         @RequestParam(required = true) reviewId: Long
-    ): List<ScoreDTO> = service.findScoresByReviewId(reviewId)
+    ): List<ScoreDTO> = service.findByReviewId(reviewId)
 
     @Operation(summary = "Create score")
     @ApiResponses(

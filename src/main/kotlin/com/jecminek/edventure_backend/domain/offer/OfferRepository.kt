@@ -4,4 +4,6 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface OfferRepository : PagingAndSortingRepository<Offer, Long>
+interface OfferRepository : PagingAndSortingRepository<Offer, Long> {
+    fun findOfferByUserIdAndSubjectId(userId: Long, subjectId: Long): Offer?
+}

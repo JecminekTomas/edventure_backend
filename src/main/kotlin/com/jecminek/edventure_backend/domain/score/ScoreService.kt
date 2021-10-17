@@ -29,11 +29,11 @@ class ScoreService {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val userFromId = reviewService.findById(scoreDTO.reviewId).userFrom.id
 
-        if (repository.findScoreByUserId(userId).isNotEmpty())
+        if (findByUserIdAndReviewId(userId, scoreDTO.reviewId) == null)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more than one score per review")
 
         if (userId != userFromId)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT add point to own review.")
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT add score to own review.")
 
         return repository.save(scoreDTO.convertToEntity()).convertToDTO()
     }
@@ -42,11 +42,11 @@ class ScoreService {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val score = findById(id)
 
-        if (userId != score.user.id)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score is not his own.")
-
-        if (repository.findScoreByUserId(userId).isEmpty())
+        if (findByUserIdAndReviewId(userId, scoreDTO.reviewId) == null)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score when he did not create any.")
+
+        if (userId != score.user.id)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score which is not his own.")
 
         score.helpful = scoreDTO.helpful
         score.review = reviewService.findById(scoreDTO.reviewId)
@@ -61,8 +61,11 @@ class ScoreService {
             "Score With Id: $id, Not Found"
         )
 
-    fun findScoresByReviewId(reviewId: Long): List<ScoreDTO> =
+    fun findByReviewId(reviewId: Long): List<ScoreDTO> =
         repository.findScoreByReviewId(reviewId).map { it.convertToDTO() }
+
+    fun findByUserIdAndReviewId(userId: Long, reviewId: Long) =
+        repository.findScoreByUserIdAndReviewId(userId, reviewId)
 
     fun delete(id: Long, httpHeaders: HttpHeaders) {
         val userId = jwtTokenUtil.getUserId(httpHeaders)

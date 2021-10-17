@@ -60,11 +60,8 @@ class OfferController {
 
     @PostMapping("/offers")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody offerDTO: OfferDTO, @RequestHeader("authorization") headers: HttpHeaders): OfferDTO {
-        val userId = jwtTokenUtil.getUserId(headers)
-        return offerService.create(userId, offerDTO)
-    }
-
+    fun create(@RequestBody offerDTO: OfferDTO, @RequestHeader httpHeaders: HttpHeaders): OfferDTO =
+        offerService.create(offerDTO, httpHeaders)
 
     @Operation(summary = "Update offer")
     @ApiResponses(
@@ -83,8 +80,9 @@ class OfferController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
-        @RequestBody offerDTO: OfferDTO
-    ): OfferDTO = offerService.update(id, offerDTO)
+        @RequestBody offerDTO: OfferDTO,
+        @RequestHeader httpHeaders: HttpHeaders
+    ): OfferDTO = offerService.update(id, offerDTO, httpHeaders)
 
     @Operation(summary = "Delete offer")
     @ApiResponses(
@@ -96,5 +94,5 @@ class OfferController {
     )
     @DeleteMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun delete(@PathVariable id: Long) = offerService.delete(id)
+    fun delete(@PathVariable id: Long, @RequestHeader httpHeaders: HttpHeaders) = offerService.delete(id, httpHeaders)
 }

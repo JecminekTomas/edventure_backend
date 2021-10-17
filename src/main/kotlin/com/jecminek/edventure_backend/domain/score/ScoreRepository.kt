@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface ScoreRepository: CrudRepository<Score, Long>{
     fun findScoreByReviewId(reviewId: Long): List<Score>
-    fun findScoreByUserId(userId: Long): List<Score>
+    fun findScoreByUserIdAndReviewId(userId: Long, reviewId: Long): Score?
 }
