@@ -59,7 +59,7 @@ class OfferController {
     @ResponseStatus(HttpStatus.OK)
     fun findByOwnerId(
         @Parameter(
-            description = "Id of offer to be found",
+            description = "Id of offer owner",
             example = "1"
         ) @PathVariable ownerId: Long,
         @RequestHeader httpHeaders: HttpHeaders

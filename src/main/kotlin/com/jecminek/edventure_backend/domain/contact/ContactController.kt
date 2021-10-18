@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*
 class ContactController {
     @Autowired
     lateinit var contactService: ContactService
-
 
     @Operation(summary = "Create contact")
     @ApiResponses(
@@ -35,9 +35,10 @@ class ContactController {
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @PathVariable userId: Long,
-        @RequestBody contactRequest: ContactRequest
+        @RequestBody contactRequest: ContactRequest,
+        @RequestHeader httpHeaders: HttpHeaders
     ): ContactResponse =
-        contactService.create(userId, contactRequest)
+        contactService.create(userId, contactRequest, httpHeaders)
 
     @Operation(summary = "Update contact")
     @ApiResponses(
@@ -57,8 +58,9 @@ class ContactController {
     fun update(
         @PathVariable contactId: Long,
         @PathVariable userId: Long,
-        @RequestBody contactRequest: ContactRequest
-    ): ContactResponse = contactService.update(userId, contactId, contactRequest)
+        @RequestBody contactRequest: ContactRequest,
+        @RequestHeader httpHeaders: HttpHeaders
+    ): ContactResponse = contactService.update(userId, contactId, contactRequest, httpHeaders)
 
     @Operation(summary = "Delete contact")
     @ApiResponses(
@@ -72,8 +74,9 @@ class ContactController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(
         @PathVariable contactId: Long,
-        @PathVariable userId: Long
-    ) = contactService.delete(userId, contactId)
+        @PathVariable userId: Long,
+        @RequestHeader httpHeaders: HttpHeaders
+    ) = contactService.delete(userId, contactId, httpHeaders)
 
     @Operation(summary = "Find user's contacts")
     @ApiResponses(

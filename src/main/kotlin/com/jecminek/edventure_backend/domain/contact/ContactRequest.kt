@@ -12,7 +12,4 @@ data class ContactRequest(
 
     @Schema(description = "Value of contact", example = "Tomáš Novotný")
     var value: String,
-
-    @Schema(description = "Value of contact", example = "Tomáš Novotný")
-    var ownerId: Long
 )
