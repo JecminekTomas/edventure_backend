@@ -35,6 +35,15 @@ class OfferService {
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
         repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
 
+    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferDTO> {
+        val userId = jwtTokenUtil.getUserId(httpHeaders)
+
+        if (userId != ownerId)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
+
+        return repository.findOffersByOwnerId(ownerId).map { it.convertToDTO() }
+    }
+
 
     fun create(offerDTO: OfferDTO, httpHeaders: HttpHeaders): OfferDTO {
         val userId = jwtTokenUtil.getUserId(httpHeaders)

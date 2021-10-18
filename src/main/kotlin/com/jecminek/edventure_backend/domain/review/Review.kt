@@ -4,7 +4,6 @@ import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.score.Score
 import com.jecminek.edventure_backend.domain.user.User
-import com.jecminek.edventure_backend.domain.user.convertEntityToResponse
 import javax.persistence.*
 
 

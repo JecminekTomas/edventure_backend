@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.domain.score.ScoreBalance
-import com.jecminek.edventure_backend.domain.score.ScoreDTO
 import com.jecminek.edventure_backend.domain.subject.SubjectDTO
 import com.jecminek.edventure_backend.domain.user.UserResponse
 import io.swagger.v3.oas.annotations.media.Schema

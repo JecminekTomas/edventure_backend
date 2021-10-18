@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
 import io.swagger.v3.oas.annotations.media.Schema
-import javax.validation.constraints.Email
 
 data class UserResponse(
     @Schema(description = "Id of user", example = "1")

@@ -1,6 +1,5 @@
 package com.jecminek.edventure_backend.domain.offer
 
-import com.jecminek.edventure_backend.security.JwtTokenUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -18,9 +17,6 @@ import org.springframework.web.bind.annotation.*
 class OfferController {
     @Autowired
     lateinit var offerService: OfferService
-
-    @Autowired
-    lateinit var jwtTokenUtil: JwtTokenUtil
 
     @Operation(summary = "Find offer by id")
     @ApiResponses(
@@ -44,6 +40,31 @@ class OfferController {
         ) @PathVariable id: Long
     ): OfferDTO =
         offerService.findById(id).convertToDTO()
+
+
+    @Operation(summary = "Find offer by id")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
+                ]
+            ),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
+    )
+    @GetMapping("/offers/by/{ownerId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findByOwnerId(
+        @Parameter(
+            description = "Id of offer to be found",
+            example = "1"
+        ) @PathVariable ownerId: Long,
+        @RequestHeader httpHeaders: HttpHeaders
+    ): List<OfferDTO> =
+        offerService.findByOwnerId(ownerId, httpHeaders)
 
     @Operation(summary = "Create offer")
     @ApiResponses(
