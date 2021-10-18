@@ -3,7 +3,11 @@ package com.jecminek.edventure_backend.domain.review
 
 import com.jecminek.edventure_backend.constant.Constants
 import com.jecminek.edventure_backend.domain.offer.OfferService
+import com.jecminek.edventure_backend.domain.score.ScoreService
+import com.jecminek.edventure_backend.domain.subject.SubjectService
+import com.jecminek.edventure_backend.domain.subject.convertToDTO
 import com.jecminek.edventure_backend.domain.user.UserService
+import com.jecminek.edventure_backend.domain.user.convertEntityToResponse
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
@@ -24,6 +28,12 @@ class ReviewService {
 
     @Autowired
     lateinit var offerService: OfferService
+
+    @Autowired
+    lateinit var subjectService: SubjectService
+
+    @Autowired
+    lateinit var scoreService: ScoreService
 
     @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
@@ -52,7 +62,7 @@ class ReviewService {
 
     fun create(httpHeaders: HttpHeaders, reviewRequest: ReviewRequest): ReviewResponse {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
-        val offerOwnerId = offerService.findById(reviewRequest.offerId).user.id
+        val offerOwnerId = offerService.findById(reviewRequest.offerId).owner.id
 
         val alreadyReviewed = findReviewsByOfferIdAndUserFromId(reviewRequest.offerId, userId).isNotEmpty()
 
@@ -98,8 +108,22 @@ class ReviewService {
         anonymous = anonymous,
         reviewTimestamp = System.currentTimeMillis(),
         userFrom = userService.findById(userId),
-        userTo = userService.findById(offerService.findById(offerId).user.id),
+        userTo = userService.findById(offerService.findById(offerId).owner.id),
         offer = offerService.findById(offerId)
+    )
+
+    fun Review.convertEntityToResponse() = ReviewResponse(
+        id = id,
+        stars = stars,
+        verbalEvaluation = verbalEvaluation ?: "",
+        reviewTimestamp = reviewTimestamp,
+        userFrom = when {
+            !anonymous -> userFrom.convertEntityToResponse()
+            else -> null
+        },
+        userTo = userTo.convertEntityToResponse(),
+        score = scoreService.getScoreBalance(id),
+        subject = subjectService.findById(offer!!.subject.id).convertToDTO()
     )
 
 }

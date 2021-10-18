@@ -58,9 +58,11 @@ class UserService : UserDetailsService {
             val authenticate: Authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(request.userName, request.password))
             val user = authenticate.principal as User
+
             ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
                 .body(user.convertEntityToResponse())
+
         } catch (ex: BadCredentialsException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }

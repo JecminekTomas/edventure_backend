@@ -4,7 +4,7 @@ import com.jecminek.edventure_backend.base.BaseEntity
 import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.score.Score
 import com.jecminek.edventure_backend.domain.user.User
-import com.jecminek.edventure_backend.domain.user.convertEntityToReviewResponse
+import com.jecminek.edventure_backend.domain.user.convertEntityToResponse
 import javax.persistence.*
 
 
@@ -32,16 +32,4 @@ class Review(
     var scores: MutableList<Score> = mutableListOf()
 
 ) : BaseEntity()
-
-fun Review.convertEntityToResponse() = ReviewResponse(
-    id = id,
-    stars = stars,
-    verbalEvaluation = verbalEvaluation ?: "",
-    reviewTimestamp = reviewTimestamp,
-    userFrom = when {
-        !anonymous -> userFrom.convertEntityToReviewResponse()
-        else -> null
-    },
-    userTo = userTo.convertEntityToReviewResponse()
-)
 

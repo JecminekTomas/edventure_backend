@@ -33,14 +33,14 @@ class OfferService {
         )
 
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
-        repository.findOfferByUserIdAndSubjectId(userId, subjectId)
+        repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
 
 
     fun create(offerDTO: OfferDTO, httpHeaders: HttpHeaders): OfferDTO {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
-        if(findByUserIdAndSubjectId(userId, offerDTO.subjectId) == null)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more than one score per review")
+        if (findByUserIdAndSubjectId(userId, offerDTO.subjectId) != null)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more offers per subject")
 
         return repository.save(offerDTO.convertToEntity(userId)).convertToDTO()
     }
@@ -49,7 +49,7 @@ class OfferService {
         val offer = findById(id)
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
-        if (offer.user.id != userId)
+        if (offer.owner.id != userId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update offer of which is not his own.")
 
         offer.price = offerDTO.price
@@ -62,7 +62,7 @@ class OfferService {
         val offer = findById(id)
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
-        if (offer.user.id != userId)
+        if (offer.owner.id != userId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT delete offer of which is not his own.")
 
         return repository.delete(offer)
@@ -73,6 +73,7 @@ class OfferService {
         price = price,
         online = online,
         note = note,
-        subject = subjectService.findById(subjectId)
+        subject = subjectService.findById(subjectId),
+        owner = userService.findById(userId)
     )
 }

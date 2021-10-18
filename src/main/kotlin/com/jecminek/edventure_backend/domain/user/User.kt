@@ -9,7 +9,6 @@ import com.jecminek.edventure_backend.enums.AuthorityType
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
-import kotlin.reflect.typeOf
 
 @Entity
 @Table(name = "\"USER\"")
@@ -38,10 +37,10 @@ class User(
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userContacts: MutableList<Contact> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userOffers: MutableList<Offer> = mutableListOf(),
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = [CascadeType.ALL])
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "owner", cascade = [CascadeType.ALL])
     var userScores: MutableList<Score> = mutableListOf()
 
     /** (DO NOT TOUCH) These lists are only for compatibility issue. **/
@@ -76,12 +75,6 @@ fun User.convertEntityToResponse() = UserResponse(
     firstName = firstName,
     lastName = lastName,
     userName = userName,
-)
-
-fun User.convertEntityToReviewResponse() = UserReviewResponse(
-    id = id,
-    firstName = firstName,
-    lastName = lastName
 )
 
 

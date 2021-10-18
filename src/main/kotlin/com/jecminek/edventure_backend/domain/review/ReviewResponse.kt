@@ -1,6 +1,9 @@
 package com.jecminek.edventure_backend.domain.review
 
-import com.jecminek.edventure_backend.domain.user.UserReviewResponse
+import com.jecminek.edventure_backend.domain.score.ScoreBalance
+import com.jecminek.edventure_backend.domain.score.ScoreDTO
+import com.jecminek.edventure_backend.domain.subject.SubjectDTO
+import com.jecminek.edventure_backend.domain.user.UserResponse
 import io.swagger.v3.oas.annotations.media.Schema
 import javax.validation.constraints.Max
 import javax.validation.constraints.Min
@@ -25,11 +28,18 @@ data class ReviewResponse(
     @Schema(description = "Time, when review was made.")
     var reviewTimestamp: Long,
 
-    @Schema(description = "ID of user, who wrote review")
-    var userFrom: UserReviewResponse?,
+    @Schema(description = "User, who wrote review")
+    var userFrom: UserResponse?,
 
-    @Schema(description = "ID of user, who review is for")
-    var userTo: UserReviewResponse
+    @Schema(description = "User, who review is for")
+    var userTo: UserResponse,
+
+    @Schema(description = "Scores of review")
+    var score: ScoreBalance,
+
+    @Schema(description = "Subject which was taught")
+    var subject: SubjectDTO
+
 
 )
 

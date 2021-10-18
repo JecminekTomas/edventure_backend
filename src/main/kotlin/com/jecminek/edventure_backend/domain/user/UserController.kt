@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -77,7 +78,7 @@ class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<UserResponse> = userService.login(loginRequest)
 
-    @Operation(summary = "Update user")
+    /*@Operation(summary = "Update user")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -90,6 +91,7 @@ class UserController {
             ApiResponse(responseCode = "404")
         ]
     )
+
     @PutMapping("/users/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
@@ -109,5 +111,5 @@ class UserController {
     @DeleteMapping("/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long) =
-        userService.delete(id)
+        userService.delete(id)*/
 }

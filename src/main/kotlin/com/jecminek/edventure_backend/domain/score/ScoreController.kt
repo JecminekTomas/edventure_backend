@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.score
 
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -19,27 +18,6 @@ class ScoreController {
     @Autowired
     lateinit var service: ScoreService
 
-    @Operation(summary = "Finds all scores for review")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200", content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ScoreDTO::class)))]
-            ),
-            ApiResponse(responseCode = "400"),
-            ApiResponse(
-                responseCode = "404",
-            )]
-    )
-    @GetMapping("/scores")
-    fun findScoresByReviewId(
-        @Parameter(
-            description = "Id of review, which score belongs to.",
-            example = "1"
-        )
-        @RequestParam(required = true) reviewId: Long
-    ): List<ScoreDTO> = service.findByReviewId(reviewId)
-
     @Operation(summary = "Create score")
     @ApiResponses(
         value = [
@@ -56,7 +34,8 @@ class ScoreController {
 
     @PostMapping("/scores")
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders): ScoreDTO = service.create(scoreDTO, httpHeaders)
+    fun create(@RequestBody scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders): ScoreDTO =
+        service.create(scoreDTO, httpHeaders)
 
     @Operation(summary = "Update score")
     @ApiResponses(
@@ -75,7 +54,8 @@ class ScoreController {
     )
     @PutMapping("/scores/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun update(id: Long, scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders) = service.update(id, scoreDTO, httpHeaders)
+    fun update(@PathVariable id: Long, @RequestBody scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders) =
+        service.update(id, scoreDTO, httpHeaders)
 
     @Operation(summary = "Delete score")
     @ApiResponses(

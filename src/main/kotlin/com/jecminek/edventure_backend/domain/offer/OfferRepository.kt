@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface OfferRepository : PagingAndSortingRepository<Offer, Long> {
-    fun findOfferByUserIdAndSubjectId(userId: Long, subjectId: Long): Offer?
+    fun findOfferByOwnerIdAndSubjectId(ownerId: Long, subjectId: Long): Offer?
 }

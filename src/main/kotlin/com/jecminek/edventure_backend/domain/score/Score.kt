@@ -14,7 +14,7 @@ class Score(
     var helpful: Boolean = false,
 
     @ManyToOne(fetch = FetchType.EAGER)
-    var user: User = User(),
+    var owner: User = User(),
 
     @ManyToOne(fetch = FetchType.EAGER)
     var review: Review = Review()

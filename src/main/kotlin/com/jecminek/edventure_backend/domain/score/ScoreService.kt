@@ -28,29 +28,30 @@ class ScoreService {
     fun create(scoreDTO: ScoreDTO, httpHeaders: HttpHeaders): ScoreDTO {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val userFromId = reviewService.findById(scoreDTO.reviewId).userFrom.id
+        val userToId = reviewService.findById(scoreDTO.reviewId).userTo.id
 
-        if (findByUserIdAndReviewId(userId, scoreDTO.reviewId) == null)
+        if (findByOwnerIdAndReviewId(userId, scoreDTO.reviewId) != null)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more than one score per review")
 
-        if (userId != userFromId)
+        if (userId == userFromId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT add score to own review.")
 
-        return repository.save(scoreDTO.convertToEntity()).convertToDTO()
+        if (userId == userToId)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT add score to review you got.")
+
+        return repository.save(scoreDTO.convertToEntity(userId)).convertToDTO()
     }
 
     fun update(id: Long, scoreDTO: ScoreDTO, httpHeaders: HttpHeaders): ScoreDTO {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val score = findById(id)
 
-        if (findByUserIdAndReviewId(userId, scoreDTO.reviewId) == null)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score when he did not create any.")
-
-        if (userId != score.user.id)
+        if (userId != score.owner.id)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score which is not his own.")
 
         score.helpful = scoreDTO.helpful
         score.review = reviewService.findById(scoreDTO.reviewId)
-        score.user = userService.findById(userId)
+        score.owner = userService.findById(userId)
 
         return repository.save(score).convertToDTO()
     }
@@ -61,25 +62,30 @@ class ScoreService {
             "Score With Id: $id, Not Found"
         )
 
-    fun findByReviewId(reviewId: Long): List<ScoreDTO> =
-        repository.findScoreByReviewId(reviewId).map { it.convertToDTO() }
-
-    fun findByUserIdAndReviewId(userId: Long, reviewId: Long) =
-        repository.findScoreByUserIdAndReviewId(userId, reviewId)
+    fun findByOwnerIdAndReviewId(userId: Long, reviewId: Long) =
+        repository.findScoreByOwnerIdAndReviewId(userId, reviewId)
 
     fun delete(id: Long, httpHeaders: HttpHeaders) {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val score = findById(id)
 
-        if (userId != score.user.id)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT update score is not his own.")
+        if (userId != score.owner.id)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT delete score which is not his own.")
 
         return repository.delete(findById(id))
     }
 
-    fun ScoreDTO.convertToEntity() = Score(
+    fun getScoreBalance(reviewId: Long): ScoreBalance {
+        val helpful = repository.countScoresByHelpfulIsTrueAndReviewId(reviewId)
+        val unhelpful = repository.countScoresByHelpfulIsFalseAndReviewId(reviewId)
+        return ScoreBalance(helpful, unhelpful)
+    }
+
+
+    fun ScoreDTO.convertToEntity(userId: Long) = Score(
         helpful = helpful,
-        review = reviewService.findById(reviewId)
+        review = reviewService.findById(reviewId),
+        owner = userService.findById(userId)
     )
 }
 
