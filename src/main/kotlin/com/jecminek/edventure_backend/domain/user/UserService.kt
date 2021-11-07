@@ -4,7 +4,6 @@ import com.jecminek.edventure_backend.enums.AuthorityType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -41,7 +40,6 @@ class UserService : UserDetailsService {
     fun register(userRequest: UserRequest): UserResponse {
         if (repository.findUserByUserName(userRequest.userName) != null)
             throw ValidationException("Username exists!")
-
         else {
             val user = User()
             user.userName = userRequest.userName
@@ -53,15 +51,14 @@ class UserService : UserDetailsService {
         }
     }
 
-    fun login(@RequestBody request: @Valid LoginRequest): ResponseEntity<UserResponse> {
+    fun login(@RequestBody request: @Valid LoginRequest): ResponseEntity<LoginResponse> {
         return try {
             val authenticate: Authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(request.userName, request.password))
             val user = authenticate.principal as User
 
             ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, jwtTokenUtil.generateAccessToken(user))
-                .body(user.convertEntityToResponse())
+                .body(LoginResponse(jwtTokenUtil.generateAccessToken(user)))
 
         } catch (ex: BadCredentialsException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()

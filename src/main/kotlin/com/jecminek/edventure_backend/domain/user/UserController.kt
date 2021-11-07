@@ -75,7 +75,7 @@ class UserController {
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
-    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<UserResponse> = userService.login(loginRequest)
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> = userService.login(loginRequest)
 
     /*@Operation(summary = "Update user")
     @ApiResponses(

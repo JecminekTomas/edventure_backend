@@ -41,8 +41,26 @@ class OfferController {
     ): OfferDTO =
         offerService.findById(id).convertToDTO()
 
+    @Operation(summary = "Find all offers")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
+                ]
+            ),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
+    )
+    @GetMapping("/offers")
+    @ResponseStatus(HttpStatus.OK)
+    fun findAll(): List<OfferResponse> =
+        offerService.getAll()
 
-    @Operation(summary = "Find offer by id")
+
+    @Operation(summary = "Find offer by owner id")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -78,7 +96,6 @@ class OfferController {
             ApiResponse(responseCode = "400")
         ]
     )
-
     @PostMapping("/offers")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody offerDTO: OfferDTO, @RequestHeader httpHeaders: HttpHeaders): OfferDTO =

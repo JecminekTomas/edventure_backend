@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.offer
 
+import com.jecminek.edventure_backend.domain.review.ReviewService
 import com.jecminek.edventure_backend.domain.subject.SubjectService
 import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.security.JwtTokenUtil
@@ -22,9 +23,18 @@ class OfferService {
     lateinit var userService: UserService
 
     @Autowired
+    lateinit var reviewService: ReviewService
+
+    @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
 
     fun findAll(): MutableIterable<Offer> = repository.findAll()
+
+    fun getAll(): List<OfferResponse> {
+        return repository.findAll().map {
+            it.convertToResponse()
+        }
+    }
 
     fun findById(id: Long): Offer =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(
@@ -84,5 +94,13 @@ class OfferService {
         note = note,
         subject = subjectService.findById(subjectId),
         owner = userService.findById(userId)
+    )
+
+    fun Offer.convertToResponse() = OfferResponse(
+        price = price,
+        note = note,
+        teacherFirstName = userService.findById(owner.id).firstName,
+        teacherLastName = userService.findById(owner.id).lastName,
+        reviewBalance = reviewService.reviewBalanceByUserId(owner.id)
     )
 }

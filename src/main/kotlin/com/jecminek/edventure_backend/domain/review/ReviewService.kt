@@ -77,6 +77,10 @@ class ReviewService {
         return repository.save(reviewRequest.convertRequestToEntity(userId)).convertEntityToResponse()
     }
 
+    fun reviewBalanceByUserId(userId: Long): ReviewBalance =
+        ReviewBalance(repository.countReviewsByUserToId(userId), repository.geReviewAverageStarsByUserId(userId))
+
+
     fun update(id: Long, httpHeaders: HttpHeaders, reviewRequest: ReviewRequest): ReviewResponse {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val review = findById(id)
