@@ -1,6 +1,8 @@
 package com.jecminek.edventure_backend.domain.offer
 
 import io.swagger.v3.oas.annotations.media.Schema
+import javax.persistence.Column
+import javax.persistence.Lob
 
 data class OfferDTO(
     @Schema(description = "ID is used only in response")

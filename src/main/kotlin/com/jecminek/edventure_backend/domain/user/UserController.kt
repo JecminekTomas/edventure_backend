@@ -67,7 +67,7 @@ class UserController {
             ApiResponse(
                 responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = LoginResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")

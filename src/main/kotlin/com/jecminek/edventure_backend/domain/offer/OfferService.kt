@@ -97,6 +97,7 @@ class OfferService {
     )
 
     fun Offer.convertToResponse() = OfferResponse(
+        id = id,
         price = price,
         note = note,
         teacherFirstName = userService.findById(owner.id).firstName,

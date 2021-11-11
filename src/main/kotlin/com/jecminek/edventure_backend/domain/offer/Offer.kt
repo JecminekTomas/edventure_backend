@@ -11,6 +11,7 @@ import javax.persistence.*
 class Offer(
     var price: Double = 0.0,
     var online: Boolean = false,
+    @Column(columnDefinition = "TEXT")
     var note: String? = null,
 
     @ManyToOne(fetch = FetchType.EAGER)
