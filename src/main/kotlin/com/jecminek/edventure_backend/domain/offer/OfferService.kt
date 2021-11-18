@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.awt.print.Pageable
 
 @Service
 class OfferService {
@@ -47,6 +48,8 @@ class OfferService {
 
     fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferDTO> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
+
+        val test: Pageable
 
         if (userId != ownerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")

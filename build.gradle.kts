@@ -50,7 +50,7 @@ dependencies {
     implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // PostgreSQL
-    runtimeOnly ("org.postgresql:postgresql")
+    runtimeOnly ("org.postgresql:postgresql:42.3.1")
 
     // Spring Security
     implementation("org.springframework.boot:spring-boot-starter-security:2.5.5")

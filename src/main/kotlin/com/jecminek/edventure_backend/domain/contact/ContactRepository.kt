@@ -1,9 +1,9 @@
 package com.jecminek.edventure_backend.domain.contact
 
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ContactRepository : PagingAndSortingRepository<Contact, Long> {
+interface ContactRepository : CrudRepository<Contact, Long> {
     fun findContactsByOwnerId(id: Long): List<Contact>
 }

@@ -1,9 +1,9 @@
 package com.jecminek.edventure_backend.domain.subject
 
-import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface SubjectRepository : PagingAndSortingRepository<Subject, Long> {
+interface SubjectRepository : CrudRepository<Subject, Long> {
     fun findSubjectsByFacultyId(id: Long): List<Subject>
 }

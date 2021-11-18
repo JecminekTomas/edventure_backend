@@ -1,7 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 
-import com.jecminek.edventure_backend.constant.Constants
 import com.jecminek.edventure_backend.domain.offer.OfferService
 import com.jecminek.edventure_backend.domain.score.ScoreService
 import com.jecminek.edventure_backend.domain.subject.SubjectService
@@ -10,7 +9,6 @@ import com.jecminek.edventure_backend.domain.user.UserService
 import com.jecminek.edventure_backend.domain.user.convertEntityToResponse
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -42,19 +40,19 @@ class ReviewService {
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
     fun findReviewsByUserToId(userToId: Long, page: Int): List<ReviewResponse> =
-        repository.findReviewsByUserToId(userToId, PageRequest.of(page, Constants.defaultPageSize)).map {
+        repository.findReviewsByUserToId(userToId).map {
             it.convertEntityToResponse()
-        }.content
+        }
 
-    fun findReviewsByUserFromId(userFromId: Long, httpHeaders: HttpHeaders, page: Int): List<ReviewResponse> {
+    fun findReviewsByUserFromId(userFromId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> {
         val loggedUserId = jwtTokenUtil.getUserId(httpHeaders)
 
         if (loggedUserId != userFromId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see reviews who wrote other user")
 
-        return repository.findReviewsByUserFromId(userFromId, PageRequest.of(page, Constants.defaultPageSize)).map {
+        return repository.findReviewsByUserFromId(userFromId).map {
             it.convertEntityToResponse()
-        }.content
+        }
     }
 
     fun findReviewsByOfferIdAndUserFromId(offerId: Long, userFromId: Long): List<Review> =
