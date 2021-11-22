@@ -126,7 +126,7 @@ class ReviewService {
             else -> null
         },
         userTo = userTo.convertEntityToResponse(),
-        score = scoreService.getScoreBalance(jwtTokenUtil.getUserId(httpHeaders), id),
+        scoreBalance = scoreService.getScoreBalance(jwtTokenUtil.getUserId(httpHeaders), id),
         subject = subjectService.findById(offer!!.subject.id).convertToDTO()
     )
 

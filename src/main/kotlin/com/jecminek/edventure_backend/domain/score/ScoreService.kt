@@ -25,12 +25,13 @@ class ScoreService {
     @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
 
+
     fun create(scoreDTO: ScoreDTO, httpHeaders: HttpHeaders): ScoreDTO {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val userFromId = reviewService.findById(scoreDTO.reviewId).userFrom.id
         val userToId = reviewService.findById(scoreDTO.reviewId).userTo.id
 
-        if (findByOwnerIdAndReviewId(userId, scoreDTO.reviewId) != null)
+        if (repository.findScoresByOwnerIdAndReviewId(userId, scoreDTO.reviewId).isNotEmpty())
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more than one score per review")
 
         if (userId == userFromId)
@@ -62,8 +63,9 @@ class ScoreService {
             "Score With Id: $id, Not Found"
         )
 
-    fun findByOwnerIdAndReviewId(userId: Long, reviewId: Long) =
-        repository.findScoreByOwnerIdAndReviewId(userId, reviewId)
+    fun findByOwnerIdAndReviewId(userId: Long, reviewId: Long): ScoreDTO =
+        repository.findScoresByOwnerIdAndReviewId(userId, reviewId)[0].convertToDTO()
+
 
     fun delete(id: Long, httpHeaders: HttpHeaders) {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
@@ -77,12 +79,18 @@ class ScoreService {
 
     fun getScoreBalance(userId: Long, reviewId: Long): ScoreBalance {
 
-        val helpful = repository.countScoresByHelpfulIsTrueAndReviewId(reviewId)
-        val unhelpful = repository.countScoresByHelpfulIsFalseAndReviewId(reviewId)
-        val userVoted = repository.findScoreByOwnerIdAndReviewId(userId, reviewId)?.convertToDTO()
+        val helpfulCount = repository.countScoresByHelpfulIsTrueAndReviewId(reviewId)
+        val unhelpfulCount = repository.countScoresByHelpfulIsFalseAndReviewId(reviewId)
+
+        val score = repository.findScoresByOwnerIdAndReviewId(userId, reviewId).map { it.convertToDTO() }
 
 
-        return ScoreBalance(helpful, unhelpful, userVoted)
+        if (score.isNotEmpty()) {
+            return ScoreBalance(helpfulCount, unhelpfulCount, UserVote(score[0].helpful))
+        }
+
+        return ScoreBalance(helpfulCount, unhelpfulCount, null)
+
     }
 
 

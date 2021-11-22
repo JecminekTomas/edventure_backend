@@ -34,11 +34,10 @@ data class ReviewResponse(
     var userTo: UserResponse,
 
     @Schema(description = "Scores of review")
-    var score: ScoreBalance,
+    var scoreBalance: ScoreBalance,
 
     @Schema(description = "Subject which was taught")
     var subject: SubjectDTO
-
 
 )
 

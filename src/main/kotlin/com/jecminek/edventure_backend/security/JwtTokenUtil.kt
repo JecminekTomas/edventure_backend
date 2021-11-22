@@ -13,7 +13,7 @@ class JwtTokenUtil {
     private val logger: Logger? = null
     fun generateAccessToken(user: User): String {
         return Jwts.builder()
-            .setSubject("${user.id}, ${user.userName}")
+            .setSubject("${user.id}, ${user.userName}, ${user.firstName}, ${user.lastName}")
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + 7 * 24 * 60 * 60 * 1000)) // 1 week
             .signWith(SignatureAlgorithm.HS512, jwtSecret)
