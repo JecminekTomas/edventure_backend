@@ -39,9 +39,9 @@ class ReviewService {
     fun findById(id: Long): Review =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun findReviewsByUserToId(userToId: Long, page: Int): List<ReviewResponse> =
+    fun findReviewsByUserToId(userToId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> =
         repository.findReviewsByUserToId(userToId).map {
-            it.convertEntityToResponse()
+            it.convertEntityToResponse(userToId, httpHeaders)
         }
 
     fun findReviewsByUserFromId(userFromId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> {
@@ -51,7 +51,7 @@ class ReviewService {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see reviews who wrote other user")
 
         return repository.findReviewsByUserFromId(userFromId).map {
-            it.convertEntityToResponse()
+            it.convertEntityToResponse(loggedUserId, httpHeaders)
         }
     }
 
@@ -72,11 +72,14 @@ class ReviewService {
         if (userId == offerOwnerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT review own offer.")
 
-        return repository.save(reviewRequest.convertRequestToEntity(userId)).convertEntityToResponse()
+        return repository.save(reviewRequest.convertRequestToEntity(userId)).convertEntityToResponse(userId, httpHeaders)
     }
 
     fun reviewBalanceByUserId(userId: Long): ReviewBalance =
-        ReviewBalance(repository.countReviewsByUserToId(userId), repository.geReviewAverageStarsByUserId(userId))
+        ReviewBalance(
+            repository.countReviewsByUserToId(userId) ?: 0,
+            repository.geReviewAverageStarsByUserId(userId) ?: 0.0
+        )
 
 
     fun update(id: Long, httpHeaders: HttpHeaders, reviewRequest: ReviewRequest): ReviewResponse {
@@ -90,7 +93,7 @@ class ReviewService {
         review.verbalEvaluation = reviewRequest.verbalEvaluation
         review.anonymous = reviewRequest.anonymous
 
-        return repository.save(review).convertEntityToResponse()
+        return repository.save(review).convertEntityToResponse(userId, httpHeaders)
     }
 
     fun delete(id: Long, httpHeaders: HttpHeaders) {
@@ -103,7 +106,6 @@ class ReviewService {
         repository.delete(review)
     }
 
-
     fun ReviewRequest.convertRequestToEntity(userId: Long) = Review(
         stars = stars,
         verbalEvaluation = verbalEvaluation,
@@ -114,7 +116,7 @@ class ReviewService {
         offer = offerService.findById(offerId)
     )
 
-    fun Review.convertEntityToResponse() = ReviewResponse(
+    fun Review.convertEntityToResponse(userId: Long, httpHeaders: HttpHeaders) = ReviewResponse(
         id = id,
         stars = stars,
         verbalEvaluation = verbalEvaluation ?: "",
@@ -124,7 +126,7 @@ class ReviewService {
             else -> null
         },
         userTo = userTo.convertEntityToResponse(),
-        score = scoreService.getScoreBalance(id),
+        score = scoreService.getScoreBalance(jwtTokenUtil.getUserId(httpHeaders), id),
         subject = subjectService.findById(offer!!.subject.id).convertToDTO()
     )
 

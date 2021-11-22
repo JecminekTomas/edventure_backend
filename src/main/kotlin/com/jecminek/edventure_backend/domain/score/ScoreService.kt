@@ -75,10 +75,14 @@ class ScoreService {
         return repository.delete(findById(id))
     }
 
-    fun getScoreBalance(reviewId: Long): ScoreBalance {
+    fun getScoreBalance(userId: Long, reviewId: Long): ScoreBalance {
+
         val helpful = repository.countScoresByHelpfulIsTrueAndReviewId(reviewId)
         val unhelpful = repository.countScoresByHelpfulIsFalseAndReviewId(reviewId)
-        return ScoreBalance(helpful, unhelpful)
+        val userVoted = repository.findScoreByOwnerIdAndReviewId(userId, reviewId)?.convertToDTO()
+
+
+        return ScoreBalance(helpful, unhelpful, userVoted)
     }
 
 

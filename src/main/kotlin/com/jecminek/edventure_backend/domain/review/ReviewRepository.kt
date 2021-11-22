@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ReviewRepository : CrudRepository<Review, Long> {
+    fun findReviewsByOfferId(offerId: Long): List<Review>
+
     fun findReviewsByUserToId(userToId: Long): List<Review>
     fun findReviewsByUserFromId(userFromId: Long): List<Review>
     fun findReviewsByOfferIdAndUserFromId(offerId: Long, userId: Long): List<Review>

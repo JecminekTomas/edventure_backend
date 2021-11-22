@@ -37,9 +37,10 @@ class OfferController {
         @Parameter(
             description = "Id of offer to be found",
             example = "1"
-        ) @PathVariable id: Long
-    ): OfferDTO =
-        offerService.findById(id).convertToDTO()
+        ) @PathVariable id: Long,
+        @RequestHeader httpHeaders: HttpHeaders
+    ): OfferDetailResponse =
+        offerService.getById(id, httpHeaders)
 
     @Operation(summary = "Find all offers")
     @ApiResponses(

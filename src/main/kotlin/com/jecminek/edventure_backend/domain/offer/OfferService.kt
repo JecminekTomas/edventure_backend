@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.offer
 
+import com.jecminek.edventure_backend.domain.review.ReviewResponse
 import com.jecminek.edventure_backend.domain.review.ReviewService
 import com.jecminek.edventure_backend.domain.subject.SubjectService
 import com.jecminek.edventure_backend.domain.user.UserService
@@ -10,7 +11,6 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
-import java.awt.print.Pageable
 
 @Service
 class OfferService {
@@ -43,13 +43,20 @@ class OfferService {
             "Offer With Id: $id, Not Found"
         )
 
+    fun getById(id: Long, httpHeaders: HttpHeaders): OfferDetailResponse {
+        val offer: Offer = findById(id)
+        val offerResponse: OfferResponse = offer.convertToResponse()
+
+        val reviews: List<ReviewResponse> = reviewService.findReviewsByUserToId(offer.owner.id, httpHeaders)
+
+        return OfferDetailResponse(offerResponse, reviews)
+    }
+
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
         repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
 
     fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferDTO> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
-
-        val test: Pageable
 
         if (userId != ownerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
@@ -105,6 +112,8 @@ class OfferService {
         note = note,
         teacherFirstName = userService.findById(owner.id).firstName,
         teacherLastName = userService.findById(owner.id).lastName,
-        reviewBalance = reviewService.reviewBalanceByUserId(owner.id)
+        reviewBalance = reviewService.reviewBalanceByUserId(owner.id),
+        subjectId = subject.id,
+        subjectName = subject.name
     )
 }

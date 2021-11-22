@@ -15,5 +15,9 @@ data class OfferResponse(
     @Schema(description = "Teacher's lastname", example = "Novák")
     var teacherLastName: String,
     @Schema(description = "Balance of reviews", example = "{22, 3.2}")
-    var reviewBalance: ReviewBalance
+    var reviewBalance: ReviewBalance,
+    @Schema(description = "Id of subject", example = "22")
+    var subjectId: Long,
+    @Schema(description = "Name of subject", example = "Programovací techniky")
+    var subjectName: String,
 )

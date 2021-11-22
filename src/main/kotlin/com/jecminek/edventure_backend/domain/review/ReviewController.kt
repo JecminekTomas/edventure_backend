@@ -38,13 +38,8 @@ class ReviewController {
             description = "ID of user, who wrote review",
             example = "1"
         ) @PathVariable userId: Long,
-        @RequestHeader httpHeaders: HttpHeaders,
-        @Parameter(
-            description = "Page number, to be found. Default page size is 50.",
-            example = "0"
-        )
-        @RequestParam(required = true) page: Int,
-    ): List<ReviewResponse> = reviewService.findReviewsByUserFromId(userId, httpHeaders, page)
+        @RequestHeader httpHeaders: HttpHeaders
+    ): List<ReviewResponse> = reviewService.findReviewsByUserFromId(userId, httpHeaders)
 
     @Operation(summary = "Find reviews by ID of user, where user got review")
     @ApiResponses(
@@ -66,12 +61,8 @@ class ReviewController {
             description = "ID of user, who review is for",
             example = "1"
         ) @PathVariable userId: Long,
-        @Parameter(
-            description = "Page number, to be found. Default page size is 50.",
-            example = "0"
-        )
-        @RequestParam(required = true) page: Int
-    ): List<ReviewResponse> = reviewService.findReviewsByUserToId(userId, page)
+        @RequestHeader httpHeaders: HttpHeaders
+    ): List<ReviewResponse> = reviewService.findReviewsByUserToId(userId, httpHeaders)
 
     @Operation(summary = "Create review")
     @ApiResponses(
