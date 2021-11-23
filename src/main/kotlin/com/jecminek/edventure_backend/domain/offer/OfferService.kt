@@ -31,8 +31,9 @@ class OfferService {
 
     fun findAll(): MutableIterable<Offer> = repository.findAll()
 
-    fun getAll(): List<OfferResponse> {
-        return repository.findAll().map {
+    fun getFirstOffers(httpHeaders: HttpHeaders): List<OfferResponse> {
+        val userId = jwtTokenUtil.getUserId(httpHeaders)
+        return repository.getFirstOffers(userId).map {
             it.convertToResponse()
         }
     }
