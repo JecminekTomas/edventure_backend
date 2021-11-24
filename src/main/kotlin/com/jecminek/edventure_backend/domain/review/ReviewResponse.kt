@@ -12,8 +12,6 @@ data class ReviewResponse(
     @Schema(description = "ID of review")
     var id: Long,
 
-    @Min(1, message = "Minimum is 1 star")
-    @Max(5, message = "Maximum is 5 stars")
     @Schema(description = "Rating in stars", example = "3")
     var stars: Double,
 

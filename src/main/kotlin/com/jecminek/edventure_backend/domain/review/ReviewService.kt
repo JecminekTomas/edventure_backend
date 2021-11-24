@@ -59,6 +59,9 @@ class ReviewService {
         repository.findReviewsByOfferIdAndUserFromId(offerId, userFromId)
 
     fun create(httpHeaders: HttpHeaders, reviewRequest: ReviewRequest): ReviewResponse {
+
+        isRequestValid(reviewRequest)
+
         val userId = jwtTokenUtil.getUserId(httpHeaders)
         val offerOwnerId = offerService.findById(reviewRequest.offerId).owner.id
 
@@ -72,7 +75,8 @@ class ReviewService {
         if (userId == offerOwnerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT review own offer.")
 
-        return repository.save(reviewRequest.convertRequestToEntity(userId)).convertEntityToResponse(userId, httpHeaders)
+        return repository.save(reviewRequest.convertRequestToEntity(userId))
+            .convertEntityToResponse(userId, httpHeaders)
     }
 
     fun reviewBalanceByUserId(userId: Long): ReviewBalance =
@@ -104,6 +108,18 @@ class ReviewService {
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User can delete ONLY own reviews.")
 
         repository.delete(review)
+    }
+
+    fun isRequestValid(reviewRequest: ReviewRequest) {
+        if (reviewRequest.stars > 5)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Review cannot have more than 5 stars")
+        if (reviewRequest.stars < 1)
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Review cannot have more less 1 star")
+        if (reviewRequest.verbalEvaluation.length > 2048)
+            throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Review's evaluation cannot have more than 2048 characters"
+            )
     }
 
     fun ReviewRequest.convertRequestToEntity(userId: Long) = Review(

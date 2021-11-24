@@ -11,6 +11,7 @@ import javax.persistence.*
 @Table(name = "REVIEW")
 class Review(
     var stars: Double = 0.0,
+    @Column(columnDefinition = "varchar(512)", length = 2048)
     var verbalEvaluation: String? = null,
     var reviewTimestamp: Long = 0,
     var anonymous: Boolean = false,
