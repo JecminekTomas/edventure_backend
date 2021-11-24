@@ -57,8 +57,8 @@ class OfferController {
     )
     @GetMapping("/offers")
     @ResponseStatus(HttpStatus.OK)
-    fun getFirstOffers(@RequestHeader httpHeaders: HttpHeaders): List<OfferResponse> =
-        offerService.getFirstOffers(httpHeaders)
+    fun getAllOffers(@RequestHeader httpHeaders: HttpHeaders): List<OfferResponse> =
+        offerService.getAllOffers(httpHeaders)
 
 
     @Operation(summary = "Find offer by owner id")

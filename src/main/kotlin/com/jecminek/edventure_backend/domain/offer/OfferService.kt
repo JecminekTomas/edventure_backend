@@ -31,9 +31,9 @@ class OfferService {
 
     fun findAll(): MutableIterable<Offer> = repository.findAll()
 
-    fun getFirstOffers(httpHeaders: HttpHeaders): List<OfferResponse> {
+    fun getAllOffers(httpHeaders: HttpHeaders): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
-        return repository.getFirstOffers(userId).map {
+        return repository.getAllOffers(userId).map {
             it.convertToResponse()
         }
     }
@@ -70,7 +70,7 @@ class OfferService {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
         if (findByUserIdAndSubjectId(userId, offerDTO.subjectId) != null)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create more offers per subject")
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Uživatel smí vytvořit pouze jednu nabídku na předmět")
 
         return repository.save(offerDTO.convertToEntity(userId)).convertToDTO()
     }
