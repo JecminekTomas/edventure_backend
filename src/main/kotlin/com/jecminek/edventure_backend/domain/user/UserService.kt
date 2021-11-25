@@ -1,5 +1,8 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.user.request.LoginRequest
+import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
+import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
 import com.jecminek.edventure_backend.enums.AuthorityType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,15 +40,15 @@ class UserService : UserDetailsService {
 
     fun findById(id: Long): User = repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
-    fun register(userRequest: UserRequest): UserResponse {
-        if (repository.findUserByUserName(userRequest.userName) != null)
+    fun register(registerRequest: RegisterRequest): UserResponse {
+        if (repository.findUserByUserName(registerRequest.userName) != null)
             throw ValidationException("Username exists!")
         else {
             val user = User()
-            user.userName = userRequest.userName
-            user.firstName = userRequest.firstName
-            user.lastName = userRequest.lastName
-            user.password = passwordEncoder.encode(userRequest.password)
+            user.userName = registerRequest.userName
+            user.firstName = registerRequest.firstName
+            user.lastName = registerRequest.lastName
+            user.password = passwordEncoder.encode(registerRequest.password)
             user.setAuthority(AuthorityType.USER)
             return repository.save(user).convertEntityToResponse()
         }
@@ -65,11 +68,18 @@ class UserService : UserDetailsService {
         }
     }
 
-    fun update(id: Long, userRequest: UserRequest): UserResponse {
-        val user = findById(id)
-        user.firstName = userRequest.firstName
-        user.lastName = userRequest.lastName
-        user.userName = userRequest.userName
+    fun update(updateRequest: UpdateRequest): UserResponse {
+        if (repository.findUserByUserName(updateRequest.userName) != null)
+            throw ResponseStatusException(
+                HttpStatus.CONFLICT,
+                "Uživatelské jméno ${updateRequest.userName} je již obsazené."
+            )
+
+        val user = findById(updateRequest.id)
+        user.firstName = updateRequest.firstName
+        user.lastName = updateRequest.lastName
+        user.userName = updateRequest.userName
+
         return repository.save(user).convertEntityToResponse()
     }
 

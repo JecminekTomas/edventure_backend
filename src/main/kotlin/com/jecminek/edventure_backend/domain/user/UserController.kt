@@ -1,5 +1,8 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.user.request.LoginRequest
+import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
+import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -58,7 +61,7 @@ class UserController {
     )
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    fun register(@RequestBody userRequest: UserRequest): UserResponse = userService.register(userRequest)
+    fun register(@RequestBody registerRequest: RegisterRequest): UserResponse = userService.register(registerRequest)
 
     @Operation(summary = "Login user")
     @SecurityRequirements
@@ -77,7 +80,7 @@ class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> = userService.login(loginRequest)
 
-    /*@Operation(summary = "Update user")
+    @Operation(summary = "Update user")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -91,14 +94,14 @@ class UserController {
         ]
     )
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/profile")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
-        @Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long,
-        @RequestBody userRequest: UserRequest
+        @RequestBody updateRequest: UpdateRequest
     ): UserResponse =
-        userService.update(id, userRequest)
+        userService.update(updateRequest)
 
+/*
     @Operation(summary = "Delete user")
     @ApiResponses(
         value = [

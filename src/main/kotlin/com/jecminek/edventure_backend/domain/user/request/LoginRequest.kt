@@ -1,4 +1,4 @@
-package com.jecminek.edventure_backend.domain.user
+package com.jecminek.edventure_backend.domain.user.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 
