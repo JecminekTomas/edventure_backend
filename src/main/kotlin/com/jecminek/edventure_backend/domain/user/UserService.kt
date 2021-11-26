@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.user.request.ChangePasswordRequest
 import com.jecminek.edventure_backend.domain.user.request.LoginRequest
 import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
 import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
@@ -81,6 +82,29 @@ class UserService : UserDetailsService {
         user.userName = updateRequest.userName
 
         return repository.save(user).convertEntityToResponse()
+    }
+
+    fun changePassword(changePasswordRequest: ChangePasswordRequest) {
+        try {
+            val authenticate: Authentication = authenticationManager
+                .authenticate(
+                    UsernamePasswordAuthenticationToken(
+                        changePasswordRequest.userName,
+                        changePasswordRequest.oldPassword
+                    )
+                )
+            val user = authenticate.principal as User
+
+            // New password
+            user.password = passwordEncoder.encode(changePasswordRequest.newPassword)
+            repository.save(user)
+
+        } catch (ex: BadCredentialsException) {
+            throw ResponseStatusException(
+                HttpStatus.I_AM_A_TEAPOT,
+                "Špatné heslo"
+            )
+        }
     }
 
     fun delete(id: Long) = repository.delete(findById(id))

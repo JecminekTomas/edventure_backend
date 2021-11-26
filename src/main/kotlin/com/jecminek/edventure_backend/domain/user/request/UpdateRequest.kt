@@ -12,6 +12,6 @@ data class UpdateRequest(
     @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
 
-    @Schema(description = "E-mail address of user", example = "xmarek")
+    @Schema(description = "Username of user", example = "xmarek")
     var userName: String,
 )

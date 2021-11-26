@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.user.request.ChangePasswordRequest
 import com.jecminek.edventure_backend.domain.user.request.LoginRequest
 import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
 import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
@@ -100,6 +101,27 @@ class UserController {
         @RequestBody updateRequest: UpdateRequest
     ): UserResponse =
         userService.update(updateRequest)
+
+    @Operation(summary = "Update user")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "202",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
+                ]
+            ),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
+    )
+
+    @PutMapping("/profile/change_password")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun changePassword(
+        @RequestBody changePasswordRequest: ChangePasswordRequest
+    ) =
+        userService.changePassword(changePasswordRequest)
 
 /*
     @Operation(summary = "Delete user")
