@@ -56,13 +56,13 @@ class OfferService {
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
         repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
 
-    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferDTO> {
+    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<UserOfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
         if (userId != ownerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
 
-        return repository.findOffersByOwnerId(ownerId).map { it.convertToDTO() }
+        return repository.findOffersByOwnerId(ownerId).map { it.convertToUserOfferResponse() }
     }
 
 
@@ -116,5 +116,15 @@ class OfferService {
         reviewBalance = reviewService.reviewBalanceByUserId(owner.id),
         subjectId = subject.id,
         subjectName = subject.name
+    )
+
+    fun Offer.convertToUserOfferResponse() = UserOfferResponse(
+        id = id,
+        price = price,
+        note = note,
+        reviewBalance = reviewService.reviewBalanceByUserId(owner.id),
+        subjectId = subject.id,
+        subjectName = subject.name,
+        subjectCode = subject.code
     )
 }

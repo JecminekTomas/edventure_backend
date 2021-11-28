@@ -82,7 +82,7 @@ class OfferController {
             example = "1"
         ) @PathVariable ownerId: Long,
         @RequestHeader httpHeaders: HttpHeaders
-    ): List<OfferDTO> =
+    ): List<UserOfferResponse> =
         offerService.findByOwnerId(ownerId, httpHeaders)
 
     @Operation(summary = "Create offer")

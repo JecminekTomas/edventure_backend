@@ -26,6 +26,8 @@ class SubjectService {
             "Subject With Id: $id, Not Found"
         )
 
+    fun getById(id: Long): SubjectDTO = findById(id).convertToDTO()
+
 
     fun create(subjectDTO: SubjectDTO): SubjectDTO = repository.save(subjectDTO.convertToEntity()).convertToDTO()
 

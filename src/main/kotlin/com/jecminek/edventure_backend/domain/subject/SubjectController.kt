@@ -1,5 +1,6 @@
 package com.jecminek.edventure_backend.domain.subject
 
+import com.jecminek.edventure_backend.domain.university.UniversityDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -38,6 +39,16 @@ class SubjectController {
         )
         @RequestParam(required = false) facultyId: Long?
     ): List<SubjectDTO> = subjectService.findAll(facultyId)
+
+    @GetMapping("/subjects/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findById(
+        @Parameter(
+            description = "Id of subject to be found",
+            example = "1"
+        ) @PathVariable id: Long
+    ): SubjectDTO =
+        subjectService.getById(id)
 
 
     @Operation(summary = "Create subject")

@@ -102,7 +102,7 @@ class UserService : UserDetailsService {
         } catch (ex: BadCredentialsException) {
             throw ResponseStatusException(
                 HttpStatus.I_AM_A_TEAPOT,
-                "Špatné heslo"
+                "Chybně zadané heslo"
             )
         }
     }
