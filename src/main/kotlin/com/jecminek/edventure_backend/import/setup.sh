@@ -1,0 +1,1 @@
+psql -d edventure -U postgres < ./university.sql && psql -d edventure -U postgres < ./faculty.sql && psql -d edventure -U postgres < ./subject.sql && psql -d edventure -U postgres < ./user.sql && psql -d edventure -U postgres < ./offer.sql && psql -d edventure -U postgres < ./review.sql

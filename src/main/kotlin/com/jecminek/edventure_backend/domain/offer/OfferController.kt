@@ -58,7 +58,7 @@ class OfferController {
     @GetMapping("/offers")
     @ResponseStatus(HttpStatus.OK)
     fun getAllOffers(@RequestHeader httpHeaders: HttpHeaders): List<OfferResponse> =
-        offerService.getAllOffers(httpHeaders)
+        offerService.getOffersShowcase(httpHeaders)
 
 
     @Operation(summary = "Find offer by owner id")
@@ -67,14 +67,14 @@ class OfferController {
             ApiResponse(
                 responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferDTO::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = UserOfferResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400"),
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/offers/by/{ownerId}")
+    @GetMapping("/offers/by/owner/{ownerId}")
     @ResponseStatus(HttpStatus.OK)
     fun findByOwnerId(
         @Parameter(
@@ -84,6 +84,30 @@ class OfferController {
         @RequestHeader httpHeaders: HttpHeaders
     ): List<UserOfferResponse> =
         offerService.findByOwnerId(ownerId, httpHeaders)
+
+    @Operation(summary = "Find offer subjectId")
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                responseCode = "200",
+                content = [
+                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferResponse::class)))
+                ]
+            ),
+            ApiResponse(responseCode = "400"),
+            ApiResponse(responseCode = "404")
+        ]
+    )
+    @GetMapping("/offers/by/subject/{subjectId}")
+    @ResponseStatus(HttpStatus.OK)
+    fun findBySubjectId(
+        @Parameter(
+            description = "Id of subject",
+            example = "1"
+        ) @PathVariable subjectId: Long,
+        @RequestHeader httpHeaders: HttpHeaders
+    ): List<OfferResponse> =
+        offerService.findBySubjectId(subjectId, httpHeaders)
 
     @Operation(summary = "Create offer")
     @ApiResponses(

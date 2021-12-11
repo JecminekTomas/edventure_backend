@@ -10,9 +10,11 @@ interface OfferRepository : CrudRepository<Offer, Long> {
 //    @Query("SELECT * FROM offer o WHERE o.owner_id != ?1 ORDER BY random() LIMIT 50", nativeQuery = true)
 //    fun getFirstOffers(userId: Long): List<Offer>
 
-    @Query("SELECT * FROM offer o WHERE o.owner_id != ?1", nativeQuery = true)
-    fun getAllOffers(userId: Long): List<Offer>
+    @Query("SELECT * FROM offer o WHERE o.owner_id != ?1 ORDER BY random() LIMIT 50", nativeQuery = true)
+    fun getOffersShowcase(userId: Long): List<Offer>
 
     fun findOfferByOwnerIdAndSubjectId(ownerId: Long, subjectId: Long): Offer?
     fun findOffersByOwnerId(ownerId: Long): List<Offer>
+
+    fun findOffersBySubjectIdAndOwnerIdNot(subjectId: Long, ownerId: Long): List<Offer>
 }

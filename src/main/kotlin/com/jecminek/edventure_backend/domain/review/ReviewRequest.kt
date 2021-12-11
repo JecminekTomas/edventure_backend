@@ -10,8 +10,8 @@ data class ReviewRequest(
     var stars: Double,
 
     @Schema(
-        description = "Verbal evaluation from student to teacher or vice versa",
-        example = "The offer was OK. Only no added materials are included in EXPENSIVE lecture."
+        description = "Verbal evaluation",
+        example = "The lesson was OK. Only no added materials are included in EXPENSIVE lecture."
     )
     var verbalEvaluation: String,
 

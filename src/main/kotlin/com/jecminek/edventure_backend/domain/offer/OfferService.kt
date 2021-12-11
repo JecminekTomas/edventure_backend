@@ -31,9 +31,16 @@ class OfferService {
 
     fun findAll(): MutableIterable<Offer> = repository.findAll()
 
-    fun getAllOffers(httpHeaders: HttpHeaders): List<OfferResponse> {
+    fun getOffersShowcase(httpHeaders: HttpHeaders): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
-        return repository.getAllOffers(userId).map {
+        return repository.getOffersShowcase(userId).map {
+            it.convertToResponse()
+        }
+    }
+
+    fun findBySubjectId(subjectId: Long, httpHeaders: HttpHeaders): List<OfferResponse> {
+        val userId = jwtTokenUtil.getUserId(httpHeaders)
+        return repository.findOffersBySubjectIdAndOwnerIdNot(subjectId, userId).map {
             it.convertToResponse()
         }
     }
