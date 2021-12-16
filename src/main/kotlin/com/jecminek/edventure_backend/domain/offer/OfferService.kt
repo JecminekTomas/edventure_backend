@@ -29,7 +29,27 @@ class OfferService {
     @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
 
-    fun findAll(): MutableIterable<Offer> = repository.findAll()
+
+    fun findOffers(
+        httpHeaders: HttpHeaders,
+        ownerId: Long?,
+        subjectId: Long?,
+        showcase: Boolean?
+    ): List<OfferResponse> {
+        val userId = jwtTokenUtil.getUserId(httpHeaders)
+        return if (ownerId !== null && subjectId === null && showcase === null) {
+            findByOwnerId(userId, httpHeaders)
+        } else if (ownerId === null && subjectId !== null && showcase === null) {
+            findBySubjectId(subjectId, httpHeaders)
+        } else if (ownerId === null && subjectId === null && showcase == true) {
+            getOffersShowcase(httpHeaders)
+        } else if (ownerId === null && subjectId === null && showcase === null) {
+            repository.findAll().map {
+                it.convertToResponse()
+            }
+        } else
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+    }
 
     fun getOffersShowcase(httpHeaders: HttpHeaders): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
@@ -63,13 +83,13 @@ class OfferService {
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
         repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
 
-    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<UserOfferResponse> {
+    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
 
         if (userId != ownerId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
 
-        return repository.findOffersByOwnerId(ownerId).map { it.convertToUserOfferResponse() }
+        return repository.findOffersByOwnerId(ownerId).map { it.convertToResponse() }
     }
 
 
@@ -120,15 +140,6 @@ class OfferService {
         note = note,
         teacherFirstName = userService.findById(owner.id).firstName,
         teacherLastName = userService.findById(owner.id).lastName,
-        reviewBalance = reviewService.reviewBalanceByUserId(owner.id),
-        subjectId = subject.id,
-        subjectName = subject.name
-    )
-
-    fun Offer.convertToUserOfferResponse() = UserOfferResponse(
-        id = id,
-        price = price,
-        note = note,
         reviewBalance = reviewService.reviewBalanceByUserId(owner.id),
         subjectId = subject.id,
         subjectName = subject.name,

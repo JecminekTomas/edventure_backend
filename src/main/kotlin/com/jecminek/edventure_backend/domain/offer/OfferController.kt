@@ -57,57 +57,13 @@ class OfferController {
     )
     @GetMapping("/offers")
     @ResponseStatus(HttpStatus.OK)
-    fun getAllOffers(@RequestHeader httpHeaders: HttpHeaders): List<OfferResponse> =
-        offerService.getOffersShowcase(httpHeaders)
-
-
-    @Operation(summary = "Find offer by owner id")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserOfferResponse::class)))
-                ]
-            ),
-            ApiResponse(responseCode = "400"),
-            ApiResponse(responseCode = "404")
-        ]
-    )
-    @GetMapping("/offers/by/owner/{ownerId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun findByOwnerId(
-        @Parameter(
-            description = "Id of offer owner",
-            example = "1"
-        ) @PathVariable ownerId: Long,
-        @RequestHeader httpHeaders: HttpHeaders
-    ): List<UserOfferResponse> =
-        offerService.findByOwnerId(ownerId, httpHeaders)
-
-    @Operation(summary = "Find offer subjectId")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = OfferResponse::class)))
-                ]
-            ),
-            ApiResponse(responseCode = "400"),
-            ApiResponse(responseCode = "404")
-        ]
-    )
-    @GetMapping("/offers/by/subject/{subjectId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun findBySubjectId(
-        @Parameter(
-            description = "Id of subject",
-            example = "1"
-        ) @PathVariable subjectId: Long,
-        @RequestHeader httpHeaders: HttpHeaders
-    ): List<OfferResponse> =
-        offerService.findBySubjectId(subjectId, httpHeaders)
+    fun findOffers(
+        @RequestHeader httpHeaders: HttpHeaders,
+        @RequestParam(required = false) ownerId: Long?,
+        @RequestParam(required = false) subjectId: Long?,
+        @RequestParam(required = false) showcase: Boolean?
+    ) =
+        offerService.findOffers(httpHeaders, ownerId, subjectId, showcase)
 
     @Operation(summary = "Create offer")
     @ApiResponses(

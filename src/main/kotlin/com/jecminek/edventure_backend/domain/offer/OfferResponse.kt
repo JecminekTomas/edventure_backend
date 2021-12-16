@@ -20,4 +20,6 @@ data class OfferResponse(
     var subjectId: Long,
     @Schema(description = "Name of subject", example = "Programovací techniky")
     var subjectName: String,
+    @Schema(description = "Code of subject", example = "PTN")
+    var subjectCode: String,
 )
