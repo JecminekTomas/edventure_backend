@@ -37,17 +37,21 @@ class OfferService {
         showcase: Boolean?
     ): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
-        return if (ownerId !== null && subjectId === null && showcase === null) {
+        return if (ownerId !== null && subjectId === null && showcase === null)
             findByOwnerId(userId, httpHeaders)
-        } else if (ownerId === null && subjectId !== null && showcase === null) {
+
+        else if (ownerId === null && subjectId !== null && showcase === null)
             findBySubjectId(subjectId, httpHeaders)
-        } else if (ownerId === null && subjectId === null && showcase == true) {
+
+        else if (ownerId === null && subjectId === null && showcase == true)
             getOffersShowcase(httpHeaders)
-        } else if (ownerId === null && subjectId === null && showcase === null) {
+
+        else if (ownerId === null && subjectId === null && showcase === null)
             repository.findAll().map {
                 it.convertToResponse()
             }
-        } else
+
+        else
             throw ResponseStatusException(HttpStatus.BAD_REQUEST)
     }
 

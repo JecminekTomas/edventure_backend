@@ -39,14 +39,27 @@ class ReviewService {
     fun findById(id: Long): Review =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 
+    fun findReviews(userFromId: Long?, userToId: Long?, httpHeaders: HttpHeaders): List<ReviewResponse> {
+        val loggedUserId = jwtTokenUtil.getUserId(httpHeaders)
+        return if (userFromId !== null && userToId === null)
+            findReviewsByUserFromId(loggedUserId, userFromId, httpHeaders)
+        else if (userFromId === null && userToId !== null)
+            findReviewsByUserToId(userToId, httpHeaders)
+        else if (userFromId === null && userToId === null)
+            repository.findAll().map {
+                it.convertEntityToResponse(loggedUserId, httpHeaders)
+            }
+        else
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
+    }
+
+
     fun findReviewsByUserToId(userToId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> =
         repository.findReviewsByUserToId(userToId).map {
             it.convertEntityToResponse(userToId, httpHeaders)
         }
 
-    fun findReviewsByUserFromId(userFromId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> {
-        val loggedUserId = jwtTokenUtil.getUserId(httpHeaders)
-
+    fun findReviewsByUserFromId(loggedUserId: Long, userFromId: Long, httpHeaders: HttpHeaders): List<ReviewResponse> {
         if (loggedUserId != userFromId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see reviews who wrote other user")
 

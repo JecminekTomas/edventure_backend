@@ -42,7 +42,7 @@ class OfferController {
     ): OfferDetailResponse =
         offerService.getById(id, httpHeaders)
 
-    @Operation(summary = "Find all offers")
+    @Operation(summary = "Find all offers with requested parameters")
     @ApiResponses(
         value = [
             ApiResponse(

@@ -18,7 +18,7 @@ class ReviewController {
     @Autowired
     lateinit var reviewService: ReviewService
 
-    @Operation(summary = "Find reviews by ID of user, where user write review")
+    @Operation(summary = "Find reviews with requested parameters")
     @ApiResponses(
         value = [
             ApiResponse(
@@ -31,38 +31,13 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/reviews/from/{userId}")
+    @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
-    fun findReviewsByUserFrom(
-        @Parameter(
-            description = "ID of user, who wrote review",
-            example = "1"
-        ) @PathVariable userId: Long,
+    fun findReviews(
+        @RequestParam userFromId: Long?,
+        @RequestParam userToId: Long?,
         @RequestHeader httpHeaders: HttpHeaders
-    ): List<ReviewResponse> = reviewService.findReviewsByUserFromId(userId, httpHeaders)
-
-    @Operation(summary = "Find reviews by ID of user, where user got review")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "200",
-                content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = ReviewResponse::class)))
-                ]
-            ),
-            ApiResponse(responseCode = "400"),
-            ApiResponse(responseCode = "404")
-        ]
-    )
-    @GetMapping("/reviews/to/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    fun findReviewsByUserTo(
-        @Parameter(
-            description = "ID of user, who review is for",
-            example = "1"
-        ) @PathVariable userId: Long,
-        @RequestHeader httpHeaders: HttpHeaders
-    ): List<ReviewResponse> = reviewService.findReviewsByUserToId(userId, httpHeaders)
+    ): List<ReviewResponse> = reviewService.findReviews(userFromId, userToId, httpHeaders)
 
     @Operation(summary = "Create review")
     @ApiResponses(
