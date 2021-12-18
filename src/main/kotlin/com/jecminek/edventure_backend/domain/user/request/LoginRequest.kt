@@ -6,6 +6,6 @@ data class LoginRequest(
     @Schema(description = "Username", example = "xmarek")
     var userName: String,
 
-    @Schema(description = "User password", example = "heslo")
+    @Schema(description = "User password", example = "Heslo123.")
     var password: String,
 )

@@ -37,6 +37,7 @@ class OfferService {
         showcase: Boolean?
     ): List<OfferResponse> {
         val userId = jwtTokenUtil.getUserId(httpHeaders)
+
         return if (ownerId !== null && subjectId === null && showcase === null)
             findByOwnerId(userId, httpHeaders)
 
@@ -69,6 +70,15 @@ class OfferService {
         }
     }
 
+    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferResponse> {
+        val userId = jwtTokenUtil.getUserId(httpHeaders)
+
+        if (userId != ownerId)
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
+
+        return repository.findOffersByOwnerId(ownerId).map { it.convertToResponse() }
+    }
+
     fun findById(id: Long): Offer =
         repository.findByIdOrNull(id) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
@@ -86,15 +96,6 @@ class OfferService {
 
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
         repository.findOfferByOwnerIdAndSubjectId(userId, subjectId)
-
-    fun findByOwnerId(ownerId: Long, httpHeaders: HttpHeaders): List<OfferResponse> {
-        val userId = jwtTokenUtil.getUserId(httpHeaders)
-
-        if (userId != ownerId)
-            throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT see other user offers")
-
-        return repository.findOffersByOwnerId(ownerId).map { it.convertToResponse() }
-    }
 
 
     fun create(offerDTO: OfferDTO, httpHeaders: HttpHeaders): OfferDTO {
