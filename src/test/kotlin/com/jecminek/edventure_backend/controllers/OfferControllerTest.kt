@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.*
 
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
+internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @MockkBean
     private lateinit var service: OfferService
@@ -48,7 +48,7 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     @WithMockUser(username = "user", password = "password")
-    fun `Test find offers method without params`() {
+    fun `test find offers method without params`() {
         every { service.findOffers(any(), null, null, null) } returns listOf(exampleResponse)
         mockMvc.get("/offers")
             .andExpect { status { isOk() } }
@@ -70,7 +70,7 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     @WithMockUser(username = "user", password = "password")
-    fun `Test find offers method with ownerId parameter`() {
+    fun `test find offers method with ownerId parameter`() {
         every { service.findOffers(any(), 1, null, null) } returns
                 listOf(exampleResponse)
         mockMvc.get("/offers?ownerId=1")
@@ -93,7 +93,7 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     @WithMockUser(username = "user", password = "password")
-    fun `Test find offers method with subjectId parameter`() {
+    fun `test find offers method with subjectId parameter`() {
         every { service.findOffers(any(), null, 1, null) } returns
                 listOf(exampleResponse)
         mockMvc.get("/offers?subjectId=1")
@@ -141,7 +141,7 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     @WithMockUser(username = "user", password = "password")
-    fun `Test update method`() {
+    fun `test update method`() {
         every { service.update(1, exampleDTO, any()) } returns
                 exampleDTO
 
@@ -164,7 +164,7 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
     @Test
     @WithMockUser(username = "user", password = "password")
-    fun `Test delete method`() {
+    fun `test delete method`() {
         every { service.delete(1, any()) } returns Unit
         mockMvc.delete("/offers/1")
             .andExpect { status { isNoContent() } }
@@ -174,8 +174,32 @@ class OfferControllerTests(@Autowired val mockMvc: MockMvc) {
 
 
     @Test
-    fun `Test unauthorized user`() {
+    fun `test unauthorized user (findOffers)`() {
         mockMvc.get("/offers")
+            .andExpect { status { isUnauthorized() } }
+    }
+
+    @Test
+    fun `test unauthorized user (create)`() {
+        mockMvc.post("/offers") {
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(exampleDTO)
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    @Test
+    fun `test unauthorized user (update)`() {
+        mockMvc.put("/offers") {
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(exampleDTO)
+            accept = MediaType.APPLICATION_JSON
+        }
+    }
+
+    @Test
+    fun `test unauthorized user (delete)`() {
+        mockMvc.delete("/offers/1")
             .andExpect { status { isUnauthorized() } }
     }
 

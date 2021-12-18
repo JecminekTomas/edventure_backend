@@ -3,7 +3,7 @@ package com.jecminek.edventure_backend.domain.user
 import com.jecminek.edventure_backend.domain.user.request.ChangePasswordRequest
 import com.jecminek.edventure_backend.domain.user.request.LoginRequest
 import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
-import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
+import com.jecminek.edventure_backend.domain.user.request.UpdateProfileRequest
 import com.jecminek.edventure_backend.enums.AuthorityType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
@@ -55,36 +55,31 @@ class UserService : UserDetailsService {
         }
     }
 
-    fun login(@RequestBody request: @Valid LoginRequest): ResponseEntity<LoginResponse> {
+    fun login(@RequestBody request: @Valid LoginRequest): ResponseEntity<TokenResponse> {
         return try {
             val authenticate: Authentication = authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(request.userName, request.password))
             val user = authenticate.principal as User
 
             ResponseEntity.ok()
-                .body(LoginResponse(jwtTokenUtil.generateAccessToken(user)))
+                .body(TokenResponse(jwtTokenUtil.generateAccessToken(user)))
 
         } catch (ex: BadCredentialsException) {
             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
         }
     }
 
-    fun update(updateRequest: UpdateRequest): UserResponse {
-        if (repository.findUserByUserName(updateRequest.userName) != null)
-            throw ResponseStatusException(
-                HttpStatus.CONFLICT,
-                "Uživatelské jméno ${updateRequest.userName} je již obsazené."
-            )
+    fun updateProfile(updateProfileRequest: UpdateProfileRequest): TokenResponse {
 
-        val user = findById(updateRequest.id)
-        user.firstName = updateRequest.firstName
-        user.lastName = updateRequest.lastName
-        user.userName = updateRequest.userName
+        val user = findById(updateProfileRequest.id)
+        user.firstName = updateProfileRequest.firstName
+        user.lastName = updateProfileRequest.lastName
 
-        return repository.save(user).convertEntityToResponse()
+        repository.save(user)
+        return TokenResponse(jwtTokenUtil.generateAccessToken(user))
     }
 
-    fun changePassword(changePasswordRequest: ChangePasswordRequest) {
+    fun changePassword(changePasswordRequest: ChangePasswordRequest): TokenResponse {
         try {
             val authenticate: Authentication = authenticationManager
                 .authenticate(
@@ -98,6 +93,8 @@ class UserService : UserDetailsService {
             // New password
             user.password = passwordEncoder.encode(changePasswordRequest.newPassword)
             repository.save(user)
+
+            return TokenResponse(jwtTokenUtil.generateAccessToken(user))
 
         } catch (ex: BadCredentialsException) {
             throw ResponseStatusException(

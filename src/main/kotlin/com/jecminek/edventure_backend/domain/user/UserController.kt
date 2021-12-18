@@ -3,7 +3,7 @@ package com.jecminek.edventure_backend.domain.user
 import com.jecminek.edventure_backend.domain.user.request.ChangePasswordRequest
 import com.jecminek.edventure_backend.domain.user.request.LoginRequest
 import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
-import com.jecminek.edventure_backend.domain.user.request.UpdateRequest
+import com.jecminek.edventure_backend.domain.user.request.UpdateProfileRequest
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
@@ -71,7 +71,7 @@ class UserController {
             ApiResponse(
                 responseCode = "200",
                 content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = LoginResponse::class)))
+                    (Content(mediaType = "application/json", schema = Schema(implementation = TokenResponse::class)))
                 ]
             ),
             ApiResponse(responseCode = "400")
@@ -79,7 +79,7 @@ class UserController {
     )
     @PostMapping("/login")
     @ResponseStatus(HttpStatus.CREATED)
-    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> = userService.login(loginRequest)
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<TokenResponse> = userService.login(loginRequest)
 
     @Operation(summary = "Update user")
     @ApiResponses(
@@ -98,9 +98,9 @@ class UserController {
     @PutMapping("/profile")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
-        @RequestBody updateRequest: UpdateRequest
-    ): UserResponse =
-        userService.update(updateRequest)
+        @RequestBody updateProfileRequest: UpdateProfileRequest
+    ): TokenResponse =
+        userService.updateProfile(updateProfileRequest)
 
     @Operation(summary = "Update user")
     @ApiResponses(
@@ -120,7 +120,7 @@ class UserController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun changePassword(
         @RequestBody changePasswordRequest: ChangePasswordRequest
-    ) =
+    ): TokenResponse =
         userService.changePassword(changePasswordRequest)
 
 /*

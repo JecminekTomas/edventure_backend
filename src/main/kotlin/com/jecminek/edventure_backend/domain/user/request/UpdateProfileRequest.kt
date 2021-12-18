@@ -2,7 +2,7 @@ package com.jecminek.edventure_backend.domain.user.request
 
 import io.swagger.v3.oas.annotations.media.Schema
 
-data class UpdateRequest(
+data class UpdateProfileRequest(
     @Schema(description = "Id of user", example = "1")
     var id: Long,
 
@@ -11,7 +11,4 @@ data class UpdateRequest(
 
     @Schema(description = "Lastname of user", example = "Vrána")
     var lastName: String,
-
-    @Schema(description = "Username of user", example = "xmarek")
-    var userName: String,
 )
