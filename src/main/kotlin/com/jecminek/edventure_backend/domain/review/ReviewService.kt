@@ -150,10 +150,7 @@ class ReviewService {
         stars = stars,
         verbalEvaluation = verbalEvaluation ?: "",
         reviewTimestamp = reviewTimestamp,
-        userFrom = when {
-            !anonymous -> userFrom.convertEntityToResponse()
-            else -> null
-        },
+        userFrom = userFrom.convertEntityToResponse(),
         userTo = userTo.convertEntityToResponse(),
         scoreBalance = scoreService.getScoreBalance(jwtTokenUtil.getUserId(httpHeaders), id),
         subject = subjectService.findById(offer!!.subject.id).convertToDTO()

@@ -81,6 +81,13 @@ class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<TokenResponse> = userService.login(loginRequest)
 
+    @PutMapping("/change_password")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    fun changePassword(
+        @RequestBody changePasswordRequest: ChangePasswordRequest
+    ) =
+        userService.changePassword(changePasswordRequest)
+
     @Operation(summary = "Update user")
     @ApiResponses(
         value = [
@@ -101,27 +108,6 @@ class UserController {
         @RequestBody updateProfileRequest: UpdateProfileRequest
     ): TokenResponse =
         userService.updateProfile(updateProfileRequest)
-
-    @Operation(summary = "Update user")
-    @ApiResponses(
-        value = [
-            ApiResponse(
-                responseCode = "202",
-                content = [
-                    (Content(mediaType = "application/json", schema = Schema(implementation = UserResponse::class)))
-                ]
-            ),
-            ApiResponse(responseCode = "400"),
-            ApiResponse(responseCode = "404")
-        ]
-    )
-
-    @PutMapping("/profile/change_password")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    fun changePassword(
-        @RequestBody changePasswordRequest: ChangePasswordRequest
-    ): TokenResponse =
-        userService.changePassword(changePasswordRequest)
 
 /*
     @Operation(summary = "Delete user")

@@ -50,6 +50,7 @@ class UserService : UserDetailsService {
             user.firstName = registerRequest.firstName
             user.lastName = registerRequest.lastName
             user.password = passwordEncoder.encode(registerRequest.password)
+            user.userContacts = registerRequest.contacts.toMutableList()
             user.setAuthority(AuthorityType.USER)
             return repository.save(user).convertEntityToResponse()
         }
@@ -69,17 +70,7 @@ class UserService : UserDetailsService {
         }
     }
 
-    fun updateProfile(updateProfileRequest: UpdateProfileRequest): TokenResponse {
-
-        val user = findById(updateProfileRequest.id)
-        user.firstName = updateProfileRequest.firstName
-        user.lastName = updateProfileRequest.lastName
-
-        repository.save(user)
-        return TokenResponse(jwtTokenUtil.generateAccessToken(user))
-    }
-
-    fun changePassword(changePasswordRequest: ChangePasswordRequest): TokenResponse {
+    fun changePassword(changePasswordRequest: ChangePasswordRequest) {
         try {
             val authenticate: Authentication = authenticationManager
                 .authenticate(
@@ -93,15 +84,22 @@ class UserService : UserDetailsService {
             // New password
             user.password = passwordEncoder.encode(changePasswordRequest.newPassword)
             repository.save(user)
-
-            return TokenResponse(jwtTokenUtil.generateAccessToken(user))
-
         } catch (ex: BadCredentialsException) {
             throw ResponseStatusException(
                 HttpStatus.I_AM_A_TEAPOT,
                 "Chybně zadané heslo"
             )
         }
+    }
+
+    fun updateProfile(updateProfileRequest: UpdateProfileRequest): TokenResponse {
+
+        val user = findById(updateProfileRequest.id)
+        user.firstName = updateProfileRequest.firstName
+        user.lastName = updateProfileRequest.lastName
+
+        repository.save(user)
+        return TokenResponse(jwtTokenUtil.generateAccessToken(user))
     }
 
     fun delete(id: Long) = repository.delete(findById(id))
