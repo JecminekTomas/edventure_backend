@@ -44,14 +44,20 @@ class UserService : UserDetailsService {
     fun register(registerRequest: RegisterRequest): UserResponse {
         if (repository.findUserByUserName(registerRequest.userName) != null)
             throw ValidationException("Username exists!")
+        else if (!areCredentialsRight(registerRequest))
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST)
         else {
-            val user = User()
-            user.userName = registerRequest.userName
-            user.firstName = registerRequest.firstName
-            user.lastName = registerRequest.lastName
-            user.password = passwordEncoder.encode(registerRequest.password)
-            user.userContacts = registerRequest.contacts.toMutableList()
-            user.setAuthority(AuthorityType.USER)
+            val user = User(
+                userName = registerRequest.userName,
+                firstName = registerRequest.firstName,
+                lastName = registerRequest.lastName,
+                password = passwordEncoder.encode(registerRequest.password),
+                userContacts = registerRequest.contacts?.toMutableList() ?: mutableListOf(),
+                authority = AuthorityType.USER.toString(),
+                locked = false,
+                expired = false,
+                enabled = true
+            )
             return repository.save(user).convertEntityToResponse()
         }
     }
@@ -106,6 +112,9 @@ class UserService : UserDetailsService {
 
     override fun loadUserByUsername(userName: String): UserDetails? = repository.findUserByUserName(userName)
 
+    fun areCredentialsRight(registerRequest: RegisterRequest): Boolean {
+        return !(registerRequest.userName.isBlank() || registerRequest.firstName.isBlank() || registerRequest.lastName.isBlank() || registerRequest.password.isBlank())
+    }
 
 }
 

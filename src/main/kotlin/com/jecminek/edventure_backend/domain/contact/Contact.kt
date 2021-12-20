@@ -15,7 +15,7 @@ class Contact(
     var contactType: ContactType = ContactType.NONE,
 
     @ManyToOne(fetch = FetchType.EAGER)
-    var owner: User = User()
+    var owner: User
 ) : BaseEntity()
 
 fun Contact.convertToResponse() = ContactResponse(

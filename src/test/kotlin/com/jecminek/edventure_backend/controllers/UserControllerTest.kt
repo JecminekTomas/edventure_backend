@@ -41,7 +41,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
         ChangePasswordRequest("xuser", "password", "newPassword")
 
     private val exampleRegisterRequest =
-        RegisterRequest("Karel", "Novák", "xuser", "password")
+        RegisterRequest("Karel", "Novák", "xuser", "password", null)
 
     private val exampleUpdateProfileRequest =
         UpdateProfileRequest(1, "Karel", "Novák")
@@ -86,6 +86,26 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
         verify(exactly = 1) { service.login(exampleLoginRequest) }
     }
 
+    @Test
+    @WithMockUser(username = "user", password = "password")
+    fun `test update of profile`() {
+        every { service.updateProfile(exampleUpdateProfileRequest) } returns exampleTokenResponse
+
+        mockMvc.put("/profile") {
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(exampleUpdateProfileRequest)
+            accept = MediaType.APPLICATION_JSON
+        }
+            .andExpect { status { isAccepted() } }
+            .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
+            .andExpect {
+                jsonPath("\$.token") {
+                    value(expectedValue = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxLCB4bWFyZWssIE1hcmVrLCBOb3Z5IiwiaWF0IjoxNjM5ODQwMzU1LCJleHAiOjE2NDA0NDUxNTV9.qTZHz0DahPg5FXjcfYMX9-cyzubRYSo_jpNfXzzlUxWl1iW3-V3YrT56iBbZXsvUDIaksyBfKyOMYsJBR5tnqQ")
+                }
+            }
+        verify(exactly = 1) { service.updateProfile(exampleUpdateProfileRequest) }
+
+    }
 
     @Test
     @WithMockUser(username = "user", password = "password")
@@ -109,6 +129,19 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     }
 
 //////////////////////////////////// UNAUTHORIZED ////////////////////////////////////////////////////
+
+    @Test
+    fun `test unauthorized user (profile update)`() {
+        every { service.updateProfile(exampleUpdateProfileRequest) } returns exampleTokenResponse
+
+        mockMvc.put("/profile") {
+            contentType = MediaType.APPLICATION_JSON
+            content = jacksonObjectMapper().writeValueAsString(exampleUpdateProfileRequest)
+            accept = MediaType.APPLICATION_JSON
+        }
+            .andExpect { status { isUnauthorized() } }
+        verify(exactly = 0) { service.updateProfile(exampleUpdateProfileRequest) }
+    }
 
     @Test
     fun `test unauthorized user (change password)`() {

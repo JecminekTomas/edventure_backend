@@ -14,10 +14,10 @@ class Score(
     var helpful: Boolean = false,
 
     @ManyToOne(fetch = FetchType.EAGER)
-    var owner: User = User(),
+    var owner: User,
 
     @ManyToOne(fetch = FetchType.EAGER)
-    var review: Review = Review()
+    var review: Review
 
 ) : BaseEntity()
 

@@ -6,22 +6,32 @@ import com.jecminek.edventure_backend.domain.offer.Offer
 import com.jecminek.edventure_backend.domain.review.Review
 import com.jecminek.edventure_backend.domain.score.Score
 import com.jecminek.edventure_backend.enums.AuthorityType
+
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import javax.persistence.*
 
+
 @Entity
 @Table(name = "\"USER\"")
 class User(
-    var firstName: String = "",
-    var lastName: String = "",
+    @Column(nullable = false)
+    var firstName: String,
 
-    @Column(unique = true) var userName: String = "",
+    @Column(nullable = false)
+    var lastName: String,
 
-    private var password: String = "",
-    private var enabled: Boolean = true,
-    private var locked: Boolean = false,
-    private var expired: Boolean = false,
+    @Column(
+        unique = true,
+        nullable = false
+    )
+    var userName: String,
+
+    @Column(nullable = false)
+    private var password: String,
+    private var enabled: Boolean,
+    private var locked: Boolean,
+    private var expired: Boolean,
 
     private var authority: String? = null,
 

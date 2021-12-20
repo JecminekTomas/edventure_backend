@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class ContactRequest(
     @Schema(description = "ID is only for response")
-    var id: Long,
+    val id: Long,
 
     @Schema(description = "Type of contact", example = "FACEBOOK")
     var contactType: ContactType,

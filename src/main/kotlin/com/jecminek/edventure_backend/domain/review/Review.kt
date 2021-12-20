@@ -18,15 +18,15 @@ class Review(
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_to_id")
-    var userTo: User = User(),
+    var userTo: User,
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_from_id")
-    var userFrom: User = User(),
+    var userFrom: User,
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "offer_id", referencedColumnName = "id")
-    var offer: Offer? = Offer(),
+    var offer: Offer?,
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "review", cascade = [CascadeType.ALL])
     var scores: MutableList<Score> = mutableListOf()

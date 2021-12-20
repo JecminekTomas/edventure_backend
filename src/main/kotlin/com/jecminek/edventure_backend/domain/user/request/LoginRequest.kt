@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class LoginRequest(
     @Schema(description = "Username", example = "xmarek")
-    var userName: String,
+    val userName: String,
 
     @Schema(description = "User password", example = "Heslo123.")
-    var password: String,
+    val password: String,
 )
