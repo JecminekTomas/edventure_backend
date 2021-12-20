@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class ChangePasswordRequest(
     @Schema(description = "Username of user", example = "xmarek")
-    var userName: String,
+    val userName: String,
 
     @Schema(description = "Old user password", example = "heslo")
-    var oldPassword: String,
+    val oldPassword: String,
 
     @Schema(description = "New user password", example = "heslo1")
-    var newPassword: String,
+    val newPassword: String,
 )

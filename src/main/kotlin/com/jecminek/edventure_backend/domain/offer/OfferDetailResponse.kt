@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class OfferDetailResponse(
     @Schema(description = "Offer detail", example = "{22, 3.2}")
-    var offer: OfferResponse,
+    val offer: OfferResponse,
     @Schema(description = "List of Reviews", example = "{22, 3.2}")
-    var reviews: List<ReviewResponse>,
+    val reviews: List<ReviewResponse>,
 )

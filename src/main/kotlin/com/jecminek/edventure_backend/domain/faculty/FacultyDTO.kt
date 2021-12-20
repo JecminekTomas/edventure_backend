@@ -4,12 +4,12 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class FacultyDTO(
     @Schema(description = "ID is used only in response")
-    var id: Long,
+    val id: Long,
     @Schema(description = "Faculty name", example = "Agronomická fakulta")
-    var name: String,
+    val name: String,
     @Schema(description = "Faculty code", example = "AF")
-    var code: String?,
+    val code: String?,
     @Schema(description = "ID of university where faculty belongs.", example = "1")
-    var universityId: Long,
+    val universityId: Long,
 )
 

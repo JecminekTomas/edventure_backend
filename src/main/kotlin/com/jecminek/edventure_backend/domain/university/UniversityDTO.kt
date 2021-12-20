@@ -4,9 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class UniversityDTO(
     @Schema(description = "ID is only for response")
-    var id: Long,
+    val id: Long,
     @Schema(description = "University name", example = "Mendelova univerzita")
-    var name: String
+    val name: String
 )
 
 fun UniversityDTO.convertToEntity() = University(

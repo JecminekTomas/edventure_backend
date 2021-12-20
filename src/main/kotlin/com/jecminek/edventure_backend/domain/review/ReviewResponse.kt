@@ -4,8 +4,6 @@ import com.jecminek.edventure_backend.domain.score.ScoreBalance
 import com.jecminek.edventure_backend.domain.subject.SubjectDTO
 import com.jecminek.edventure_backend.domain.user.UserResponse
 import io.swagger.v3.oas.annotations.media.Schema
-import javax.validation.constraints.Max
-import javax.validation.constraints.Min
 import javax.validation.constraints.Size
 
 data class ReviewResponse(

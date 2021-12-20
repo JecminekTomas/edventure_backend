@@ -1,6 +1,6 @@
 package com.jecminek.edventure_backend.domain.review
 
 data class ReviewBalance (
-    var reviewCount: Int,
-    var starsAverage: Double
+    val reviewCount: Int,
+    val starsAverage: Double
 )

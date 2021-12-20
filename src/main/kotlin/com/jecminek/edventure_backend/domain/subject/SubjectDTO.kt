@@ -4,13 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema
 
 data class SubjectDTO(
     @Schema(description = "ID is only for response")
-    var id: Long,
+    val id: Long,
     @Schema(description = "Code of subject", example = "PTN")
-    var code: String,
+    val code: String,
     @Schema(description = "Subject title", example = "Programovací techniky")
-    var name: String,
+    val name: String,
     @Schema(description = "Faculty, where subject being taught", example = "PEF")
-    var facultyId: Long,
+    val facultyId: Long,
 )
 
 
