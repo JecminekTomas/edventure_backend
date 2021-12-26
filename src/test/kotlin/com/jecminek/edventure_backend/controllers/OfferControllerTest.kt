@@ -50,7 +50,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
     @WithMockUser(username = "user", password = "password")
     fun `test find offers method without params`() {
         every { service.findOffers(any(), null, null, null) } returns listOf(exampleResponse)
-        mockMvc.get("/offers")
+        mockMvc.get("/api/api/offers")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -73,7 +73,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test find offers method with ownerId parameter`() {
         every { service.findOffers(any(), 1, null, null) } returns
                 listOf(exampleResponse)
-        mockMvc.get("/offers?ownerId=1")
+        mockMvc.get("/api/offers?ownerId=1")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -96,7 +96,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test find offers method with subjectId parameter`() {
         every { service.findOffers(any(), null, 1, null) } returns
                 listOf(exampleResponse)
-        mockMvc.get("/offers?subjectId=1")
+        mockMvc.get("/api/offers?subjectId=1")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -121,7 +121,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
         every { service.create(exampleDTO, any()) } returns
                 exampleDTO
 
-        mockMvc.post("/offers") {
+        mockMvc.post("/api/offers") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleDTO)
             accept = MediaType.APPLICATION_JSON
@@ -145,7 +145,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
         every { service.update(1, exampleDTO, any()) } returns
                 exampleDTO
 
-        mockMvc.put("/offers/1") {
+        mockMvc.put("/api/offers/1") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleDTO)
             accept = MediaType.APPLICATION_JSON
@@ -166,7 +166,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
     @WithMockUser(username = "user", password = "password")
     fun `test delete method`() {
         every { service.delete(1, any()) } returns Unit
-        mockMvc.delete("/offers/1")
+        mockMvc.delete("/api/offers/1")
             .andExpect { status { isNoContent() } }
 
         verify(exactly = 1) { service.delete(1, any()) }
@@ -175,13 +175,13 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `test unauthorized user (findOffers)`() {
-        mockMvc.get("/offers")
+        mockMvc.get("/api/offers")
             .andExpect { status { isUnauthorized() } }
     }
 
     @Test
     fun `test unauthorized user (create)`() {
-        mockMvc.post("/offers") {
+        mockMvc.post("/api/offers") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleDTO)
             accept = MediaType.APPLICATION_JSON
@@ -190,7 +190,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `test unauthorized user (update)`() {
-        mockMvc.put("/offers") {
+        mockMvc.put("/api/offers") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleDTO)
             accept = MediaType.APPLICATION_JSON
@@ -199,7 +199,7 @@ internal class OfferControllerTest(@Autowired val mockMvc: MockMvc) {
 
     @Test
     fun `test unauthorized user (delete)`() {
-        mockMvc.delete("/offers/1")
+        mockMvc.delete("/api/offers/1")
             .andExpect { status { isUnauthorized() } }
     }
 

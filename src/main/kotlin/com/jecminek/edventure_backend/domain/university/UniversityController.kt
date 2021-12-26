@@ -36,7 +36,7 @@ class UniversityController {
                 ApiResponse(responseCode = "404", content = [])
             ]
         )
-        @GetMapping("/universities")
+        @GetMapping("/api/universities")
         @ResponseStatus(HttpStatus.OK)
         fun findAll(): List<UniversityDTO> =
             universityService.findAll()
@@ -54,7 +54,7 @@ class UniversityController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @GetMapping("/universities/{id}")
+        @GetMapping("/api/universities/{id}")
         @ResponseStatus(HttpStatus.OK)
         fun findById(
             @Parameter(
@@ -77,7 +77,7 @@ class UniversityController {
             ]
         )
 
-        @PostMapping("/universities")
+        @PostMapping("/api/universities")
         @ResponseStatus(HttpStatus.CREATED)
         fun create(@RequestBody universityDTO: UniversityDTO): UniversityDTO =
             universityService.create(universityDTO)
@@ -95,7 +95,7 @@ class UniversityController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @PutMapping("/universities/{id}")
+        @PutMapping("/api/universities/{id}")
         @ResponseStatus(HttpStatus.ACCEPTED)
         fun update(
             @PathVariable id: Long,
@@ -110,7 +110,7 @@ class UniversityController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @DeleteMapping("/universities/{id}")
+        @DeleteMapping("/api/universities/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
         fun delete(@PathVariable id: Long) = universityService.delete(id)
     }

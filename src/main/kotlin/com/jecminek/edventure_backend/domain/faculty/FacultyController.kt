@@ -33,7 +33,7 @@ class FacultyController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @GetMapping("/faculties")
+        @GetMapping("/api/faculties")
         @ResponseStatus(HttpStatus.OK)
         fun findById(
             @Parameter(
@@ -56,7 +56,7 @@ class FacultyController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @GetMapping("/faculties/{id}")
+        @GetMapping("/api/faculties/{id}")
         @ResponseStatus(HttpStatus.OK)
         fun findById(
             @Parameter(
@@ -79,7 +79,7 @@ class FacultyController {
             ]
         )
 
-        @PostMapping("/faculties")
+        @PostMapping("/api/faculties")
         @ResponseStatus(HttpStatus.CREATED)
         fun create(@RequestBody facultyDTO: FacultyDTO): FacultyDTO =
             facultyService.create(facultyDTO)
@@ -97,7 +97,7 @@ class FacultyController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @PutMapping("/faculties/{id}")
+        @PutMapping("/api/faculties/{id}")
         @ResponseStatus(HttpStatus.ACCEPTED)
         fun update(
             @PathVariable id: Long,
@@ -112,7 +112,7 @@ class FacultyController {
                 ApiResponse(responseCode = "404")
             ]
         )
-        @DeleteMapping("/faculties/{id}")
+        @DeleteMapping("/api/faculties/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
         fun delete(@PathVariable id: Long) = facultyService.delete(id)
     }

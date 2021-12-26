@@ -50,7 +50,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test user registration`() {
         every { service.register(exampleRegisterRequest) } returns exampleUserResponse
 
-        mockMvc.post("/register") {
+        mockMvc.post("/api/register") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleRegisterRequest)
             accept = MediaType.APPLICATION_JSON
@@ -70,7 +70,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test login`() {
         every { service.login(exampleLoginRequest) } returns ResponseEntity.ok().body(exampleTokenResponse)
 
-        mockMvc.post("/login") {
+        mockMvc.post("/api/login") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleLoginRequest)
             accept = MediaType.APPLICATION_JSON
@@ -91,7 +91,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test update of profile`() {
         every { service.updateProfile(exampleUpdateProfileRequest) } returns exampleTokenResponse
 
-        mockMvc.put("/profile") {
+        mockMvc.put("/api/profile") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleUpdateProfileRequest)
             accept = MediaType.APPLICATION_JSON
@@ -112,7 +112,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test of password change`() {
         every { service.changePassword(exampleChangePasswordRequest) } returns Unit
 
-        mockMvc.put("/profile/change_password") {
+        mockMvc.put("/api/profile/change_password") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleChangePasswordRequest)
             accept = MediaType.APPLICATION_JSON
@@ -134,7 +134,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test unauthorized user (profile update)`() {
         every { service.updateProfile(exampleUpdateProfileRequest) } returns exampleTokenResponse
 
-        mockMvc.put("/profile") {
+        mockMvc.put("/api/profile") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleUpdateProfileRequest)
             accept = MediaType.APPLICATION_JSON
@@ -147,7 +147,7 @@ internal class UserControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test unauthorized user (change password)`() {
         every { service.changePassword(exampleChangePasswordRequest) } returns Unit
 
-        mockMvc.put("/profile/change_password") {
+        mockMvc.put("/api/profile/change_password") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleChangePasswordRequest)
             accept = MediaType.APPLICATION_JSON

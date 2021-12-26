@@ -36,8 +36,6 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
             0,
             null,
             UserResponse(1, "Karel", "Novák", "xuser"),
-            ScoreBalance(1, 1, null),
-            SubjectDTO(1, "PTN", "Programovací techniky", 1)
         )
 
     @Test
@@ -45,7 +43,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test find reviews method (no parameter)`() {
         every { service.findReviews(null, null, any()) } returns listOf(exampleReviewResponse)
 
-        mockMvc.get("/reviews")
+        mockMvc.get("/api/reviews")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -75,7 +73,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test find reviews method (userFromId parameter)`() {
         every { service.findReviews(1, null, any()) } returns listOf(exampleReviewResponse)
 
-        mockMvc.get("/reviews?userFromId=1")
+        mockMvc.get("/api/reviews?userFromId=1")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -105,7 +103,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test find reviews method (userToId parameter)`() {
         every { service.findReviews(null, 1, any()) } returns listOf(exampleReviewResponse)
 
-        mockMvc.get("/reviews?userToId=1")
+        mockMvc.get("/api/reviews?userToId=1")
             .andExpect { status { isOk() } }
             .andExpect { content { contentType(MediaType.APPLICATION_JSON) } }
             .andExpect {
@@ -135,7 +133,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test create method`() {
         every { service.create(any(), exampleReviewRequest) } returns exampleReviewResponse
 
-        mockMvc.post("/reviews") {
+        mockMvc.post("/api/reviews") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleReviewRequest)
             accept = MediaType.APPLICATION_JSON
@@ -169,7 +167,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test update method`() {
         every { service.update(1, any(), exampleReviewRequest) } returns exampleReviewResponse
 
-        mockMvc.put("/reviews/1") {
+        mockMvc.put("/api/reviews/1") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleReviewRequest)
             accept = MediaType.APPLICATION_JSON
@@ -202,7 +200,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     @WithMockUser(username = "user", password = "password")
     fun `test delete method`() {
         every { service.delete(1, any()) } returns Unit
-        mockMvc.delete("/reviews/1")
+        mockMvc.delete("/api/reviews/1")
             .andExpect { status { isNoContent() } }
 
         verify(exactly = 1) { service.delete(1, any()) }
@@ -214,7 +212,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test unauthorized user (findReviews)`() {
         every { service.findReviews(null, null, any()) } returns listOf(exampleReviewResponse)
 
-        mockMvc.get("/reviews")
+        mockMvc.get("/api/reviews")
             .andExpect { status { isUnauthorized() } }
 
         verify(exactly = 0) { service.findReviews(null, null, any()) }
@@ -224,7 +222,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test unauthorized user (create)`() {
         every { service.create(any(), exampleReviewRequest) } returns exampleReviewResponse
 
-        mockMvc.post("/reviews") {
+        mockMvc.post("/api/reviews") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleReviewRequest)
             accept = MediaType.APPLICATION_JSON
@@ -238,7 +236,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     fun `test unauthorized user (update)`() {
         every { service.update(1, any(), exampleReviewRequest) } returns exampleReviewResponse
 
-        mockMvc.put("/reviews/1") {
+        mockMvc.put("/api/reviews/1") {
             contentType = MediaType.APPLICATION_JSON
             content = jacksonObjectMapper().writeValueAsString(exampleReviewRequest)
             accept = MediaType.APPLICATION_JSON
@@ -251,7 +249,7 @@ internal class ReviewControllerTest(@Autowired val mockMvc: MockMvc) {
     @Test
     fun `test unauthorized user (delete)`() {
         every { service.delete(1, any()) } returns Unit
-        mockMvc.delete("/reviews/1")
+        mockMvc.delete("/api/reviews/1")
             .andExpect { status { isUnauthorized() } }
 
         verify(exactly = 0) { service.delete(1, any()) }

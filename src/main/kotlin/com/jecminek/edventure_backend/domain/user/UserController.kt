@@ -38,7 +38,7 @@ class UserController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/users/{id}")
+    @GetMapping("/api/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(
         @Parameter(
@@ -61,7 +61,7 @@ class UserController {
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/register")
+    @PostMapping("/api/register")
     @ResponseStatus(HttpStatus.CREATED)
     fun register(@RequestBody registerRequest: RegisterRequest): UserResponse = userService.register(registerRequest)
 
@@ -78,11 +78,11 @@ class UserController {
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/login")
+    @PostMapping("/api/login")
     @ResponseStatus(HttpStatus.CREATED)
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<TokenResponse> = userService.login(loginRequest)
 
-    @PutMapping("/change_password")
+    @PutMapping("/api/change_password")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun changePassword(
         @RequestBody changePasswordRequest: ChangePasswordRequest
@@ -103,7 +103,7 @@ class UserController {
         ]
     )
 
-    @PutMapping("/profile")
+    @PutMapping("/api/profile")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @RequestBody updateProfileRequest: UpdateProfileRequest
@@ -119,7 +119,7 @@ class UserController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/api/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@Parameter(description = "ID of updated user", example = "1") @PathVariable id: Long) =
         userService.delete(id)*/

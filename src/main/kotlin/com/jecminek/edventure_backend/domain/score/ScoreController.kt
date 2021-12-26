@@ -32,7 +32,7 @@ class ScoreController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/scores")
+    @GetMapping("/api/scores")
     @ResponseStatus(HttpStatus.OK)
     fun findByOwnerIdAndReviewId(
         @Parameter(
@@ -60,7 +60,7 @@ class ScoreController {
         ]
     )
 
-    @PostMapping("/scores")
+    @PostMapping("/api/scores")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders): ScoreDTO =
         service.create(scoreDTO, httpHeaders)
@@ -80,7 +80,7 @@ class ScoreController {
 
         ]
     )
-    @PutMapping("/scores/{id}")
+    @PutMapping("/api/scores/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(@PathVariable id: Long, @RequestBody scoreDTO: ScoreDTO, @RequestHeader httpHeaders: HttpHeaders) =
         service.update(id, scoreDTO, httpHeaders)
@@ -93,7 +93,7 @@ class ScoreController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/scores/{id}")
+    @DeleteMapping("/api/scores/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long, @RequestHeader httpHeaders: HttpHeaders) = service.delete(id, httpHeaders)
 }

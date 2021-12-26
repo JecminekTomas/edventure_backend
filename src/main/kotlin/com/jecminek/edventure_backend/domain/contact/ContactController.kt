@@ -31,7 +31,7 @@ class ContactController {
         ]
     )
 
-    @PostMapping("/users/{userId}/contacts")
+    @PostMapping("/api/users/{userId}/contacts")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @PathVariable userId: Long,
@@ -53,7 +53,7 @@ class ContactController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/users/{userId}/contacts/{contactId}")
+    @PutMapping("/api/users/{userId}/contacts/{contactId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable contactId: Long,
@@ -70,7 +70,7 @@ class ContactController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/users/{userId}/contacts/{contactId}")
+    @DeleteMapping("/api/users/{userId}/contacts/{contactId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(
         @PathVariable contactId: Long,
@@ -91,7 +91,7 @@ class ContactController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/users/{userId}/contacts")
+    @GetMapping("/api/users/{userId}/contacts")
     @ResponseStatus(HttpStatus.OK)
     fun findUserContacts(
         @Parameter(
