@@ -12,7 +12,7 @@ import javax.persistence.Table
 @Table(name = "CONTACT")
 class Contact(
     var value: String = "",
-    var contactType: ContactType = ContactType.NONE,
+    var contactType: ContactType,
 
     @ManyToOne(fetch = FetchType.EAGER)
     var owner: User

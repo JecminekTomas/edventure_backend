@@ -1,10 +1,13 @@
 package com.jecminek.edventure_backend.domain.user
 
+import com.jecminek.edventure_backend.domain.contact.Contact
+import com.jecminek.edventure_backend.domain.contact.ContactRequest
 import com.jecminek.edventure_backend.domain.user.request.ChangePasswordRequest
 import com.jecminek.edventure_backend.domain.user.request.LoginRequest
 import com.jecminek.edventure_backend.domain.user.request.RegisterRequest
 import com.jecminek.edventure_backend.domain.user.request.UpdateProfileRequest
 import com.jecminek.edventure_backend.enums.AuthorityType
+import com.jecminek.edventure_backend.enums.ContactType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -21,7 +24,6 @@ import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.server.ResponseStatusException
 import javax.validation.Valid
-import javax.xml.bind.ValidationException
 
 @Service
 class UserService : UserDetailsService {
@@ -43,22 +45,34 @@ class UserService : UserDetailsService {
 
     fun register(registerRequest: RegisterRequest): UserResponse {
         if (repository.findUserByUserName(registerRequest.userName) != null)
-            throw ValidationException("Username exists!")
+            throw ResponseStatusException(HttpStatus.CONFLICT)
         else if (!areCredentialsRight(registerRequest))
             throw ResponseStatusException(HttpStatus.BAD_REQUEST)
         else {
+            //First create user without contacts
             val user = User(
                 userName = registerRequest.userName,
                 firstName = registerRequest.firstName,
                 lastName = registerRequest.lastName,
                 password = passwordEncoder.encode(registerRequest.password),
-                userContacts = registerRequest.contacts?.toMutableList() ?: mutableListOf(),
+                userContacts = mutableListOf(),
                 authority = AuthorityType.USER.toString(),
                 locked = false,
                 expired = false,
                 enabled = true
             )
-            return repository.save(user).convertEntityToResponse()
+
+            //Fetch created user
+            val createdUser = findById(repository.save(user).id)
+
+
+            //Add contacts
+            createdUser.userContacts =
+                registerRequest.contacts?.map { convertContactRequestToEntity(it, createdUser.id) }?.toMutableList()
+                    ?: mutableListOf()
+
+            // Save updated user
+            return repository.save(createdUser).convertEntityToResponse()
         }
     }
 
@@ -114,6 +128,15 @@ class UserService : UserDetailsService {
 
     fun areCredentialsRight(registerRequest: RegisterRequest): Boolean {
         return !(registerRequest.userName.isBlank() || registerRequest.firstName.isBlank() || registerRequest.lastName.isBlank() || registerRequest.password.isBlank())
+    }
+
+    @OptIn(ExperimentalStdlibApi::class)
+    fun convertContactRequestToEntity(contactRequest: ContactRequest, ownerId: Long): Contact {
+        return Contact(
+            value = contactRequest.value,
+            contactType = ContactType.valueOf(contactRequest.contactType.uppercase()),
+            owner = findById(ownerId)
+        )
     }
 
 }

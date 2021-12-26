@@ -152,6 +152,7 @@ class ReviewService {
         reviewTimestamp = reviewTimestamp,
         userFrom = userFrom.convertEntityToResponse(),
         userTo = userTo.convertEntityToResponse(),
+        anonymous = anonymous,
         scoreBalance = scoreService.getScoreBalance(jwtTokenUtil.getUserId(httpHeaders), id),
         subject = subjectService.findById(offer!!.subject.id).convertToDTO()
     )

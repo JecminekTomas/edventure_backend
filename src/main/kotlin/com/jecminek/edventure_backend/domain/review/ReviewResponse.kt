@@ -29,11 +29,14 @@ data class ReviewResponse(
     @Schema(description = "User, who review is for")
     var userTo: UserResponse,
 
+    @Schema(description = "Does reviewer want to stay anonymous", example = "false")
+    val anonymous: Boolean,
+
     @Schema(description = "Scores of review")
     var scoreBalance: ScoreBalance,
 
     @Schema(description = "Subject which was taught")
-    var subject: SubjectDTO
+    var subject: SubjectDTO,
 
 )
 

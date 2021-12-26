@@ -1,6 +1,7 @@
 package com.jecminek.edventure_backend.domain.contact
 
 import com.jecminek.edventure_backend.domain.user.UserService
+import com.jecminek.edventure_backend.enums.ContactType
 import com.jecminek.edventure_backend.security.JwtTokenUtil
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.repository.findByIdOrNull
@@ -21,11 +22,15 @@ class ContactService {
     @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
 
+
     fun create(userId: Long, contactRequest: ContactRequest, httpHeaders: HttpHeaders): ContactResponse {
         val loggedUserId = jwtTokenUtil.getUserId(httpHeaders)
 
         if (userId != loggedUserId)
             throw ResponseStatusException(HttpStatus.FORBIDDEN, "User CANNOT create contact to other user")
+
+        if(contactRequest.value.isBlank())
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Hodnota musí být vyplněna")
 
         //Check user existence
         userService.findById(userId)
@@ -40,6 +45,7 @@ class ContactService {
         )
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun update(
         userId: Long,
         contactId: Long,
@@ -56,7 +62,7 @@ class ContactService {
         userService.findById(userId)
 
         val contact = getById(contactId)
-        contact.contactType = contactRequest.contactType
+        contact.contactType = ContactType.valueOf(contactRequest.contactType.uppercase())
         contact.value = contactRequest.value
         return repository.save(contact).convertToResponse()
     }
@@ -84,9 +90,10 @@ class ContactService {
     }
 
 
+    @OptIn(ExperimentalStdlibApi::class)
     fun ContactRequest.convertToEntity(userId: Long) = Contact(
         value = value,
-        contactType = contactType,
+        contactType = ContactType.valueOf(contactType.uppercase()),
         owner = userService.findById(userId)
     )
 }

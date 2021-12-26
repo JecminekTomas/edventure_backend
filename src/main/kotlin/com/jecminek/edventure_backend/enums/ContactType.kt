@@ -5,6 +5,5 @@ enum class ContactType {
     TWITTER,
     LINKEDIN,
     INSTAGRAM,
-    PHONE_NUMBER,
-    NONE // DEFAULT VALUE
+    TELEFON,
 }

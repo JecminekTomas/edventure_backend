@@ -1,5 +1,7 @@
 package com.jecminek.edventure_backend.domain.offer
 
+import com.jecminek.edventure_backend.domain.contact.ContactResponse
+import com.jecminek.edventure_backend.domain.contact.ContactService
 import com.jecminek.edventure_backend.domain.review.ReviewResponse
 import com.jecminek.edventure_backend.domain.review.ReviewService
 import com.jecminek.edventure_backend.domain.subject.SubjectService
@@ -25,6 +27,9 @@ class OfferService {
 
     @Autowired
     lateinit var reviewService: ReviewService
+
+    @Autowired
+    lateinit var contactService: ContactService
 
     @Autowired
     lateinit var jwtTokenUtil: JwtTokenUtil
@@ -91,7 +96,9 @@ class OfferService {
 
         val reviews: List<ReviewResponse> = reviewService.findReviewsByUserToId(offer.owner.id, httpHeaders)
 
-        return OfferDetailResponse(offerResponse, reviews)
+        val contacts: List<ContactResponse> = contactService.findContactsByOwnerId(offer.owner.id)
+
+        return OfferDetailResponse(offerResponse, reviews, contacts)
     }
 
     fun findByUserIdAndSubjectId(userId: Long, subjectId: Long) =
