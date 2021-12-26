@@ -31,7 +31,7 @@ class OfferController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/api/offers/{id}")
+    @GetMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(
         @Parameter(
@@ -55,7 +55,7 @@ class OfferController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/api/offers")
+    @GetMapping("/offers")
     @ResponseStatus(HttpStatus.OK)
     fun findOffers(
         @RequestHeader httpHeaders: HttpHeaders,
@@ -77,7 +77,7 @@ class OfferController {
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/api/offers")
+    @PostMapping("/offers")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody offerDTO: OfferDTO, @RequestHeader httpHeaders: HttpHeaders): OfferDTO =
         offerService.create(offerDTO, httpHeaders)
@@ -95,7 +95,7 @@ class OfferController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/api/offers/{id}")
+    @PutMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
@@ -111,7 +111,7 @@ class OfferController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/api/offers/{id}")
+    @DeleteMapping("/offers/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long, @RequestHeader httpHeaders: HttpHeaders) = offerService.delete(id, httpHeaders)
 }

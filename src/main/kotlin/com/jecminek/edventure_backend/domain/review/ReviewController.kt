@@ -31,7 +31,7 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @GetMapping("/api/reviews")
+    @GetMapping("/reviews")
     @ResponseStatus(HttpStatus.OK)
     fun findReviews(
         @RequestParam userFromId: Long?,
@@ -51,7 +51,7 @@ class ReviewController {
             ApiResponse(responseCode = "400")
         ]
     )
-    @PostMapping("/api/reviews")
+    @PostMapping("/reviews")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(
         @RequestBody reviewRequest: ReviewRequest,
@@ -72,7 +72,7 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/api/reviews/{id}")
+    @PutMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @Parameter(description = "ID of updated review", example = "1")
@@ -89,7 +89,7 @@ class ReviewController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/api/reviews/{id}")
+    @DeleteMapping("/reviews/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(
         @Parameter(description = "ID of deleted review", example = "1")

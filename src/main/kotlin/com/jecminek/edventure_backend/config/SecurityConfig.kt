@@ -62,8 +62,8 @@ class SecurityConfig(
         // TODO: 12.10.2021 MORE MATCHERS, I.E. FACULTY, UNIVERSITY - FOR ADMIN ONLY
         // Set permissions on endpoints
         http.authorizeRequests() // Swagger endpoints must be publicly accessible
-            .antMatchers("/api/register/**").permitAll()
-            .antMatchers("/api/login/**").permitAll()
+            .antMatchers("/register/**").permitAll()
+            .antMatchers("/login/**").permitAll()
             .antMatchers(
                 "/api-docs",
                 "/api-docs/swagger-config",
@@ -74,7 +74,7 @@ class SecurityConfig(
                 "/configuration/ui"
             ).permitAll() // swagger api docs
             // FIXME: 16.10.2021 MAKE IT WORK.
-//            .antMatchers("/api/universities").hasAuthority("USER")
+//            .antMatchers("/universities").hasAuthority("USER")
             .anyRequest().authenticated()
 
         // Add JWT token filter
@@ -90,7 +90,7 @@ class SecurityConfig(
         config.addAllowedOriginPattern("*")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
-        source.registerCorsConfiguration("/api/**", config)
+        source.registerCorsConfiguration("/**", config)
         return CorsFilter(source)
     }
 

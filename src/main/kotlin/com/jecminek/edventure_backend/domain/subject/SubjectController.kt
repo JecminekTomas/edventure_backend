@@ -31,7 +31,7 @@ class SubjectController {
                 responseCode = "404",
             )]
     )
-    @GetMapping("/api/subjects")
+    @GetMapping("/subjects")
     fun findAll(
         @Parameter(
             description = "Id of faculty where subject is being taught",
@@ -40,7 +40,7 @@ class SubjectController {
         @RequestParam(required = false) facultyId: Long?
     ): List<SubjectDTO> = subjectService.findAll(facultyId)
 
-    @GetMapping("/api/subjects/{id}")
+    @GetMapping("/subjects/{id}")
     @ResponseStatus(HttpStatus.OK)
     fun findById(
         @Parameter(
@@ -64,7 +64,7 @@ class SubjectController {
         ]
     )
 
-    @PostMapping("/api/subjects")
+    @PostMapping("/subjects")
     @ResponseStatus(HttpStatus.CREATED)
     fun create(@RequestBody subjectDTO: SubjectDTO): SubjectDTO =
         subjectService.create(subjectDTO)
@@ -82,7 +82,7 @@ class SubjectController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @PutMapping("/api/subjects/{id}")
+    @PutMapping("/subjects/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(
         @PathVariable id: Long,
@@ -97,7 +97,7 @@ class SubjectController {
             ApiResponse(responseCode = "404")
         ]
     )
-    @DeleteMapping("/api/subjects/{id}")
+    @DeleteMapping("/subjects/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = subjectService.delete(id)
 
